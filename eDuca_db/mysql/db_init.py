@@ -12,12 +12,22 @@ print(mydb)
 
 mycursor = mydb.cursor()
 
+# Drop the database if it exists
+mycursor.execute("DROP DATABASE IF EXISTS ies")
+print("Database 'ies' dropped.")
+
+# Create the database
+mycursor.execute("CREATE DATABASE ies")
+print("Database 'ies' created.")
+
 #show tables in database
 databases = []
 mycursor.execute("SHOW DATABASES")
 for x in mycursor:
     databases.append(x[0])
 print(databases[1])
+
+
 
 #show tables in database
 tables = []
@@ -27,6 +37,8 @@ if "ies" in databases:
     for x in mycursor:
         tables.append(x[0])
     print(tables)
+
+    
 
     if "users" not in tables:
         mycursor.execute("CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), email VARCHAR(255), password VARCHAR(255))")
@@ -68,18 +80,22 @@ if "ies" in databases:
         mycursor.execute("CREATE TABLE disciplinas_turmas (disciplina VARCHAR(255), turma INT, FOREIGN KEY (disciplina) REFERENCES disciplinas(nome) ON DELETE CASCADE, FOREIGN KEY (turma) REFERENCES turmas(id) ON DELETE CASCADE)")
         print("Table disciplinas_turmas created!")
 
-
     # Inserts
 
-    """ mycursor.execute("INSERT INTO users (name, email, password) VALUES (%s, %s, %s)", ("João", "joao@gmail", "123"))
+    mycursor.execute("INSERT INTO users (name, email, password) VALUES (%s, %s, %s)", ("João", "joao@gmail", "123"))
     mycursor.execute("INSERT INTO users (name, email, password) VALUES (%s, %s, %s)", ("Maria", "maria@gmail", "123"))
     mycursor.execute("INSERT INTO users (name, email, password) VALUES (%s, %s, %s)", ("José", "jose@gmail", "123"))
     mycursor.execute("INSERT INTO users (name, email, password) VALUES (%s, %s, %s)", ("Ana", "ana@gmail", "123"))
-
-    mycursor.execute("INSERT INTO sys_admin (id) VALUES (%s)", ([1]))
+    #print("Users inserted!")
+    
+    mycursor.execute("INSERT INTO sys_admin (id) VALUES (%s)", (1,))
+    mycursor.execute("INSERT INTO school_admin (id) VALUES (%s)", (2,))
+    mycursor.execute("INSERT INTO school_admin (id) VALUES (%s)", (3,))
+    #print("Sys_admin inserted!")
 
     mycursor.execute("INSERT INTO escolas (nome, admin) VALUES (%s, %s)", ("Anadia", 2))
     mycursor.execute("INSERT INTO escolas (nome, admin) VALUES (%s, %s)", ("Aveiro", 3))
+    #print("Escolas inserted!")
 
     mycursor.execute("INSERT INTO turmas (id, nome, escola) VALUES (%s, %s, %s)", (1, "1º ano", "Anadia"))
     mycursor.execute("INSERT INTO turmas (id, nome, escola) VALUES (%s, %s, %s)", (2, "2º ano", "Anadia"))
@@ -87,26 +103,43 @@ if "ies" in databases:
     mycursor.execute("INSERT INTO turmas (id, nome, escola) VALUES (%s, %s, %s)", (4, "1º ano", "Aveiro"))
     mycursor.execute("INSERT INTO turmas (id, nome, escola) VALUES (%s, %s, %s)", (5, "2º ano", "Aveiro"))
     mycursor.execute("INSERT INTO turmas (id, nome, escola) VALUES (%s, %s, %s)", (6, "3º ano", "Aveiro"))
+    #print("Turmas inserted!")
 
     mycursor.execute("INSERT INTO alunos (nome, turma) VALUES (%s, %s)", ("João", 1))
     mycursor.execute("INSERT INTO alunos (nome, turma) VALUES (%s, %s)", ("Maria", 1))
     mycursor.execute("INSERT INTO alunos (nome, turma) VALUES (%s, %s)", ("José", 1))
     mycursor.execute("INSERT INTO alunos (nome, turma) VALUES (%s, %s)", ("Ana", 2))
+    #print("Alunos inserted!")
 
-    mycursor.execute("INSERT INTO professores (escola) VALUES (%s)", ("Anadia"))
-    mycursor.execute("INSERT INTO professores (escola) VALUES (%s)", ("Aveiro"))
+    mycursor.execute("INSERT INTO professores (escola) VALUES (%s)", ("Anadia",))
+    mycursor.execute("INSERT INTO professores (escola) VALUES (%s)", ("Aveiro",))
+    #print("Professores inserted!")
 
-    mycursor.execute("INSERT INTO disciplinas (nome) VALUES (%s)", ("Matemática"))
-    mycursor.execute("INSERT INTO disciplinas (nome) VALUES (%s)", ("Português"))
-    mycursor.execute("INSERT INTO disciplinas (nome) VALUES (%s)", ("Inglês"))
+    mycursor.execute("INSERT INTO disciplinas (nome) VALUES (%s)", ("Matemática",))
+    mycursor.execute("INSERT INTO disciplinas (nome) VALUES (%s)", ("Português",))
+    mycursor.execute("INSERT INTO disciplinas (nome) VALUES (%s)", ("Inglês",))
+    #print("Disciplinas inserted!")
 
     mycursor.execute("INSERT INTO disciplinas_professores (disciplina, professor_id) VALUES (%s, %s)", ("Matemática", 1))
     mycursor.execute("INSERT INTO disciplinas_professores (disciplina, professor_id) VALUES (%s, %s)", ("Português", 1))
     mycursor.execute("INSERT INTO disciplinas_professores (disciplina, professor_id) VALUES (%s, %s)", ("Inglês", 2))
+    #print("Disciplinas_professores inserted!")
 
     mycursor.execute("INSERT INTO disciplinas_turmas (disciplina, turma) VALUES (%s, %s)", ("Matemática", 1))
     mycursor.execute("INSERT INTO disciplinas_turmas (disciplina, turma) VALUES (%s, %s)", ("Português", 1))
-    mycursor.execute("INSERT INTO disciplinas_turmas (disciplina, turma) VALUES (%s, %s)", ("Inglês", 2)) """
+    mycursor.execute("INSERT INTO disciplinas_turmas (disciplina, turma) VALUES (%s, %s)", ("Inglês", 2))
+    #print("Disciplinas_turmas inserted!")
+
+    mydb.commit()
+
+    tables_to_clean = ['users', 'sys_admin', 'escolas', 'turmas', 'alunos', 'professores', 'disciplinas', 'disciplinas_professores', 'disciplinas_turmas']
+    
+    for table in tables_to_clean:
+        mycursor.execute(f"SELECT * FROM {table}")
+        myresult = mycursor.fetchall()
+        #print(f"Data from table: {table}")
+        for x in myresult:
+            #print(x)
 
 
 
