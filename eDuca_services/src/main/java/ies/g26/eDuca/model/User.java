@@ -1,44 +1,40 @@
 package ies.g26.eDuca.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*    ;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
+
 @Entity
-@Data
 @Table(name = "user")
-public class user implements Serializable {
-    
-    // Attributes
-    @Id
-    @Column(name = "n_mec", nullable = false)
-    private long n_mec;
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+@Data
+
+public class User implements Serializable {
 
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Id
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    //@JsonIgnore
+
     @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "type", nullable = false)
-    @Enumerated(EnumType.ORDINAL)
-    private u_type type;
+    @Enumerated(EnumType.STRING)
+    private UserType type;
+
 
     // Constructors
-    public user() {
+    public User() {
     }
 
-    public user(long n_mec, String name, String email, String password, userType type) {
-        this.n_mec = n_mec;
+    public User(String name, String email, String password, UserType type) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -52,12 +48,16 @@ public class user implements Serializable {
             return false;
         }
             
-        user user = (user) o;
-        return n_mec == user.n_mec;
+        User user = (User) o;
+        return email == user.email;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(n_mec);
+        return Objects.hash(email);
+    }
+
+    protected void setUserType(UserType userType) {
+        this.type = userType;
     }
 }
