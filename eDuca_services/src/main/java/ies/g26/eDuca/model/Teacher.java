@@ -7,7 +7,8 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("Teacher")
 public class Teacher extends User {
-    @Id
+
+
     @Column(name = "n_mec", nullable = false)
     private long n_mec;
 

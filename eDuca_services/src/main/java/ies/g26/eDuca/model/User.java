@@ -5,14 +5,19 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Objects;
 
-
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 @Data
 
 public class User implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+
 
     @Column(name = "name", nullable = false)
     private String name;

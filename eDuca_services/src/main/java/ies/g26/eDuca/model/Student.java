@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 @Entity
 @DiscriminatorValue("Student")
 public class Student extends User {
-    @Id
-    @Column(name = "n_mec", nullable = false)
+
+    @Column(name = "n_mec", unique = true, nullable = false)
     private long n_mec;
 
     @Column(name = "school", nullable = false)

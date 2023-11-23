@@ -4,14 +4,16 @@ import java.util.List;
 import ies.g26.eDuca.model.UserType;
 
 
-public interface UserService  {
-    public List<User> getAllUsers();
-    public User getUserByN_mec(Long n_mec);
-    public User getUserByEmail(String email);
-    public List<User> getAllUsersByType(UserType type);
-    public void saveOrUpdateUser(User user);
-    public void deleteUser(Long n_mec);
-    public boolean existsByEmail(String email);
-    public boolean existsByN_mec(Long n_mec);
+public interface UserService {
+    List<User> getUserByName();
+    User getUserByEmail(String email);
+    List<User> getAllUsersByType(UserType type);
+    void saveOrUpdateUser(User user);
+    void deleteUser(Long n_mec);
+    boolean existsByEmail(String email);
+    boolean existsByN_mec(Long n_mec);
+
+
+
     
 }

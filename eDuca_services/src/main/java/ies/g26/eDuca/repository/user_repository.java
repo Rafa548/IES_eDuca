@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface user_repository extends JpaRepository<User, Long> {
-    Integer countByEmail(String email);
-    User findByN_mec(Long n__mec);
+    User findByName(String name);
     List<User> findAllByType(UserType type);
 }
