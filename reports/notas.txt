@@ -1,0 +1,2 @@
+em termos de arquitetura o script deve ir buscar dados diretamente á api 
+e em caso de alguma atualizaçao (na lista de alunos) deve ser enviada uma mensagem de refresh para existir uma atualizaçao em real time
