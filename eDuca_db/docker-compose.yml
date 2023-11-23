@@ -1,4 +1,4 @@
-# Use root/example as user/password credentials
+# Use root/examplerootpass as user/password credentials
 version: '3.8'
 
 services:
@@ -7,7 +7,7 @@ services:
     image: mysql:5.7
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: 'rootpass'
+      MYSQL_ROOT_PASSWORD: ''
       MYSQL_USER: 'spring'
       MYSQL_PASSWORD: 'springpass'
       MYSQL_DATABASE: 'ies'
