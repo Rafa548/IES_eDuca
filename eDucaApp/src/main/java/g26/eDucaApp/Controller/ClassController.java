@@ -24,7 +24,7 @@ public class ClassController {
     }
 
     // build get Class by name REST API
-    @GetMapping("{id}")
+    @GetMapping("{classname}")
     public ResponseEntity<S_class> getClassByName(@PathVariable("classname") String classname){
         S_class s_class = educaServices.getS_classByClassname(classname);
         return new ResponseEntity<>(s_class, HttpStatus.OK);
@@ -41,5 +41,13 @@ public class ClassController {
              return new ResponseEntity<>(educaServices.getAllS_class(), HttpStatus.OK);
          }
     }
+
+    @GetMapping("{classname}/students")
+    public ResponseEntity<?> getStudentsByClassname(@PathVariable("classname") String classname){
+        S_class s_class = educaServices.getS_classByClassname(classname);
+        return new ResponseEntity<>(s_class.getStudents(), HttpStatus.OK);
+    }
+
+
 
 }

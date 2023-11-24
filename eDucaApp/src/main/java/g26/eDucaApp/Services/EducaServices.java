@@ -166,12 +166,6 @@ public class EducaServices {
         return updatedS_class;
     }
 
-    public List<Student> getAllStudentsByClassName(String className) {
-        if (s_class_repo.findByClassname(className).isEmpty()) {
-            return null;
-        }
-        S_class s_class = s_class_repo.findByClassname(className).get();
-        return s_class.getStudents();
-    }
+
 
 }
