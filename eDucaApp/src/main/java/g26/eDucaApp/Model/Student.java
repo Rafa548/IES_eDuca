@@ -16,19 +16,19 @@ import java.util.Objects;
 @Table(name = "students")
 public class Student {
 
-    @Column(name = "n_mec", unique = true, nullable = false)
-    private long n_mec;
+    @Column(name = "nmec", unique = true, nullable = false)
+    private Long nmec;
 
     @Column(name = "school", nullable = false)
     private String school;
 
     @ManyToOne
-    @JoinColumn(name = "class_id", nullable = false)
-    private S_class s_class;
+    @JoinColumn(name = "studentclass", nullable = true)
+    private S_class studentclass;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;

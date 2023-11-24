@@ -19,7 +19,7 @@ public class Teacher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -30,8 +30,8 @@ public class Teacher {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "n_mec", nullable = false)
-    private long n_mec;
+    @Column(name = "nmec", nullable = false)
+    private Long nmec;
 
     @Column(name = "school", nullable = false)
     private String school;

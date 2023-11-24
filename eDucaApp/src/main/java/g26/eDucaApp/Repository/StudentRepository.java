@@ -10,8 +10,8 @@ public interface StudentRepository extends JpaRepository<Student, Long>{
 
     Optional<Student> findByName(String name);
 
-    Optional<Student> findByN_mec(long n_mec);
+    Optional<Student> findByNmec(Long nmec);
 
-    Optional<Student> findByS_class( S_class s_class);
+    Optional<Student> findByStudentclass(S_class studentclass);
 
 }

@@ -17,7 +17,7 @@ import java.util.Objects;
 public class Sys_Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
