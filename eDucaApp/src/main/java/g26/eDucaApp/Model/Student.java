@@ -1,5 +1,6 @@
 package g26.eDucaApp.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class Student {
 
     @ManyToOne
     @JoinColumn(name = "studentclass", nullable = true)
+    @JsonIgnoreProperties("students")
     private S_class studentclass;
 
     @Id

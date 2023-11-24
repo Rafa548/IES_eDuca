@@ -1,5 +1,6 @@
 package g26.eDucaApp.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,7 +38,12 @@ public class Teacher {
     private String school;
 
     @ManyToMany(mappedBy = "teachers")
+    @JsonIgnoreProperties("teachers")
     private List<S_class> s_classes;
+
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("teacher")
+    private List<Subject> subjects;
 
     @Override
     public boolean equals(Object o) {

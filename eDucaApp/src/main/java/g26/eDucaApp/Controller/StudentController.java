@@ -50,6 +50,7 @@ public class StudentController {
     @PutMapping("{nmec}")
     public ResponseEntity<Student> updateStudent(@PathVariable("nmec") Long nmec,
                                                   @RequestBody Student student){
+
         student.setNmec(nmec);
         Student updatedStudent = studentService.updateStudent(student);
         return new ResponseEntity<>(updatedStudent, HttpStatus.OK);

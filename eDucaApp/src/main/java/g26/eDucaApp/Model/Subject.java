@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
@@ -24,9 +25,11 @@ public class Subject {
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
+    @JsonIgnoreProperties("subjects")
     private Teacher teacher;
 
     @ManyToMany(mappedBy = "subjects")
+    @JsonIgnoreProperties("subjects")
     private List<S_class> classes;
 
 }

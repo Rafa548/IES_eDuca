@@ -17,5 +17,5 @@ public interface Sch_AdminRepository extends JpaRepository<Sch_Admin, Long>{
 
     Optional<Sch_Admin> findBySchool(String school);
 
-    List<Student> findBySClass(S_class sClass);
+
 }
