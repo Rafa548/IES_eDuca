@@ -1,8 +1,5 @@
 package g26.eDucaApp.Model;
 
-import g26.eDucaApp.Model.User;
-import g26.eDucaApp.Model.S_class;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,14 +7,28 @@ import lombok.Setter;
 
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "teachers")
-public class Teacher extends User {
+public class Teacher {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "email", unique = true, nullable = false)
+    private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @Column(name = "n_mec", nullable = false)
     private long n_mec;
@@ -28,7 +39,22 @@ public class Teacher extends User {
     @ManyToMany(mappedBy = "teachers")
     private List<S_class> s_classes;
 
-    public Teacher() {
-        super.setUserType(UserType.Teacher);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
+
+        Teacher user = (Teacher) o;
+        return email == user.email;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
+    }
+
+
+
 }
