@@ -2,16 +2,15 @@
 version: '3.8'
 
 services:
-
-  mysql:
-    image: mysql:5.7
+  mysql_db:
+    image: mysql/mysql-server:5.7
     restart: unless-stopped
+    container_name: eDuca_db	
     environment:
-      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_ROOT_PASSWORD: 'rootpass'
+      MYSQL_DATABASE: 'eDuca'
       MYSQL_USER: 'spring'
       MYSQL_PASSWORD: 'springpass'
-      MYSQL_DATABASE: 'ies'
     ports:
       - "3306:3306"
-    volumes:
-      - ~/docker/mysql:/var/lib/mysql
+    
