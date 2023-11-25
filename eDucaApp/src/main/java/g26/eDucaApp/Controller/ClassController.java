@@ -1,6 +1,7 @@
 package g26.eDucaApp.Controller;
 
 import g26.eDucaApp.Model.S_class;
+import g26.eDucaApp.Model.Student;
 import g26.eDucaApp.Services.EducaServices;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,17 @@ public class ClassController {
         return new ResponseEntity<>(s_class.getStudents(), HttpStatus.OK);
     }
 
+    @PutMapping("{classname}")
+    public ResponseEntity<?> updateClass(@PathVariable("classname") String classname, @RequestBody S_class s_class){
+        s_class = educaServices.getS_classByClassname(classname);
+        s_class.setClassname(classname);
+        S_class updatedClass = educaServices.updateS_class(s_class);
+        return new ResponseEntity<>(updatedClass, HttpStatus.OK);
+    }
 
-
+    @DeleteMapping("{classname}")
+    public ResponseEntity<?> deleteClass(@PathVariable("classname") String classname){
+        educaServices.deleteS_class(classname);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

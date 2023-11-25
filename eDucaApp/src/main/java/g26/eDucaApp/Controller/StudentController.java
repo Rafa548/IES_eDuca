@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("students")
@@ -41,6 +43,12 @@ public class StudentController {
             return new ResponseEntity<>(student, HttpStatus.OK);
         } else if (studentNmec != null && studentNmec != 0) {
             Student student = studentService.getStudentByNmec(studentNmec);
+            return new ResponseEntity<>(student, HttpStatus.OK);
+        } else if (studentclass != null) {
+            List<Student> student = studentService.getStudentByS_class(studentclass);
+            return new ResponseEntity<>(student, HttpStatus.OK);
+        } else if (school != null) {
+            List<Student> student = studentService.getStudentBySchool(school);
             return new ResponseEntity<>(student, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);

@@ -31,17 +31,19 @@ public class Teacher {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "nmec", nullable = false)
+    @Column(name = "nmec", unique = true,nullable = false)
     private Long nmec;
 
     @Column(name = "school", nullable = false)
     private String school;
 
     @ManyToMany(mappedBy = "teachers")
+    @Column(name = "classes", nullable = false)
     @JsonIgnoreProperties("teachers")
     private List<S_class> s_classes;
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    @Column(name = "subjects", nullable = false)
     @JsonIgnoreProperties("teacher")
     private List<Subject> subjects;
 
