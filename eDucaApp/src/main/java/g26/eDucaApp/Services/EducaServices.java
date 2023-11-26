@@ -129,9 +129,7 @@ public class EducaServices {
     }
 
     public List<Teacher> getAllTeachers() {
-        if (teacher_repo.findAll().isEmpty()) {
-            return null;
-        }
+
         return teacher_repo.findAll();
     }
 
@@ -158,6 +156,13 @@ public class EducaServices {
             return null;
         }
         return s_class_repo.findByClassname(classname).get();
+    }
+
+    public S_class getS_classById(Long id) {
+        if (s_class_repo.findById(id).isEmpty()) {
+            return null;
+        }
+        return s_class_repo.findById(id).get();
     }
 
     public List<S_class> getAllS_class() {
@@ -212,9 +217,7 @@ public class EducaServices {
     }
 
     public List<Sch_Admin> getAllSch_Admin() {
-        if (sch_admin_repo.findAll().isEmpty()) {
-            return null;
-        }
+
         return sch_admin_repo.findAll();
     }
 
@@ -249,13 +252,12 @@ public class EducaServices {
         if (subject_repo.findByName(subjectName).isEmpty()) {
             return null;
         }
+
         return subject_repo.findByName(subjectName).get();
     }
 
     public List<Subject> getAllSubjects() {
-        if (subject_repo.findAll().isEmpty()) {
-            return null;
-        }
+
         return subject_repo.findAll();
     }
 
@@ -298,9 +300,7 @@ public class EducaServices {
     }
 
     public List<Sys_Admin> getAllSys_Admin() {
-        if (sys_admin_repo.findAll().isEmpty()) {
-            return null;
-        }
+
         return sys_admin_repo.findAll();
     }
 

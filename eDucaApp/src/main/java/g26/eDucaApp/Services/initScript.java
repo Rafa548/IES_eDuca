@@ -4,7 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import g26.eDucaApp.Services.messaging.Producer;
+
+import g26.eDucaApp.Services.kafka_messages.Producer;
 import jakarta.annotation.PostConstruct;
 
 import java.util.ArrayList;

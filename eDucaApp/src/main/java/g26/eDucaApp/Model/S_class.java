@@ -23,6 +23,9 @@ public class S_class {
     @Column(name = "classname", nullable = false)
     private String classname;
 
+    @Column(name = "school", nullable = false)
+    private String school;
+
     @ManyToMany
     @JoinTable(
             name = "class_subject", // Join table name

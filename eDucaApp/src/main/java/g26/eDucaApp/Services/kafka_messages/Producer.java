@@ -1,4 +1,4 @@
-package g26.eDucaApp.Services.messaging;
+package g26.eDucaApp.Services.kafka_messages;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
