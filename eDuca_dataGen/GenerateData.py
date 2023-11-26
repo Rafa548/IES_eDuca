@@ -199,7 +199,7 @@ def main():
         subject_obj = {
             "id": subject_id,
             "name": subject,
-            "teacher": "",
+            "teachers": [],
             "classes": []
         }
         subject_id += 1
@@ -229,8 +229,8 @@ def main():
         }
         teachers.append(teacher)
 
-    
-
+   
+                
 
     while True:
         print("Waiting for messages...")
@@ -282,8 +282,8 @@ def main():
                         {
                             "type": "subject",
                             "name": subject['name'],
-                            "teacher": subject['teacher'],
-                            #"classes": subject['classes']
+                            "teachers": subject['teachers'],
+                            "classes": subject['classes']
                         }
                         )
                 

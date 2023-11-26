@@ -37,7 +37,12 @@ public class Teacher {
     @Column(name = "school", nullable = false)
     private String school;
 
-    @ManyToMany(mappedBy = "teachers")
+    @ManyToMany
+    @JoinTable(
+            name = "class_teacher",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "class_id")
+    )
     @JsonIgnoreProperties("teachers")
     private List<S_class> classes;
 

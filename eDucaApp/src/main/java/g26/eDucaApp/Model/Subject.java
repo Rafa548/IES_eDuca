@@ -33,7 +33,12 @@ public class Subject {
     @JsonIgnoreProperties("subjects")
     private List<Teacher> teachers;
 
-    @ManyToMany(mappedBy = "subjects")
+    @ManyToMany
+    @JoinTable(
+            name = "class_subject",
+            joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "class_id")
+    )
     @JsonIgnoreProperties("subjects")
     private List<S_class> classes;
 

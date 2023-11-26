@@ -86,14 +86,15 @@ public class Consumer {
             studentClass.setTeachers(teachersList);
 
             JSONArray subjectsArray = jsonObject.getJSONArray("subjects");
-            List<String> subjectsList = new ArrayList<>();
+            List<Subject> subjectsList = new ArrayList<>();
 
             for (int i = 0; i < subjectsArray.length(); i++) {
                 JSONObject subjectObj = subjectsArray.getJSONObject(i);
-                Subject subject = educaServices.getSubjectByName(subjectObj.getString("name"));
+                Subject subject = educaServices.getSubjectById((long) subjectObj.getInt("id"));
                 if (subject != null)
-                    subjectsList.add(subjectsArray.getString(i));
+                    subjectsList.add(subject);
             }
+            studentClass.setSubjects(subjectsList);
 
             educaServices.createS_class(studentClass);
         }
@@ -128,6 +129,26 @@ public class Consumer {
         else if (type.equals("subject")) {
             Subject subject = new Subject();
             subject.setName(jsonObject.getString("name"));
+
+            JSONArray teachersArray = jsonObject.getJSONArray("teachers");
+            List<Teacher> teachersList = new ArrayList<>();
+            for (int i = 0; i < teachersArray.length(); i++) {
+                JSONObject teacherObj = teachersArray.getJSONObject(i);
+                Teacher teacher = educaServices.getTeacherByN_mec(teacherObj.getLong("nmec"));
+                if (teacher != null)
+                    teachersList.add(teacher);
+            }
+            subject.setTeachers(teachersList);
+
+            JSONArray classesArray = jsonObject.getJSONArray("classes");
+            List<S_class> classesList = new ArrayList<>();
+            for (int i = 0; i < classesArray.length(); i++) {
+                JSONObject classObj = classesArray.getJSONObject(i);
+                S_class s_Class = educaServices.getS_classById((long) classObj.getInt("id"));
+                if (s_Class != null)
+                    classesList.add(s_Class);
+            }
+            subject.setClasses(classesList);
 
             educaServices.createSubject(subject);
         }
