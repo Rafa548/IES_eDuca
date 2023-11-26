@@ -148,8 +148,17 @@ def main():
 
     consumer.subscribe([receive_topic])
 
+    num_students = 200
+    subject_id = 1
+
     classes = set()
+    used_emails = set()
     class_objects = []
+    students = []
+    teachers = []
+    subjects = ["math", "portuguese", "english", "history", "geography", "biology", "physics", "chemistry"]
+    subjects_objects = []
+    
 
     for i in range(1, 11):
         for letter in ['a', 'b', 'c', 'd']:
@@ -166,11 +175,7 @@ def main():
                 }
                 class_objects.append(class_obj)
 
-    num_students = 200
-
-    students = []
-    teachers = []
-    used_emails = set()
+    
 
     for i in range(1, num_students + 1):
         student_class = random.choice(class_objects)
@@ -178,7 +183,6 @@ def main():
         while email in used_emails:
             email = f"{generate_random_string(8)}@gmail.com"
         used_emails.add(email)
-        
         student_nmec = 100000 + i
         student = {
             "nmec": student_nmec,
@@ -190,11 +194,24 @@ def main():
             "password": "hello"
         }
         students.append(student)
+    
+    for subject in subjects:
+        subject_obj = {
+            "id": subject_id,
+            "name": subject,
+            "teacher": "",
+            "classes": []
+        }
+        subject_id += 1
+        subjects_objects.append(subject_obj)
 
     
 
     for i in range(1, 31):
-        num_classes = random.randint(1, 6)  
+        random.shuffle(subjects_objects)
+        num_classes = random.randint(1, 6)
+        num_subjects_assigned = random.randint(1, 3)
+        subjects_assigned = subjects_objects[:num_subjects_assigned] 
         classes_assigned = random.sample(class_objects, num_classes)
         email = f"{generate_random_string(8)}@gmail.com"
         while email in used_emails:
@@ -208,9 +225,11 @@ def main():
             "nmec": 2000000 + i, 
             "school": "SampleSchool",
             "s_classes": classes_assigned,  
-            "subjects": []  
+            "subjects": subjects_assigned  
         }
         teachers.append(teacher)
+
+    
 
 
     while True:
@@ -253,9 +272,24 @@ def main():
                             "school": student['school']
                         }
                         )
+                subjects_api_url = "http://localhost:8080/subjects"
+                current_subjects = requests.get(subjects_api_url).json()
+                #print(current_subjects)
+                for subject in subjects_objects:
+                    existing_subject = next((s for s in current_subjects if s['name'] == subject['name']), None)
+                    if existing_subject is None:
+                        producer.send(send_topic,       
+                        {
+                            "type": "subject",
+                            "name": subject['name'],
+                            "teacher": subject['teacher'],
+                            #"classes": subject['classes']
+                        }
+                        )
+                
                 teachers_api_url = "http://localhost:8080/teachers"
                 current_teachers = requests.get(teachers_api_url).json()
-                print(current_teachers)
+                #print(current_teachers)
                 for teacher in teachers:
                     existing_teacher = next((t for t in current_teachers if t['nmec'] == teacher['nmec']), None)
                     if existing_teacher is None:
@@ -271,6 +305,7 @@ def main():
                             "subjects": teacher['subjects']
                         }
                         )
+                
             if message.value['type'] == 'update':
                 students_api_url = "http://localhost:8080/students"
                 class_api_url = "http://localhost:8080/classes"

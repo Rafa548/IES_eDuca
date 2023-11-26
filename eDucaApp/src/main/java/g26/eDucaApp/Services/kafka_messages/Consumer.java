@@ -69,7 +69,7 @@ public class Consumer {
             List<Student> studentsList = new ArrayList<>();
             for (int i = 0; i < studentsArray.length(); i++) {
                 JSONObject studentObj = studentsArray.getJSONObject(i);
-                Student student =educaServices.getStudentByNmec(studentObj.getLong("nmec"));
+                Student student = educaServices.getStudentByNmec(studentObj.getLong("nmec"));
                 if (student != null)
                     studentsList.add(student);
             }
@@ -113,11 +113,23 @@ public class Consumer {
                 if (s_Class != null)
                     classesList.add(s_Class);
             }
-
+            JSONArray subjectsArray = jsonObject.getJSONArray("subjects");
+            List<Subject> subjectsList = new ArrayList<>();
+            for (int i = 0; i < subjectsArray.length(); i++) {
+                JSONObject subjectObj = subjectsArray.getJSONObject(i);
+                Subject subject = educaServices.getSubjectById((long) subjectObj.getInt("id"));
+                if (subject != null)
+                    subjectsList.add(subject);
+            }
+            teacher.setSubjects(subjectsList);
             teacher.setClasses(classesList);
-
-
             educaServices.createTeacher(teacher);
+        }
+        else if (type.equals("subject")) {
+            Subject subject = new Subject();
+            subject.setName(jsonObject.getString("name"));
+
+            educaServices.createSubject(subject);
         }
     }
     

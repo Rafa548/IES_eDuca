@@ -90,9 +90,7 @@ public class EducaServices {
     private TeacherRepository teacher_repo;
 
     public Teacher createTeacher(Teacher teacher) {
-        if (teacher_repo.findByNmec(teacher.getNmec()).isPresent()) {
-            return null;
-        }
+
         return teacher_repo.save(teacher);
     }
 
@@ -101,6 +99,13 @@ public class EducaServices {
             return null;
         }
         return teacher_repo.findByEmail(teacherEmail).get();
+    }
+
+    public Teacher getTeacherById(Long id) {
+        if (teacher_repo.findById(id).isEmpty()) {
+            return null;
+        }
+        return teacher_repo.findById(id).get();
     }
 
 
@@ -145,9 +150,7 @@ public class EducaServices {
     private S_ClassRepository s_class_repo;
 
     public S_class createS_class(S_class s_class) {
-        if (s_class_repo.findByClassname(s_class.getClassname()).isPresent()) {
-            return null;
-        }
+
         return s_class_repo.save(s_class);
     }
 
@@ -189,9 +192,7 @@ public class EducaServices {
     private Sch_AdminRepository sch_admin_repo;
 
     public Sch_Admin createSch_Admin(Sch_Admin sch_admin) {
-        if (sch_admin_repo.findById(sch_admin.getId()).isPresent()) {
-            return null;
-        }
+
         return sch_admin_repo.save(sch_admin);
     }
 
@@ -242,9 +243,7 @@ public class EducaServices {
     private SubjectRepository subject_repo;
 
     public Subject createSubject(Subject subject) {
-        if (subject_repo.findById(subject.getId()).isPresent()) {
-            return null;
-        }
+
         return subject_repo.save(subject);
     }
 
@@ -254,6 +253,13 @@ public class EducaServices {
         }
 
         return subject_repo.findByName(subjectName).get();
+    }
+
+    public Subject getSubjectById(Long id) {
+        if (subject_repo.findById(id).isEmpty()) {
+            return null;
+        }
+        return subject_repo.findById(id).get();
     }
 
     public List<Subject> getAllSubjects() {
@@ -279,9 +285,7 @@ public class EducaServices {
     private Sys_AdminRepository sys_admin_repo;
 
     public Sys_Admin createSys_Admin(Sys_Admin sys_admin) {
-        if (sys_admin_repo.findById(sys_admin.getId()).isPresent()) {
-            return null;
-        }
+
         return sys_admin_repo.save(sys_admin);
     }
 
