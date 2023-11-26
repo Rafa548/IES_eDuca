@@ -41,8 +41,13 @@ public class Teacher {
     @JsonIgnoreProperties("teachers")
     private List<S_class> classes;
 
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("teacher")
+    @ManyToMany
+    @JoinTable(
+            name = "teacher_subject",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id")
+    )
+    @JsonIgnoreProperties("teachers")
     private List<Subject> subjects;
 
     @Override

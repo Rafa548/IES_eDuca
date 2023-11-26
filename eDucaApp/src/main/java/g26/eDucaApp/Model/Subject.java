@@ -24,10 +24,14 @@ public class Subject {
     @Column(name = "name",nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "teacher")
+    @ManyToMany
+    @JoinTable(
+            name = "teacher_subject",
+            joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "teacher_id")
+    )
     @JsonIgnoreProperties("subjects")
-    private Teacher teacher;
+    private List<Teacher> teachers;
 
     @ManyToMany(mappedBy = "subjects")
     @JsonIgnoreProperties("subjects")

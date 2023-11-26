@@ -25,16 +25,11 @@ public class SubjectController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getSubject(@RequestParam(value = "name", required = false) String subjectName,
-                                        @RequestParam(value = "teacher", required = false) Teacher subjectTeacher){
+    public ResponseEntity<?> getSubject(@RequestParam(value = "name", required = false) String subjectName){
         if (subjectName != null) {
             Subject subject = subjectService.getSubjectByName(subjectName);
             return new ResponseEntity<>(subject, HttpStatus.OK);
-        }else if (subjectTeacher != null) {
-            Subject subject = subjectService.getSubjectByTeacher(subjectTeacher);
-            return new ResponseEntity<>(subject, HttpStatus.OK);
-        }
-        else {
+        } else {
             return new ResponseEntity<>(subjectService.getAllSubjects(), HttpStatus.OK);
         }
     }
@@ -45,4 +40,5 @@ public class SubjectController {
         subjectService.deleteSubject(subject.getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }

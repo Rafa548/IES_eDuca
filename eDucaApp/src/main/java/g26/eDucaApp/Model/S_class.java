@@ -28,9 +28,9 @@ public class S_class {
 
     @ManyToMany
     @JoinTable(
-            name = "class_subject", // Join table name
-            joinColumns = @JoinColumn(name = "class_id"), // Column name for S_class's ID
-            inverseJoinColumns = @JoinColumn(name = "subject_id") // Column name for Subject's ID
+            name = "class_subject",
+            joinColumns = @JoinColumn(name = "class_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
     @JsonIgnoreProperties("class_subject")
     private List<Subject> subjects;

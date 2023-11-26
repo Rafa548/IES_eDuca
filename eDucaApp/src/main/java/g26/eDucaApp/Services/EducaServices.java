@@ -147,6 +147,7 @@ public class EducaServices {
         teacher_repo.delete(teacher);
     }
 
+
     private S_ClassRepository s_class_repo;
 
     public S_class createS_class(S_class s_class) {
@@ -263,7 +264,6 @@ public class EducaServices {
     }
 
     public List<Subject> getAllSubjects() {
-
         return subject_repo.findAll();
     }
 
@@ -273,13 +273,6 @@ public class EducaServices {
         }
         Subject subject = subject_repo.findById(id).get();
         subject_repo.delete(subject);
-    }
-
-    public Subject getSubjectByTeacher(Teacher teacher) {
-        if (subject_repo.findByTeacher(teacher).isEmpty()) {
-            return null;
-        }
-        return subject_repo.findByTeacher(teacher).get();
     }
 
     private Sys_AdminRepository sys_admin_repo;

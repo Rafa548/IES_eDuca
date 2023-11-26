@@ -58,6 +58,18 @@ public class TeacherController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("{nmec}/subjects")
+    public ResponseEntity<?> getTeacherSubjects(@PathVariable("nmec") Long nmec){
+        Teacher teacher = teacherService.getTeacherByN_mec(nmec);
+        return new ResponseEntity<>(teacher.getSubjects(), HttpStatus.OK);
+    }
+
+    @GetMapping("{nmec}/classes")
+    public ResponseEntity<?> getTeacherClasses(@PathVariable("nmec") Long nmec){
+        Teacher teacher = teacherService.getTeacherByN_mec(nmec);
+        return new ResponseEntity<>(teacher.getClasses(), HttpStatus.OK);
+    }
+
 
 
 }
