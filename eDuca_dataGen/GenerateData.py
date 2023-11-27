@@ -173,27 +173,14 @@ def main():
                     "subjects": [],
                     "teachers": []
                 }
+                
+                    
                 class_objects.append(class_obj)
+    
 
     
 
-    for i in range(1, num_students + 1):
-        student_class = random.choice(class_objects)
-        email = f"{generate_random_string(8)}@gmail.com"
-        while email in used_emails:
-            email = f"{generate_random_string(8)}@gmail.com"
-        used_emails.add(email)
-        student_nmec = 100000 + i
-        student = {
-            "nmec": student_nmec,
-            "school": "SampleSchool",
-            "studentclass": student_class,
-            "id": i,
-            "name": f"{generate_random_string(5)} {generate_random_string(6)}",
-            "email": email,
-            "password": "hello"
-        }
-        students.append(student)
+    
     
     for subject in subjects:
         subject_obj = {
@@ -204,6 +191,8 @@ def main():
         }
         subject_id += 1
         subjects_objects.append(subject_obj)
+
+    
 
     
 
@@ -224,10 +213,37 @@ def main():
             "password": "password123", 
             "nmec": 2000000 + i, 
             "school": "SampleSchool",
-            "s_classes": classes_assigned,  
+            "s_classes": classes_assigned,
             "subjects": subjects_assigned  
         }
         teachers.append(teacher)
+
+    
+
+    for i in range(1, num_students + 1):
+        student_class = random.choice(class_objects)
+        email = f"{generate_random_string(8)}@gmail.com"
+        while email in used_emails:
+            email = f"{generate_random_string(8)}@gmail.com"
+        used_emails.add(email)
+        student_nmec = 100000 + i
+        student = {
+            "nmec": student_nmec,
+            "school": "SampleSchool",
+            "studentclass": student_class,
+            "id": i,
+            "name": f"{generate_random_string(5)} {generate_random_string(6)}",
+            "email": email,
+            "password": "hello"
+        }
+        students.append(student)
+
+    for class_ in class_objects:
+        for teacher in teachers:
+            for s_class in teacher['s_classes']:
+                if s_class['classname'] == class_["classname"] and s_class["school"] == class_["school"]:
+                    class_['subjects'] += teacher['subjects']
+
 
    
                 
@@ -239,6 +255,23 @@ def main():
             #producer.send(send_topic, message.value)
             if message.value['type'] == 'init':
                 time.sleep(7)
+                subjects_api_url = "http://localhost:8080/subjects"
+                current_subjects = requests.get(subjects_api_url).json()
+                #print(current_subjects)
+                for subject in subjects_objects:
+                    existing_subject = next((s for s in current_subjects if s['name'] == subject['name']), None)
+                    if existing_subject is None:
+                        producer.send(send_topic,       
+                        {
+                            "type": "subject",
+                            "name": subject['name'],
+                            "teachers": subject['teachers'],
+                            "classes": subject['classes']
+                        }
+                        )
+
+                
+
                 classes_api_url = "http://localhost:8080/classes"
                 current_classes = requests.get(classes_api_url).json()
                 for class_ in class_objects:
@@ -272,20 +305,7 @@ def main():
                             "school": student['school']
                         }
                         )
-                subjects_api_url = "http://localhost:8080/subjects"
-                current_subjects = requests.get(subjects_api_url).json()
-                #print(current_subjects)
-                for subject in subjects_objects:
-                    existing_subject = next((s for s in current_subjects if s['name'] == subject['name']), None)
-                    if existing_subject is None:
-                        producer.send(send_topic,       
-                        {
-                            "type": "subject",
-                            "name": subject['name'],
-                            "teachers": subject['teachers'],
-                            "classes": subject['classes']
-                        }
-                        )
+                
                 
                 teachers_api_url = "http://localhost:8080/teachers"
                 current_teachers = requests.get(teachers_api_url).json()
@@ -305,6 +325,7 @@ def main():
                             "subjects": teacher['subjects']
                         }
                         )
+                
                 
             if message.value['type'] == 'update':
                 students_api_url = "http://localhost:8080/students"
