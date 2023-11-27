@@ -23,13 +23,16 @@ public class Teaching_Assignment {
 
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
+    @JsonIgnoreProperties({"teaching_assignments","teachers", "students", "subjects"})
     private S_class sclass;
 
     @ManyToOne
     @JoinColumn(name = "subject_id", nullable = false)
+    @JsonIgnoreProperties({"teachers", "teaching_assignments", "classes"})
     private Subject subject;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
+    @JsonIgnoreProperties({"subjects", "teaching_assignments","classes"})
     private Teacher teacher;
 }

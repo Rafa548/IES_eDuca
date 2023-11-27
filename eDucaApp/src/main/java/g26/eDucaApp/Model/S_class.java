@@ -51,7 +51,7 @@ public class S_class {
     private List<Teacher> teachers;
 
     @OneToMany(mappedBy = "sclass", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("sclass")
+    @JsonIgnoreProperties({"classes","sclass"})
     private List<Teaching_Assignment> teaching_assignments;
 
 
