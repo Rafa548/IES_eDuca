@@ -1,4 +1,5 @@
 package g26.eDucaApp.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.List;
@@ -32,7 +33,8 @@ public class S_class {
             joinColumns = @JoinColumn(name = "class_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
-    @JsonIgnoreProperties("class_subject")
+    @JsonIgnoreProperties({"classes", "teachers"})
+    //@JsonIgnore
     private List<Subject> subjects;
 
     @OneToMany(mappedBy = "studentclass", cascade = CascadeType.ALL)
@@ -45,7 +47,7 @@ public class S_class {
             joinColumns = @JoinColumn(name = "class_id"),
             inverseJoinColumns = @JoinColumn(name = "teacher_id")
     )
-    @JsonIgnoreProperties("class_teacher")
+    @JsonIgnoreProperties({"classes","subjects"})
     private List<Teacher> teachers;
 
 
