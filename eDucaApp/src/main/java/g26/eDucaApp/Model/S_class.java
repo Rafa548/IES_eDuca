@@ -50,5 +50,11 @@ public class S_class {
     @JsonIgnoreProperties({"classes","subjects"})
     private List<Teacher> teachers;
 
+    @OneToMany(mappedBy = "sclass", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("sclass")
+    private List<Teaching_Assignment> teaching_assignments;
+
 
 }
+
+

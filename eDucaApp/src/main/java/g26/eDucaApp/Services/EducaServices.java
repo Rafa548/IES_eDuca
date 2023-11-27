@@ -1,16 +1,12 @@
 package g26.eDucaApp.Services;
 
-import g26.eDucaApp.Model.S_class;
-import g26.eDucaApp.Model.Sch_Admin;
-import g26.eDucaApp.Model.Student;
-import g26.eDucaApp.Model.Subject;
-import g26.eDucaApp.Model.Teacher;
-import g26.eDucaApp.Model.Sys_Admin;
+import g26.eDucaApp.Model.*;
 import g26.eDucaApp.Repository.*;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -318,6 +314,105 @@ public class EducaServices {
         return updatedSys_Admin;
     }
 
+    private Teaching_AssignmentRepository teaching_assignment_repo;
 
+    public Teaching_Assignment createTeachingAssignment(Teaching_Assignment teaching_assignment) {
 
+        return teaching_assignment_repo.save(teaching_assignment);
+    }
+
+    public List<Teaching_Assignment> getTeachingAssignmentByTeacher(Teacher teacher) {
+        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findByTeacher(teacher);
+
+        if (teaching_assignments.isEmpty()) {
+            return null;
+        } else {
+            return teaching_assignments;
+        }
+    }
+
+    public List<Teaching_Assignment> getTeachingAssignmentByS_class(S_class s_class) {
+        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findBySclass(s_class);
+
+        if (teaching_assignments.isEmpty()) {
+            return null;
+        } else {
+            return teaching_assignments;
+        }
+    }
+
+    public List<Teaching_Assignment> getTeachingAssignmentBySubject(Subject subject) {
+        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findBySubject(subject);
+
+        if (teaching_assignments.isEmpty()) {
+            return null;
+        } else {
+            return teaching_assignments;
+        }
+    }
+
+    public Teaching_Assignment getTeachingAssignmentById(Long id){
+        Optional<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findById(id);
+        if (teaching_assignments.isEmpty()) {
+            return null;
+        } else {
+            return teaching_assignments.get();
+        }
+    }
+
+    public List<Teaching_Assignment> getAllTeachingAssignments() {
+
+        return teaching_assignment_repo.findAll();
+    }
+
+    private GradeRepository grade_repo;
+
+    public Grade createGrade(Grade grade) {
+
+        return grade_repo.save(grade);
+    }
+
+    public List<Grade> getGradeByStudent(Student student) {
+        List<Grade> grades = grade_repo.findByStudent(student);
+
+        if (grades.isEmpty()) {
+            return null;
+        } else {
+            return grades;
+        }
+    }
+
+    public List<Grade> getGradeBySubject(Subject subject) {
+        List<Grade> grades = grade_repo.findBySubject(subject);
+
+        if (grades.isEmpty()) {
+            return null;
+        } else {
+            return grades;
+        }
+    }
+
+    public List<Grade> getGradeByTeacher(Teacher teacher) {
+        List<Grade> grades = grade_repo.findByTeacher(teacher);
+
+        if (grades.isEmpty()) {
+            return null;
+        } else {
+            return grades;
+        }
+    }
+
+    public Grade getGradeById(Long id){
+        Optional<Grade> grades = grade_repo.findById(id);
+        if (grades.isEmpty()) {
+            return null;
+        } else {
+            return grades.get();
+        }
+    }
+
+    public List<Grade> getAllGrades() {
+
+        return grade_repo.findAll();
+    }
 }
