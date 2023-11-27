@@ -59,6 +59,10 @@ public class Teacher {
     @JsonIgnoreProperties("teacher")
     private List<Grade> grades;
 
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("teacher")
+    private List<Teaching_Assignment> teaching_assignments;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

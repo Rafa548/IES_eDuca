@@ -1,9 +1,6 @@
 package g26.eDucaApp.Services.kafka_messages;
 
-import g26.eDucaApp.Model.S_class;
-import g26.eDucaApp.Model.Student;
-import g26.eDucaApp.Model.Subject;
-import g26.eDucaApp.Model.Teacher;
+import g26.eDucaApp.Model.*;
 import g26.eDucaApp.Repository.StudentRepository;
 import g26.eDucaApp.Repository.TeacherRepository;
 import g26.eDucaApp.Services.EducaServices;
@@ -106,7 +103,7 @@ public class Consumer {
             teacher.setNmec(jsonObject.getLong("nmec"));
             teacher.setSchool(jsonObject.getString("school"));
             JSONArray classesArray = jsonObject.getJSONArray("s_classes");
-            System.out.println(classesArray);
+
             List<S_class> classesList = new ArrayList<>();
             for (int i = 0; i < classesArray.length(); i++) {
                 JSONObject classObj = classesArray.getJSONObject(i);
@@ -151,6 +148,25 @@ public class Consumer {
             subject.setClasses(classesList);
 
             educaServices.createSubject(subject);
+        } else if (type.equals("assigment")) {
+            // Handle assigment message
+            Teaching_Assignment assignment = new Teaching_Assignment();
+            JSONObject ClassJson = jsonObject.getJSONObject("class");
+            S_class class_ = educaServices.getS_classById((long) ClassJson.getInt("id"));
+            if (class_ != null)
+                assignment.setSclass(class_);
+
+            JSONObject subjectJson = jsonObject.getJSONObject("subject");
+            Subject subject = educaServices.getSubjectById((long) subjectJson.getInt("id"));
+            if (subject != null)
+                assignment.setSubject(subject);
+
+            JSONObject teacherJson = jsonObject.getJSONObject("teacher");
+            Teacher teacher = educaServices.getTeacherByN_mec(teacherJson.getLong("nmec"));
+            if (teacher != null)
+                assignment.setTeacher(teacher);
+
+            educaServices.createTeachingAssignment(assignment);
         }
     }
     
