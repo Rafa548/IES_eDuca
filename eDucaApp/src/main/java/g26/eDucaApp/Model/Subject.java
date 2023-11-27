@@ -42,4 +42,8 @@ public class Subject {
     @JsonIgnoreProperties("subjects")
     private List<S_class> classes;
 
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("subject")
+    private List<Grade> grades;
+
 }
