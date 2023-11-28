@@ -325,6 +325,30 @@ def main():
                             "subjects": teacher['subjects']
                         }
                         )
+                #wait 10 seconds
+                time.sleep(10)
+
+                #create 2 students for class 3a
+                producer.send(send_topic,       
+                        {
+                            "type": "student",
+                            "name": "Diogo Silva",
+                            "studentclass": {
+                                "id": 1,
+                                "classname": "3a",
+                                "school": "SampleSchool",
+                                "students": [],
+                                "subjects": [],
+                                "teachers": []
+                            },
+                            "nmec": 10736044,
+                            "email": "asdfasdfasdfasdf@gmail.com",
+                            "password": "hello",
+                            "school": "SampleSchool"
+                        }
+                        )
+                
+
                 
                 
             if message.value['type'] == 'update':

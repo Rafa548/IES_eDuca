@@ -1,6 +1,26 @@
+// App.js
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import ClassPage from './ClassPage';
+
+const ClassCard = ({ sClass }) => (
+  <div className="class-container">
+    <Link to={`/class/${sClass.classname}`}>
+      <h3>{sClass.classname}</h3>
+    </Link>
+    {/* ... (rest of the class details) */}
+  </div>
+);
+
+const ClassList = ({ classes }) => (
+  <div className="class-container-wrapper">
+    {classes.map((sClass) => (
+      <ClassCard key={sClass.id} sClass={sClass} />
+    ))}
+  </div>
+);
 
 const App = () => {
   const [classes, setClasses] = useState([]);
@@ -20,38 +40,20 @@ const App = () => {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <div className="App-intro">
-          <h2>Classes</h2>
-          {classes.map((sClass) => (
-            <div key={sClass.id} className="class-container">
-              <h3>{sClass.classname}</h3>
-              <p>School: {sClass.school}</p>
-              <div className="section">
-                <h4>Subjects:</h4>
-                <ul>
-                  {sClass.subjects.map((subject) => (
-                    <li key={subject.id}>{subject.name}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className="section">
-                <h4>Students:</h4>
-                <ul>
-                  {sClass.students.map((student) => (
-                    <li key={student.id}>
-                      {student.name} ({student.email})
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ))}
-        </div>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <header className="App-header">
+          
+          <div className="App-intro">
+            <h2>Classes</h2>
+            <Switch>
+              <Route path="/class/:classId" component={ClassPage} />
+              <Route path="/" render={() => <ClassList classes={classes} />} />
+            </Switch>
+          </div>
+        </header>
+      </div>
+    </Router>
   );
 };
 
