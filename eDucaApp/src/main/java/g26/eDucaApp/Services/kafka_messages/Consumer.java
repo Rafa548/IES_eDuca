@@ -38,7 +38,7 @@ public class Consumer {
             return;
         }
         JSONObject jsonObject = new JSONObject(message);
-        System.out.println("Consumed message: " + message);
+        //System.out.println("Consumed message: " + message);
         String type = jsonObject.getString("type");
         if (type.equals("student")) {
             Student student = new Student();

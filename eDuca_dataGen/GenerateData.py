@@ -26,7 +26,7 @@ def main():
 
     consumer.subscribe([receive_topic])
 
-    num_students = 200
+    num_students = 400
    
     subject_id = 1
     assignment_id = 1
@@ -169,7 +169,7 @@ def main():
 
     for i in range(1, num_students + 1):
         student_class = random.choice(class_objects)
-        while len(assigned_classes[student_class["id"]]) > 20:
+        while len(assigned_classes[student_class["id"]]) >= 10:
             student_class = random.choice(class_objects)
         email = f"{generate_random_string(8)}@gmail.com"
         while email in used_emails:
@@ -193,11 +193,11 @@ def main():
         for subject in subjects_objects:
             class_["subjects"].append(subject)
 
-
     while True:
         print("Waiting for messages...")
         for message in consumer:
                 print(message.value)
+                generate_data = False
                 #producer.send(send_topic, message.value)
                 if message.value['type'] == 'init':
                     time.sleep(7)
@@ -297,8 +297,11 @@ def main():
                                     }             
                             )
                             #print(assigment)
+ 
+                    generate_data == True
 
                 if message.value['type'] == 'periodic':
+                    time.sleep(15)
                     students_api_url = "http://localhost:8080/students"
                     current_students = requests.get(students_api_url).json()
                     class_api_url = "http://localhost:8080/classes"
@@ -334,23 +337,6 @@ def main():
                                     "grade": grade
                                 })
                     
-                    """ for students_classes in class_objects:
-                        for student in stud ents:
-                            if student["studentclass"] == students_classes :
-                                subject = random.choice(students_classes["subjects"])
-                                grade = random.randint(1, 20)
-                                teacher_info = next((t for t in teacher_assignment if t["assigned_class"] == students_classes and t["assigned_subject"] == subject), None)
-                                teacher = next((t for t in teachers if t["id"] == teacher_info["teacher_id"]), None)
-                                print("teacher:",teacher)
-                                print
-                                print("..........................")
-                                #print(student)
-                                grades.append({
-                                    "student": student,
-                                    "subject": subject,
-                                    "teacher": teacher,
-                                    "grade": grade
-                                }) """
                     
                     for grade in grades:
                         producer.send(send_topic,
