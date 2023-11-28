@@ -162,12 +162,35 @@ public class Consumer {
                 assignment.setSubject(subject);
 
             JSONObject teacherJson = jsonObject.getJSONObject("teacher");
-            Teacher teacher = educaServices.getTeacherByN_mec(teacherJson.getLong("nmec"));
+            Teacher teacher = educaServices.getTeacherByN_mec((long) teacherJson.getLong("nmec"));
             if (teacher != null)
                 assignment.setTeacher(teacher);
 
             educaServices.createTeachingAssignment(assignment);
+        } else if (type.equals("grade")) {
+            // Handle grade message
+            Grade grade = new Grade();
+            grade.setGrade(jsonObject.getInt("grade"));
+            //grade.setWeight(jsonObject.getInt("weight"));
+
+            JSONObject studentJson = jsonObject.getJSONObject("student");
+            Student student = educaServices.getStudentByNmec((long) studentJson.getInt("nmec"));
+            if (student != null)
+                grade.setStudent(student);
+
+            JSONObject subjectJson = jsonObject.getJSONObject("subject");
+            Subject subject = educaServices.getSubjectById((long) subjectJson.getInt("id"));
+            if (subject != null)
+                grade.setSubject(subject);
+
+            JSONObject teacherJson = jsonObject.getJSONObject("teacher");
+            Teacher teacher = educaServices.getTeacherByN_mec((long) teacherJson.getInt("nmec"));
+            if (teacher != null)
+                grade.setTeacher(teacher);
+
+            educaServices.createGrade(grade);
         }
+
     }
     
 }

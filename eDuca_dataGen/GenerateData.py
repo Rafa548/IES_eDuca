@@ -160,6 +160,9 @@ def main():
         }
         teachers.append(teacher)
 
+
+    grades = []
+
     
 
     for i in range(1, num_students + 1):
@@ -182,127 +185,155 @@ def main():
 
     
     for class_ in class_objects:
-        for teacher in teachers:
-            for s_class in teacher['s_classes']:
-                #print(s_class)
-                if s_class['classname'] == class_["classname"] and s_class["school"] == class_["school"]:
-                    class_['subjects'] += teacher['subjects']
+        for subject in subjects_objects:
+            class_["subjects"].append(subject)
 
-
-   
+            
     generate_data = False
 
     while True:
         print("Waiting for messages...")
         for message in consumer:
-            print(message.value)
-            #producer.send(send_topic, message.value)
-            if message.value['type'] == 'init':
-                time.sleep(7)
-                subjects_api_url = "http://localhost:8080/subjects"
-                current_subjects = requests.get(subjects_api_url).json()
-                #print(current_subjects)
-                for subject in subjects_objects:
-                    existing_subject = next((s for s in current_subjects if s['name'] == subject['name']), None)
-                    if existing_subject is None:
-                        producer.send(send_topic,       
-                        {
-                            "type": "subject",
-                            "name": subject['name'],
-                            "teachers": subject['teachers'],
-                            "classes": subject['classes']
-                        }
-                        )
-                        #print(subject)
+                print(message.value)
+                #producer.send(send_topic, message.value)
+                if message.value['type'] == 'init':
+                    time.sleep(7)
+                    subjects_api_url = "http://localhost:8080/subjects"
+                    current_subjects = requests.get(subjects_api_url).json()
+                    #print(current_subjects)
+                    for subject in subjects_objects:
+                        existing_subject = next((s for s in current_subjects if s['name'] == subject['name']), None)
+                        if existing_subject is None:
+                            producer.send(send_topic,       
+                            {
+                                "type": "subject",
+                                "name": subject['name'],
+                                "teachers": subject['teachers'],
+                                "classes": subject['classes']
+                            }
+                            )
+                            #print(subject)
 
-                
+                    
 
 
-                classes_api_url = "http://localhost:8080/classes"
-                current_classes = requests.get(classes_api_url).json()
-                for class_ in class_objects:
-                    existing_class = next((c for c in current_classes if c['classname'] == class_['classname']), None) #and c["school"] == class_["school"]), None)
-                    if existing_class is None:
-                        producer.send(send_topic,       
-                        {
-                            "type": "class",
-                            "classname": class_['classname'],
-                            "school": class_['school'],
-                            "students": class_['students'],
-                            "subjects": class_['subjects'],
-                            "teachers": class_['teachers']
-                        }
-                        )
-                        #print(class_)
+                    classes_api_url = "http://localhost:8080/classes"
+                    current_classes = requests.get(classes_api_url).json()
+                    for class_ in class_objects:
+                        existing_class = next((c for c in current_classes if c['classname'] == class_['classname']), None) #and c["school"] == class_["school"]), None)
+                        if existing_class is None:
+                            producer.send(send_topic,       
+                            {
+                                "type": "class",
+                                "classname": class_['classname'],
+                                "school": class_['school'],
+                                "students": class_['students'],
+                                "subjects": class_['subjects'],
+                                "teachers": class_['teachers']
+                            }
+                            )
+                            #print(class_)
 
-                students_api_url = "http://localhost:8080/students"
-                current_students = requests.get(students_api_url).json()
-                #print(current_students)
-                for student in students:
-                    existing_student = next((s for s in current_students if s['nmec'] == student['nmec']), None)
-                    if existing_student is None:
-                        producer.send(send_topic,       
-                        {
-                            "type": "student",
-                            "name": student['name'],
-                            "studentclass": student['studentclass'],
-                            "nmec": student['nmec'],
-                            "email": student['email'],
-                            "password": student['password'],
-                            "school": student['school']
-                        }
-                        )
-                        #print(student)
-                
-                
-                teachers_api_url = "http://localhost:8080/teachers"
-                current_teachers = requests.get(teachers_api_url).json()
-                #print(current_teachers)
-                for teacher in teachers:
-                    existing_teacher = next((t for t in current_teachers if t['nmec'] == teacher['nmec']), None)
-                    if existing_teacher is None:
-                        producer.send(send_topic,       
-                        {
-                            "type": "teacher",
-                            "name": teacher['name'],
-                            "nmec": teacher['nmec'],
-                            "email": teacher['email'],
-                            "password": teacher['password'],
-                            "school": teacher['school'],
-                            "s_classes": teacher['s_classes'],
-                            "subjects": teacher['subjects'],
-                        }
-                        )
-                        #print(teacher)
-                
+                    students_api_url = "http://localhost:8080/students"
+                    current_students = requests.get(students_api_url).json()
+                    #print(current_students)
+                    for student in students:
+                        existing_student = next((s for s in current_students if s['nmec'] == student['nmec']), None)
+                        if existing_student is None:
+                            producer.send(send_topic,       
+                            {
+                                "type": "student",
+                                "name": student['name'],
+                                "studentclass": student['studentclass'],
+                                "nmec": student['nmec'],
+                                "email": student['email'],
+                                "password": student['password'],
+                                "school": student['school']
+                            }
+                            )
+                            #print(student)
+                    
+                    
+                    teachers_api_url = "http://localhost:8080/teachers"
+                    current_teachers = requests.get(teachers_api_url).json()
+                    #print(current_teachers)
+                    for teacher in teachers:
+                        existing_teacher = next((t for t in current_teachers if t['nmec'] == teacher['nmec']), None)
+                        if existing_teacher is None:
+                            producer.send(send_topic,       
+                            {
+                                "type": "teacher",
+                                "name": teacher['name'],
+                                "nmec": teacher['nmec'],
+                                "email": teacher['email'],
+                                "password": teacher['password'],
+                                "school": teacher['school'],
+                                "s_classes": teacher['s_classes'],
+                                "subjects": teacher['subjects'],
+                            }
+                            )
+                            #print(teacher)
+                    
 
-                assigments_api_url = "http://localhost:8080/teaching_assignments"
-                current_assigments = requests.get(assigments_api_url).json()
-                for assigment in teacher_assignment:
-                    existing_assigment = next((s for s in current_assigments if s['name'] == subject['name']), None)
-                    if existing_assigment is None:
-                        print(assigment["assigned_class"])
-                        for teacher in teachers:
-                            if teacher["id"] == assigment["teacher_id"]:
-                                producer.send(send_topic,
-                                {
-                                    "type": "assigment",
+                    assigments_api_url = "http://localhost:8080/teaching_assignments"
+                    current_assigments = requests.get(assigments_api_url).json()
+                    for assigment in teacher_assignment:
+                        existing_assigment = next((s for s in current_assigments if s['id'] == subject['id']), None)
+                        if existing_assigment is None:
+                            #print(assigment["assigned_class"])
+                            for teacher in teachers:
+                                if teacher["id"] == assigment["teacher_id"]:
+                                    producer.send(send_topic,
+                                    {
+                                        "type": "assigment",
+                                        "teacher": teacher,
+                                        "class": assigment["assigned_class"],
+                                        "subject": assigment["assigned_subject"]
+                                    }             
+                            )
+                            #print(assigment)
+
+
+                    generate_data = True
+
+                if message.value['type'] == 'update':
+                    generate_data = False
+                    students_api_url = "http://localhost:8080/students"
+                    class_api_url = "http://localhost:8080/classes"
+
+                if message.value['type'] == 'periodic':
+                    for students_classes in class_objects:
+                        for student in students:
+                            
+                            if student["studentclass"] == students_classes :
+                                subject = random.choice(students_classes["subjects"])
+                                grade = random.randint(1, 20)
+                                teacher_info = next((t for t in teacher_assignment if t["assigned_class"] == students_classes and t["assigned_subject"] == subject), None)
+                                teacher = next((t for t in teachers if t["id"] == teacher_info["teacher_id"]), None)
+                                print("teacher:",teacher)
+                                print
+                                print("..........................")
+                                #print(student)
+                                grades.append({
+                                    "student": student,
+                                    "subject": subject,
                                     "teacher": teacher,
-                                    "class": assigment["assigned_class"],
-                                    "subject": assigment["assigned_subject"]
-                                }             
+                                    "grade": grade
+                                })
+                    
+                    for grade in grades:
+                        producer.send(send_topic,
+                        {
+                            "type": "grade",
+                            "student": grade["student"],
+                            "subject": grade["subject"],
+                            "teacher": grade["teacher"],
+                            "grade": grade["grade"]
+                        }
                         )
-                        #print(assigment)
-
-
-                generate_data = True
-            if message.value['type'] == 'update':
-                generate_data = False
-                students_api_url = "http://localhost:8080/students"
-                class_api_url = "http://localhost:8080/classes"
+                        #print(grade)
         
-        if generate_data:
-            print("hello")
+        
 
 
 

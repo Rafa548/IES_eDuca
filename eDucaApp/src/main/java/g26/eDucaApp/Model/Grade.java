@@ -22,7 +22,7 @@ public class Grade {
         private int grade;
 
         @ManyToOne
-        @JoinColumn(name = "student_id", nullable = false)
+        @JoinColumn(name = "student", nullable = false)
         private Student student;
 
         @ManyToOne

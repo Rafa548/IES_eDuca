@@ -367,7 +367,6 @@ public class EducaServices {
     private GradeRepository grade_repo;
 
     public Grade createGrade(Grade grade) {
-
         return grade_repo.save(grade);
     }
 
