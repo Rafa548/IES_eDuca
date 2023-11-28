@@ -129,7 +129,6 @@ public class EducaServices {
     }
 
     public List<Teacher> getAllTeachers() {
-
         return teacher_repo.findAll();
     }
 

@@ -1,5 +1,6 @@
 package g26.eDucaApp.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ public class Student {
 
     @ManyToOne
     @JoinColumn(name = "studentclass", nullable = true)
-    @JsonIgnoreProperties("students")
+    @JsonIgnoreProperties({"students", "teachers", "subjects", "teaching_assignments"})
     private S_class studentclass;
 
     @Id
@@ -43,7 +44,7 @@ public class Student {
     private String password;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("student")
+    @JsonIgnoreProperties({"student", "teacher"})
     private List<Grade> grades;
 
 

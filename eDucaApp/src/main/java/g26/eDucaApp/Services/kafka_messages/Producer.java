@@ -18,7 +18,7 @@ public class Producer {
     private KafkaTemplate<String, String> kafkaTemplate;
 
     public void sendMessage(String message){
-        System.out.println("SENDING MESSAGE");
+
         this.kafkaTemplate.send(TOPIC, message);
         this.kafkaTemplate.flush();
     }

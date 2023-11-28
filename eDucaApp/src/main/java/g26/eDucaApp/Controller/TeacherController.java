@@ -34,7 +34,9 @@ public class TeacherController {
     public ResponseEntity<?> getTeachers(@RequestParam(value="email", required = false) String teacherEmail,
                                          @RequestParam(value="name", required = false) String teacherName,
                                          @RequestParam(value="nmec", required = false) Long teacherNmec,
-                                         @RequestParam(value="school", required = false) String school){
+                                         @RequestParam(value="school", required = false) String school,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "1") int size){
         if (teacherEmail != null) {
             Teacher teacher = teacherService.getTeacherByEmail(teacherEmail);
             return new ResponseEntity<>(teacher, HttpStatus.OK);
@@ -45,7 +47,7 @@ public class TeacherController {
             Teacher teacher = teacherService.getTeacherByN_mec(teacherNmec);
             return new ResponseEntity<>(teacher, HttpStatus.OK);
         } else if (school != null) {
-            List<Teacher> teachers = teacherService.getTeacherBySchool(school);//não devia retornar uma lista????<Rafa ..........>
+            List<Teacher> teachers = teacherService.getTeacherBySchool(school);
             return new ResponseEntity<>(teachers, HttpStatus.OK);
         }else {
             return new ResponseEntity<>(teacherService.getAllTeachers(), HttpStatus.OK);

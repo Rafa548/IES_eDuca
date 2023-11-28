@@ -28,11 +28,11 @@ public class Teaching_Assignment {
 
     @ManyToOne
     @JoinColumn(name = "subject_id", nullable = false)
-    @JsonIgnoreProperties({"teachers", "teaching_assignments", "classes"})
+    @JsonIgnoreProperties({"teachers", "teaching_assignments", "classes", "grades"})
     private Subject subject;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
-    @JsonIgnoreProperties({"subjects", "teaching_assignments","classes"})
+    @JsonIgnoreProperties({"subjects", "teaching_assignments","classes","grades"})
     private Teacher teacher;
 }

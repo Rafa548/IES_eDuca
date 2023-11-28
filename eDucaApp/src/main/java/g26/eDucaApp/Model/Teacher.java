@@ -43,7 +43,7 @@ public class Teacher {
             joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "class_id")
     )
-    @JsonIgnoreProperties("teachers")
+    @JsonIgnoreProperties({"teachers","students", "subjects", "teaching_assignments"})
     private List<S_class> classes;
 
     @ManyToMany
@@ -52,15 +52,15 @@ public class Teacher {
             joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
-    @JsonIgnoreProperties("teachers")
+    @JsonIgnoreProperties({"teachers", "classes", "teaching_assignments", "grades"})
     private List<Subject> subjects;
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("teacher")
+    @JsonIgnoreProperties({"teacher", "subject"})
     private List<Grade> grades;
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("teacher")
+    @JsonIgnoreProperties({"teacher"})
     private List<Teaching_Assignment> teaching_assignments;
 
     @Override
