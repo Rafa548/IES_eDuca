@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 import ClassPage from './ClassPage';
+import Navbar from './Navbar';
 
 const ClassCard = ({ sClass }) => (
   <div className="class-container">
@@ -40,20 +41,22 @@ const App = () => {
   }, []);
 
   return (
-    <Router>
-      <div className="App">
-        <header className="App-header">
-          
-          <div className="App-intro">
-            <h2>Classes</h2>
-            <Switch>
-              <Route path="/class/:classId" component={ClassPage} />
-              <Route path="/" render={() => <ClassList classes={classes} />} />
-            </Switch>
+      <Router>
+        <Navbar />
+        <div className="App">
+          <div className="App-body">
+            <header className="App-header">
+              <div className="App-intro">
+                <h2>Classes</h2>
+                <Switch>
+                  <Route path="/class/:classId" component={ClassPage} />
+                  <Route path="/" render={() => <ClassList classes={classes} />} />
+                </Switch>
+              </div>
+            </header>
           </div>
-        </header>
-      </div>
-    </Router>
+        </div>
+      </Router>
   );
 };
 

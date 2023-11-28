@@ -17,6 +17,16 @@ const ClassPage = ({ match }) => {
     }
   };
 
+  const calculateAverage = (grades) => {
+    if (grades.length === 0) {
+      return undefined;
+    }
+
+    const sum = grades.reduce((accumulator, grade) => accumulator + grade.value, 0);
+    return sum / grades.length;
+  };
+
+
   useEffect(() => {
     fetchData(); // Initial data fetch
 
@@ -49,14 +59,18 @@ const ClassPage = ({ match }) => {
           </thead>
           <tbody>
             {classDetails.students.map((student) => (
-              <tr key={student.id}>
-                <td>{student.name}</td>
-                {classDetails.subjects.map((subject) => (
-                  <td key={subject.id}>
-                    {student.grades.find((grade) => grade.subjectId === subject.id)?.value || 'N/A'}
-                  </td>
-                ))}
-              </tr>
+                <tr key={student.id}>
+                  <td>{student.name}</td>
+                  {classDetails.subjects.map((subject) => {
+                    const studentGradesForSubject = student.grades.filter((grade) => grade.subjectId === subject.id);
+                    const averageGrade = calculateAverage(studentGradesForSubject);
+                    return (
+                        <td key={subject.id}>
+                          {averageGrade !== undefined ? averageGrade.toFixed(2) : 'N/A'}
+                        </td>
+                    );
+                  })}
+                </tr>
             ))}
           </tbody>
         </table>
