@@ -29,7 +29,7 @@ const ClassPage = ({ match }) => {
 	  }
 
 	  const sum = grades.reduce((accumulator, grade) => accumulator + grade.grade, 0);
-	  return sum / grades.length;
+	  return (sum / grades.length).toFixed(1);
 	};
 
 	// Add a function to calculate the average grades for a given subject

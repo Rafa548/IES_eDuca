@@ -39,8 +39,8 @@ const App = () => {
 
 	  fetchData(); // Initial data fetch
 
-	  // Set up an interval to fetch updated data every, for example, 10 seconds
-	  const intervalId = setInterval(fetchData, 10000);
+	  
+	  const intervalId = setInterval(fetchData, 3000);
 
 	  // Clean up the interval when the component unmounts
 	  return () => clearInterval(intervalId);
