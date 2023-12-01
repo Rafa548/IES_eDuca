@@ -153,7 +153,7 @@ def main():
         teachers.append(teacher)
 
 
-    grades = []
+    
 
     assigned_classes = {class_id: set() for class_id in range(1, 41)}
 
@@ -390,6 +390,8 @@ def main():
                         producer.send(send_topic, assigment_json)
 
                 if message.value['type'] == 'periodic':
+                    
+
                     std_progress_api_url = "http://localhost:8080/progress/insertion/students"
                     response = requests.get(std_progress_api_url)
                     while response.status_code != 200:
@@ -460,30 +462,52 @@ def main():
                         response = requests.get(grade_progress_api_url)
                         grade_progress = response.json()
                         time.sleep(1) """
-                    #grades_api_url = "http://localhost:8080/grades"
-                    #current_grades = requests.get(grades_api_url).json()
+                    max_grades_number = 20
+                    grades = {}
+                    new_grades = []
+                    grades_api_url = "http://localhost:8080/grades"
+                    current_grades = requests.get(grades_api_url).json()
+
+                    for existing_grade in current_grades:
+                        pair_id = (
+                            existing_grade["student"]["id"],
+                            existing_grade["subject"]["id"],
+                        )
+
+                        if pair_id not in grades:
+                            grades[pair_id] = []
+
+                        grades[pair_id].append(existing_grade)
+                        print(len(grades[pair_id]))
 
                     for student_class in current_classes:
                         for student in current_students:
                             #print(student)
                             if student["studentclass"]["classname"] == student_class["classname"]:
                                 subject = random.choice(student_class["subjects"])
-                                grade = random.randint(-2, 20)
-                                teacher_info = next((t for t in current_assigments if t["sclass"]["classname"] == student_class["classname"] and t["subject"]["name"] == subject["name"]), None)
-                                teacher = next((t for t in current_teachers if t["id"] == teacher_info["teacher"]["id"]), None)
-                                #print("teacher:",teacher)
-                            
-                                #print("..........................")
+                                pair_id = (
+                                    student["id"],
+                                    subject["id"],
+                                )
+                                if pair_id not in grades:
+                                    grades[pair_id] = []
+                                if len(grades[pair_id]) < max_grades_number:
+                                    grade = random.randint(-2, 20)
+                                    teacher_info = next((t for t in current_assigments if t["sclass"]["classname"] == student_class["classname"] and t["subject"]["name"] == subject["name"]), None)
+                                    teacher = next((t for t in current_teachers if t["id"] == teacher_info["teacher"]["id"]), None)
+                                    #print("teacher:",teacher)
                                 
-                                grades.append({
-                                    "student": student,
-                                    "subject": subject,
-                                    "teacher": teacher,
-                                    "grade": grade
-                                })
+                                    #print("..........................")
+                                    
+                                    new_grades.append({
+                                        "student": student,
+                                        "subject": subject,
+                                        "teacher": teacher,
+                                        "grade": grade
+                                    })
                     
                     
-                    for grade in grades:
+                    for grade in new_grades:
                         producer.send(send_topic,
                         {
                             "type": "grade",
