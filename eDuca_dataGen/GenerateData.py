@@ -11,11 +11,6 @@ def generate_random_string(length):
     return ''.join(random.choices(string.ascii_lowercase, k=length))
 
 def main():
-
-    global_students = []
-    teachers = {}
-    classes = {}
-
     
     consumer = KafkaConsumer(bootstrap_servers=['localhost:9092'], auto_offset_reset='earliest', enable_auto_commit=True, group_id='my-group', value_deserializer=lambda x: json.loads(x.decode('utf-8')))
 
@@ -86,11 +81,6 @@ def main():
             assignment_id += 1
             assigned_subjects[teacher_id].add(subject["id"])
             
-            
-            
-            
-            
-
 
     """ for assignment in teacher_assignment:
         print(f"Assignment ID: {assignment['id']}")
@@ -197,35 +187,63 @@ def main():
         print("Waiting for messages...")
         for message in consumer:
                 print(message.value)
-                generate_data = False
+                
                 #producer.send(send_topic, message.value)
+                
+
                 if message.value['type'] == 'init':
-                    time.sleep(7)
                     subjects_api_url = "http://localhost:8080/subjects"
                     current_subjects = requests.get(subjects_api_url).json()
-                    #print(current_subjects)
+                    subjects_messages = []
+                    
                     for subject in subjects_objects:
                         existing_subject = next((s for s in current_subjects if s['name'] == subject['name']), None)
                         if existing_subject is None:
-                            producer.send(send_topic,       
+                            subjects_messages.append({
+                                "type": "subject",
+                                "name": subject['name'],
+                                "teachers": subject['teachers'],
+                                "classes": subject['classes']
+                            })
+                            """ producer.send(send_topic,       
                             {
                                 "type": "subject",
                                 "name": subject['name'],
                                 "teachers": subject['teachers'],
                                 "classes": subject['classes']
                             }
-                            )
+                            ) """
                             #print(subject)
+
+                    producer.send(send_topic,
+                                {
+                                "type": "task",
+                                "task_type": "subjects",
+                                "total_expected": len(subjects_messages)
+                                }
+                            )
+                    
+                    for subject_json in subjects_messages:
+                        producer.send(send_topic, subject_json)
 
                     
 
 
                     classes_api_url = "http://localhost:8080/classes"
                     current_classes = requests.get(classes_api_url).json()
+                    classes_messages = []
                     for class_ in class_objects:
                         existing_class = next((c for c in current_classes if c['classname'] == class_['classname']), None) #and c["school"] == class_["school"]), None)
                         if existing_class is None:
-                            producer.send(send_topic,       
+                            classes_messages.append({
+                                "type": "class",
+                                "classname": class_['classname'],
+                                "school": class_['school'],
+                                "students": class_['students'],
+                                "subjects": class_['subjects'],
+                                "teachers": class_['teachers']
+                            })
+                            """ producer.send(send_topic,       
                             {
                                 "type": "class",
                                 "classname": class_['classname'],
@@ -234,38 +252,82 @@ def main():
                                 "subjects": class_['subjects'],
                                 "teachers": class_['teachers']
                             }
-                            )
+                            ) """
                             #print(class_)
+                    
+                    producer.send(send_topic,
+                                {
+                                "type": "task",
+                                "task_type": "classes",
+                                "total_expected": len(classes_messages)
+                                }
+                            )
+                    
+                    for class_json in classes_messages:
+                        producer.send(send_topic, class_json)
+                            
 
                     students_api_url = "http://localhost:8080/students"
                     current_students = requests.get(students_api_url).json()
-                    #print(current_students)
+                    students_messages = []
+
                     for student in students:
                         existing_student = next((s for s in current_students if s['nmec'] == student['nmec']), None)
                         if existing_student is None:
-                            producer.send(send_topic,       
-                            {
+                            students_messages.append({
                                 "type": "student",
                                 "name": student['name'],
-                                "studentclass": student['studentclass'],
                                 "nmec": student['nmec'],
                                 "email": student['email'],
                                 "password": student['password'],
-                                "school": student['school']
+                                "school": student['school'],
+                                "studentclass": student['studentclass']
+                            })
+                            """ producer.send(send_topic,       
+                            {
+                                "type": "student",
+                                "name": student['name'],
+                                "nmec": student['nmec'],
+                                "email": student['email'],
+                                "password": student['password'],
+                                "school": student['school'],
+                                "studentclass": student['studentclass']
                             }
-                            )
+                            ) """
                             #print(student)
+
+                    producer.send(send_topic,
+                                {
+                                "type": "task",
+                                "task_type": "students",
+                                "total_expected": len(students_messages)
+                                }
+                            )
+                    
+                    for student_json in students_messages:
+                        producer.send(send_topic, student_json)
                     
                     
                     teachers_api_url = "http://localhost:8080/teachers"
                     current_teachers = requests.get(teachers_api_url).json()
-                    #print(current_teachers)
+                    teachers_messages = []
                     for teacher in teachers:
                         existing_teacher = next((t for t in current_teachers if t['nmec'] == teacher['nmec']), None)
                         if existing_teacher is None:
                             if "1a" in teacher["s_classes"]:
                                 print("1a")
-                            producer.send(send_topic,       
+                            teachers_messages.append({
+                                "type": "teacher",
+                                "name": teacher['name'],
+                                "nmec": teacher['nmec'],
+                                "email": teacher['email'],
+                                "password": teacher['password'],
+                                "school": teacher['school'],
+                                "s_classes": teacher['s_classes'],
+                                "subjects": teacher['subjects'],
+                                "teacher_assignments": teacher['teacher_assignments']
+                            })
+                            """ producer.send(send_topic,       
                             {
                                 "type": "teacher",
                                 "name": teacher['name'],
@@ -275,44 +337,129 @@ def main():
                                 "school": teacher['school'],
                                 "s_classes": teacher['s_classes'],
                                 "subjects": teacher['subjects'],
+                                "teacher_assignments": teacher['teacher_assignments']
                             }
-                            )
+                            ) """
                             #print(teacher)
                     
+                    producer.send(send_topic,
+                                {
+                                "type": "task",
+                                "task_type": "teachers",
+                                "total_expected": len(teachers_messages)
+                                }
+                            )
+                    
+                    for teacher_json in teachers_messages:
+                        producer.send(send_topic, teacher_json)
 
                     assigments_api_url = "http://localhost:8080/teaching_assignments"
                     current_assigments = requests.get(assigments_api_url).json()
+                    assigments_messages = []
                     for assigment in teacher_assignment:
                         existing_assigment = next((s for s in current_assigments if s['id'] == subject['id']), None)
                         if existing_assigment is None:
                             #print(assigment["assigned_class"])
                             for teacher in teachers:
                                 if teacher["id"] == assigment["teacher_id"]:
-                                    producer.send(send_topic,
+                                    assigments_messages.append({
+                                        "type": "assigment",
+                                        "teacher": teacher,
+                                        "class": assigment["assigned_class"],
+                                        "subject": assigment["assigned_subject"]
+                                    })
+                                    """ producer.send(send_topic,       
                                     {
                                         "type": "assigment",
                                         "teacher": teacher,
                                         "class": assigment["assigned_class"],
                                         "subject": assigment["assigned_subject"]
-                                    }             
-                            )
+                                    }
+                                    ) """
                             #print(assigment)
  
-                    generate_data == True
+                    producer.send(send_topic,
+                                {
+                                "type": "task",
+                                "task_type": "assigments",
+                                "total_expected": len(assigments_messages)
+                                }
+                            )
+
+                    for assigment_json in assigments_messages:
+                        producer.send(send_topic, assigment_json)
 
                 if message.value['type'] == 'periodic':
-                    time.sleep(15)
+                    std_progress_api_url = "http://localhost:8080/progress/insertion/students"
+                    response = requests.get(std_progress_api_url)
+                    while response.status_code != 200:
+                        response = requests.get(std_progress_api_url)
+                        time.sleep(1)
+                    std_progress = response.json()
+                    while std_progress < 99.99999:
+                        response = requests.get(std_progress_api_url)
+                        std_progress = response.json()
+                        time.sleep(1)
                     students_api_url = "http://localhost:8080/students"
                     current_students = requests.get(students_api_url).json()
+                    class_progress_api_url = "http://localhost:8080/progress/insertion/classes"
+                    response = requests.get(class_progress_api_url)
+                    while response.status_code != 200:
+                        response = requests.get(class_progress_api_url)
+                        time.sleep(1)
+                    class_progress = response.json()
+                    while class_progress < 99.99999:
+                        response = requests.get(class_progress_api_url)
+                        class_progress = response.json()
+                        time.sleep(1)
                     class_api_url = "http://localhost:8080/classes"
                     current_classes = requests.get(class_api_url).json()
+                    teacher_progress_api_url = "http://localhost:8080/progress/insertion/teachers"
+                    response = requests.get(teacher_progress_api_url)
+                    while response.status_code != 200:
+                        response = requests.get(teacher_progress_api_url)
+                        time.sleep(1)
+                    teacher_progress = response.json()
+                    while teacher_progress < 99.99999:
+                        response = requests.get(teacher_progress_api_url)
+                        teacher_progress = response.json()
+                        time.sleep(1)
+                    teacher_api_url = "http://localhost:8080/teachers"
+                    current_teachers = requests.get(teacher_api_url).json()
+                    subject_progress_api_url = "http://localhost:8080/progress/insertion/subjects"
+                    response = requests.get(subject_progress_api_url)
+                    while response.status_code != 200:
+                        response = requests.get(subject_progress_api_url)
+                        time.sleep(1)
+                    subject_progress = response.json()
+                    while subject_progress < 99.99999:
+                        response = requests.get(subject_progress_api_url)
+                        subject_progress = response.json()
+                        time.sleep(1)
                     subjects_api_url = "http://localhost:8080/subjects"
                     current_subjects = requests.get(subjects_api_url).json()
-                    teachers_api_url = "http://localhost:8080/teachers"
-                    current_teachers = requests.get(teachers_api_url).json()
-                    #print(current_teachers)
+                    assigment_progress_api_url = "http://localhost:8080/progress/insertion/assigments"
+                    response = requests.get(assigment_progress_api_url)
+                    while response.status_code != 200:
+                        response = requests.get(assigment_progress_api_url)
+                        time.sleep(1)
+                    assigment_progress = response.json()
+                    while assigment_progress < 99.99999:
+                        response = requests.get(assigment_progress_api_url)
+                        assigment_progress = response.json()
+                        time.sleep(1)
                     assigments_api_url = "http://localhost:8080/teaching_assignments"
                     current_assigments = requests.get(assigments_api_url).json()
+                    """ grade_progress_api_url = "http://localhost:8080/progress/insertion/grades"
+                    response = requests.get(grade_progress_api_url)
+                    while response.status_code != 200:
+                        response = requests.get(grade_progress_api_url)
+                        time.sleep(1)
+                    grade_progress = response.json()
+                    while grade_progress["progress"] < 99.99999:
+                        response = requests.get(grade_progress_api_url)
+                        grade_progress = response.json()
+                        time.sleep(1) """
                     #grades_api_url = "http://localhost:8080/grades"
                     #current_grades = requests.get(grades_api_url).json()
 
@@ -323,8 +470,6 @@ def main():
                                 subject = random.choice(student_class["subjects"])
                                 grade = random.randint(-2, 20)
                                 teacher_info = next((t for t in current_assigments if t["sclass"]["classname"] == student_class["classname"] and t["subject"]["name"] == subject["name"]), None)
-                                #print("teacher_info:",teacher_info)
-
                                 teacher = next((t for t in current_teachers if t["id"] == teacher_info["teacher"]["id"]), None)
                                 #print("teacher:",teacher)
                             
