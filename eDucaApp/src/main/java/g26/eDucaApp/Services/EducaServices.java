@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import g26.eDucaApp.Model.Notification;
+import g26.eDucaApp.Model.NotificationType;
+import g26.eDucaApp.Services.notifications.notificationsService;
+
 @Service
 @AllArgsConstructor
 public class EducaServices {
@@ -365,7 +369,16 @@ public class EducaServices {
 
     private GradeRepository grade_repo;
 
+    private notificationsService notificationService;
+    private NotificationRepository notificationRepository;
+
     public Grade createGrade(Grade grade) {
+        String message = String.format("Grade %s was added to %s by %s for subject %s", grade.getGrade(), grade.getStudent().getName(), grade.getTeacher().getName(), grade.getSubject().getName());
+
+        Notification notification = new Notification( message , NotificationType.GRADE);
+        notificationRepository.save(notification);
+        notificationService.sendNotification(notification);
+
         return grade_repo.save(grade);
     }
 

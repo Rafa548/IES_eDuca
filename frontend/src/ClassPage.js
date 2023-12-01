@@ -2,42 +2,68 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ClassPage.css';
+import WebSocketService from './WebSocketService';
 
 const ClassPage = ({ match }) => {
   const [classDetails, setClassDetails] = useState(null);
   const [studentDetails, setStudentDetails] = useState(null);
+
   const studentId = match.params.studentId;
   const classId = match.params.classId;
 
+  //notifications
+  const [notifications, setNotifications] = useState([]);
+  const webSocketService = WebSocketService(onMessage);
+
+  // Define onMessage function before using it in useEffect
+  function onMessage(notification) {
+    setNotifications((prevNotifications) => [...prevNotifications, notification]);
+  }
+
+  useEffect(() => {
+    webSocketService.connect();
+
+    // Subscribe to the class (replace 'ClassName' with the actual class name)
+    const subscription = webSocketService.subscribeToClass('ClassName');
+
+    return () => {
+      // Check if subscription is not null before unsubscribing
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+      webSocketService.disconnect();
+    };
+  }, [webSocketService]);
+
   const fetchData = async () => {
     try {
+      if (studentId) {
+        const response1 = await fetch(`/students/${studentId}`);
+        const data1 = await response1.json();
+        setStudentDetails(data1);
+      }
+
       const response = await fetch(`/classes/${classId}`);
-      const response1= await fetch(`/students/${studentId}`);
       const data = await response.json();
-      const data1 = await response1.json();
-      setStudentDetails(data1);
       setClassDetails(data);
     } catch (error) {
       console.error('Error fetching class details:', error);
     }
   };
 
-
   const calculateAverage = (grades) => {
-	  if (grades.length === 0) {
-	    return undefined;
-	  }
+    if (grades.length === 0) {
+      return undefined;
+    }
 
-	  const sum = grades.reduce((accumulator, grade) => accumulator + grade.grade, 0);
-	  return (sum / grades.length).toFixed(1);
-	};
+    const sum = grades.reduce((accumulator, grade) => accumulator + grade.grade, 0);
+    return (sum / grades.length).toFixed(1);
+  };
 
-	// Add a function to calculate the average grades for a given subject
-	const calculateSubjectAverage = (student, subjectId) => {
-	  const subjectGrades = student.grades.filter((grade) => grade.subject.id === subjectId);
-	  return calculateAverage(subjectGrades);
-	};
-
+  const calculateSubjectAverage = (student, subjectId) => {
+    const subjectGrades = student.grades.filter((grade) => grade.subject.id === subjectId);
+    return calculateAverage(subjectGrades);
+  };
 
   useEffect(() => {
     fetchData(); // Initial data fetch
@@ -47,8 +73,7 @@ const ClassPage = ({ match }) => {
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(intervalId);
-  }, [classId]);
-
+  }, [classId, studentId]);
 
   if (!classDetails) {
     return <div>Loading...</div>;
@@ -72,17 +97,25 @@ const ClassPage = ({ match }) => {
           </thead>
           <tbody>
             {classDetails.students.map((student) => (
-		  <tr key={student.id}>
-		    <td>{student.name}</td>
-		    {classDetails.subjects.map((subject) => (
-		      <td key={subject.id}>
-			{calculateSubjectAverage(student, subject.id) || 'N/A'}
-		      </td>
-		    ))}
-		  </tr>
-		))}
+              <tr key={student.id}>
+                <td>{student.name}</td>
+                {classDetails.subjects.map((subject) => (
+                  <td key={subject.id}>
+                    {calculateSubjectAverage(student, subject.id) || 'N/A'}
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
+      </div>
+      <div>
+        <h1>Notifications</h1>
+        <ul>
+          {notifications.map((notification, index) => (
+            <li key={index}>{notification.message}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
