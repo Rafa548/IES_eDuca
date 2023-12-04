@@ -3,6 +3,8 @@ package g26.eDucaApp.Services;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -16,53 +18,40 @@ import java.util.Map;
 @Service
 public class initScript {
 
-        @Autowired
-        private Producer producer;
+    @Autowired
+    private Producer producer;
 
-        private boolean initialized = false;
+    private boolean initialized = false;
 
-        @PostConstruct
-        public void init() {
-            // wait 10 seconds for kafka to start
-            /* try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } */
+    @EventListener(ApplicationReadyEvent.class)
+    public void onApplicationReadyEvent() {
+        // Perform initialization when the application is ready
+        String message = "";
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", "init");
+        message = jsonObject.toString();
+        System.out.println("Produced message: " + message);
+        producer.sendMessage(message);
+        initialized = true;
+    }
 
-            String message = "";
+    @Scheduled(fixedDelay = 7000) // Send every 15 seconds (adjust as needed)
+    public void sendMessagePeriodically() {
+        if (!initialized) {
+            return;
+        }
+        try {
+            // Creating a JSON message for periodic sending
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("type", "init");
-            message = jsonObject.toString();
-            System.out.println("Produced message: " + message);
+            jsonObject.put("type", "periodic");
+            String message = jsonObject.toString();
+
+            // Sending the periodic message to Kafka
+            System.out.println("Produced periodic message: " + message);
             producer.sendMessage(message);
-            initialized = true;
-
+        } catch (Exception e) {
+            // Handle any exceptions or errors here
+            e.printStackTrace();
         }
-
-        @Scheduled(fixedDelay = 30000) // Send every 5 seconds (adjust as needed)
-        public void sendMessagePeriodically() {
-            if (!initialized) {
-                // Wait for initialization before starting periodic messages
-                return;
-            }
-
-            try {
-                // Creating a JSON message for periodic sending
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("type", "periodic");
-                String message = jsonObject.toString();
-
-                // Sending the periodic message to Kafka
-                System.out.println("Produced periodic message: " + message);
-                producer.sendMessage(message);
-            } catch (Exception e) {
-                // Handle any exceptions or errors here
-                e.printStackTrace();
-            }
-        }
-
-
-
-
+    }
 }

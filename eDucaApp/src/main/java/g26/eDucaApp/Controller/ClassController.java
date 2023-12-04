@@ -1,5 +1,6 @@
 package g26.eDucaApp.Controller;
 
+import g26.eDucaApp.Model.Grade;
 import g26.eDucaApp.Model.S_class;
 import g26.eDucaApp.Model.Student;
 import g26.eDucaApp.Services.EducaServices;
@@ -8,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
@@ -48,6 +51,56 @@ public class ClassController {
         S_class s_class = educaServices.getS_classByClassname(classname);
         return new ResponseEntity<>(s_class.getStudents(), HttpStatus.OK);
     }
+
+    @GetMapping("{classname}/students/{nmec}")
+    public ResponseEntity<?> getStudentByClassnameAndNmec(@PathVariable("classname") String classname, @PathVariable("nmec") Long nmec){
+        S_class s_class = educaServices.getS_classByClassname(classname);
+        List<Student> students = s_class.getStudents();
+        for (Student student : students){
+            if (student.getNmec().equals(nmec)){
+                return new ResponseEntity<>(student, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("{classname}/{nmec}/{subject}/grade")
+    public ResponseEntity<?> getStudentGradeByClassnameAndNmecAndSubject(@PathVariable("classname") String classname, @PathVariable("nmec") Long nmec, @PathVariable("subject") String subject) {
+        S_class s_class = educaServices.getS_classByClassname(classname);
+        List<Student> students = s_class.getStudents();
+
+        for (Student student : students) {
+            if (student.getNmec().equals(nmec)) {
+                List<Integer> studentGrades = new ArrayList<>();
+                System.out.println(student.getGrades());
+                for (Grade grade : student.getGrades()) {
+                    System.out.println(grade.getSubject());
+                    System.out.println(grade.getSubject().getName());
+                    if (grade.getSubject().getName().equals(subject)) {
+                        studentGrades.add(grade.getGrade());
+                    }
+                }
+
+                if (studentGrades.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No grades found for the student in the subject.");
+                }
+
+                double median;
+                int size = studentGrades.size();
+                if (size % 2 == 0) {
+                    median = (studentGrades.get(size / 2 - 1) + studentGrades.get(size / 2)) / 2.0;
+                } else {
+                    median = studentGrades.get(size / 2);
+                }
+
+                // Return the median
+                return ResponseEntity.status(HttpStatus.OK).body(median);
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student not found in the class.");
+    }
+
 
     @PutMapping("{classname}")
     public ResponseEntity<?> updateClass(@PathVariable("classname") String classname, @RequestBody S_class s_class){
