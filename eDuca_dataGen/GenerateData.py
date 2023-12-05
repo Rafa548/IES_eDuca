@@ -478,7 +478,7 @@ def main():
                             grades[pair_id] = []
 
                         grades[pair_id].append(existing_grade)
-                        print(len(grades[pair_id]))
+                        #print(len(grades[pair_id]))
 
                     for student_class in current_classes:
                         for student in current_students:

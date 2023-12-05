@@ -1,22 +1,14 @@
 package g26.eDucaApp.Services.kafka_messages;
 
-import g26.eDucaApp.Model.*;
-import g26.eDucaApp.Repository.StudentRepository;
-import g26.eDucaApp.Repository.TeacherRepository;
 import g26.eDucaApp.Services.EducaServices;
-import g26.eDucaApp.Services.EducaServicesUpdate;
 import g26.eDucaApp.Controller.ProgressController;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class Consumer {
@@ -32,9 +24,6 @@ public class Consumer {
 
     @Autowired
     private EducaServices educaServices;
-
-    @Autowired
-    private EducaServicesUpdate educaServicesUpdate;
 
     @Autowired
     private ProgressController progressController;
@@ -59,27 +48,27 @@ public class Consumer {
             }
         }
         else if (type.equals("student")) {
-            educaServicesUpdate.AddStudent(jsonObject);
+            educaServices.AddStudent(jsonObject);
             progressController.incrementProgress("students");
         }
         else if (type.equals("class")) {
-            educaServicesUpdate.AddClass(jsonObject);
+            educaServices.AddClass(jsonObject);
             progressController.incrementProgress("classes");
         }
         else if (type.equals("teacher")) {
-            educaServicesUpdate.AddTeacher(jsonObject);
+            educaServices.AddTeacher(jsonObject);
             progressController.incrementProgress("teachers");
         }
         else if (type.equals("subject")) {
-            educaServicesUpdate.AddSubject(jsonObject);
+            educaServices.AddSubject(jsonObject);
             progressController.incrementProgress("subjects");
         }
         else if (type.equals("assigment")) {
-            educaServicesUpdate.AddAssigment(jsonObject);
+            educaServices.AddAssigment(jsonObject);
             progressController.incrementProgress("assigments");
         }
         else if (type.equals("grade")) {
-            educaServicesUpdate.AddGrade(jsonObject);
+            educaServices.AddGrade(jsonObject);
             progressController.incrementProgress("grades");
         }
     }
