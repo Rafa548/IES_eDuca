@@ -17,10 +17,12 @@ const ClassPage = ({ match }) => {
 
   // Define onMessage function before using it in useEffect
   function onMessage(notification) {
+    console.log('Received notification:', notification);
     setNotifications((prevNotifications) => [...prevNotifications, notification]);
   }
 
   useEffect(() => {
+    console.log('Connecting to WebSocket...');
     webSocketService.connect();
 
     // Subscribe to the class (replace 'ClassName' with the actual class name)
@@ -31,6 +33,7 @@ const ClassPage = ({ match }) => {
       if (subscription) {
         subscription.unsubscribe();
       }
+      console.log('Disconnecting from WebSocket...');
       webSocketService.disconnect();
     };
   }, [webSocketService]);
@@ -69,7 +72,7 @@ const ClassPage = ({ match }) => {
     fetchData(); // Initial data fetch
 
     // Set up an interval to fetch updated data every, for example, 10 seconds
-    const intervalId = setInterval(fetchData, 3000);
+    const intervalId = setInterval(fetchData, 30000);
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(intervalId);

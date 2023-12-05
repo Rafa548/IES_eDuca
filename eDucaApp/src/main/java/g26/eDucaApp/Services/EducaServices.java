@@ -376,8 +376,18 @@ public class EducaServices {
         String message = String.format("Grade %s was added to %s by %s for subject %s", grade.getGrade(), grade.getStudent().getName(), grade.getTeacher().getName(), grade.getSubject().getName());
 
         Notification notification = new Notification( message , NotificationType.GRADE);
-        notificationRepository.save(notification);
-        notificationService.sendNotification(notification);
+        
+        Notification savedNotification = notificationRepository.save(notification);
+        //System.out.println(savedNotification);
+        try{
+            notificationService.sendNotification(savedNotification);
+            System.out.println("Notification sent");
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        
+        
 
         return grade_repo.save(grade);
     }

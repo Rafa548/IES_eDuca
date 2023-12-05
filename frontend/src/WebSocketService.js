@@ -4,7 +4,7 @@ import { Client } from '@stomp/stompjs';
 
 const WebSocketService = (onMessageCallback) => {
   const client = new Client({
-    brokerURL: 'ws:http://localhost:8080/ws', // Your WebSocket endpoint
+    brokerURL: 'ws://localhost:8080/ws', // Your WebSocket endpoint
     debug: function (str) {
       console.log(str);
     },
@@ -13,8 +13,25 @@ const WebSocketService = (onMessageCallback) => {
     heartbeatOutgoing: 4000,
   });
 
+  client.onConnect = () => {
+    console.log('WebSocket connected');
+    const subscription = client.subscribe(`/topic/notifications`, (message) => {
+      onMessageCallback(JSON.parse(message.body));
+      console.log('Received message:', JSON.parse(message.body));
+    });
+  };
+
+  client.onDisconnect = () => {
+    console.log('WebSocket disconnected');
+  };
+
+  client.onStompError = (frame) => {
+    console.error('WebSocket error:', frame.headers.message);
+  };
+
   const connect = () => {
     client.activate();
+    console.log('client connecting...');
   };
 
   const disconnect = () => {
@@ -23,8 +40,10 @@ const WebSocketService = (onMessageCallback) => {
 
   const subscribeToClass = (className) => {
     if (client.connected) {
-      const subscription = client.subscribe(`/class/${className}`, (message) => {
+      //const subscription = client.subscribe(`/class/${className}`, (message) => {
+      const subscription = client.subscribe(`/topic/notifications`, (message) => {
         onMessageCallback(JSON.parse(message.body));
+        console.log('Received message:', JSON.parse(message.body));
       });
 
       return subscription;

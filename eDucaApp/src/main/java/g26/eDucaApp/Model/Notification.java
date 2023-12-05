@@ -17,8 +17,8 @@ import java.util.Date;
 public class Notification implements Serializable{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String id;
 
     private String message;
 
