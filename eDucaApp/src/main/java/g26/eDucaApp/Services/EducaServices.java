@@ -3,7 +3,11 @@ import g26.eDucaApp.Model.*;
 import g26.eDucaApp.Repository.*;
 
 import lombok.AllArgsConstructor;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +20,23 @@ import g26.eDucaApp.Services.notifications.notificationsService;
 public class EducaServices {
 
     private StudentRepository std_repo;
+
+    private TeacherRepository teacher_repo;
+
+    private S_ClassRepository sclass_repo;
+
+    private Sch_AdminRepository sch_admin_repo;
+
+    private SubjectRepository subject_repo;
+
+    private Sys_AdminRepository sys_admin_repo;
+
+    private Teaching_AssignmentRepository teaching_assignment_repo;
+
+    private GradeRepository grade_repo;
+
+    // Student
+    //----------------------------------------------------------------//
 
     public Student createStudent(Student student) {
         return std_repo.save(student);
@@ -84,10 +105,11 @@ public class EducaServices {
         std_repo.delete(student);
     }
 
+    //----------------------------------------------------------------//
 
 
-    private TeacherRepository teacher_repo;
-
+    // Teacher
+    //----------------------------------------------------------------//
     public Teacher createTeacher(Teacher teacher) {
 
         return teacher_repo.save(teacher);
@@ -145,50 +167,55 @@ public class EducaServices {
         teacher_repo.delete(teacher);
     }
 
+    //----------------------------------------------------------------//
 
-    private S_ClassRepository s_class_repo;
 
+    // S_class
     public S_class createS_class(S_class s_class) {
 
-        return s_class_repo.save(s_class);
+        return sclass_repo.save(s_class);
     }
 
     public S_class getS_classByClassname(String classname) {
-        if (s_class_repo.findByClassname(classname).isEmpty()) {
+        if (sclass_repo.findByClassname(classname).isEmpty()) {
             return null;
         }
-        return s_class_repo.findByClassname(classname).get();
+        return sclass_repo.findByClassname(classname).get();
     }
 
     public S_class getS_classById(Long id) {
-        if (s_class_repo.findById(id).isEmpty()) {
+        if (sclass_repo.findById(id).isEmpty()) {
             return null;
         }
-        return s_class_repo.findById(id).get();
+        return sclass_repo.findById(id).get();
     }
 
     public List<S_class> getAllS_class() {
 
-        return s_class_repo.findAll();
+        return sclass_repo.findAll();
     }
 
     public void deleteS_class(String classname){
-        if (s_class_repo.findByClassname(classname).isEmpty()) {
+        if (sclass_repo.findByClassname(classname).isEmpty()) {
             return;
         }
-        S_class s_class = s_class_repo.findByClassname(classname).get();
-        s_class_repo.delete(s_class);
+        S_class s_class = sclass_repo.findByClassname(classname).get();
+        sclass_repo.delete(s_class);
     }
 
     public S_class updateS_class(S_class s_class){
-        S_class existingS_class = s_class_repo.findById(s_class.getId()).get();
+        S_class existingS_class = sclass_repo.findById(s_class.getId()).get();
         existingS_class.setClassname(s_class.getClassname());
         existingS_class.setStudents(s_class.getStudents());
-        S_class updatedS_class = s_class_repo.save(existingS_class);
+        S_class updatedS_class = sclass_repo.save(existingS_class);
         return updatedS_class;
     }
 
-    private Sch_AdminRepository sch_admin_repo;
+    //----------------------------------------------------------------//
+
+
+    // Sch_Admin
+    //----------------------------------------------------------------//
 
     public Sch_Admin createSch_Admin(Sch_Admin sch_admin) {
 
@@ -239,8 +266,12 @@ public class EducaServices {
         return updatedSch_Admin;
     }
 
-    private SubjectRepository subject_repo;
+    //----------------------------------------------------------------//
 
+
+
+    // Subject
+    //----------------------------------------------------------------//
     public Subject createSubject(Subject subject) {
 
         return subject_repo.save(subject);
@@ -273,7 +304,11 @@ public class EducaServices {
         subject_repo.delete(subject);
     }
 
-    private Sys_AdminRepository sys_admin_repo;
+    //----------------------------------------------------------------//
+
+
+    // Sys_Admin
+    //----------------------------------------------------------------//
 
     public Sys_Admin createSys_Admin(Sys_Admin sys_admin) {
 
@@ -316,8 +351,11 @@ public class EducaServices {
         return updatedSys_Admin;
     }
 
-    private Teaching_AssignmentRepository teaching_assignment_repo;
+    //----------------------------------------------------------------//
 
+
+    //Teaching_Assigment
+    //----------------------------------------------------------------//
     public Teaching_Assignment createTeachingAssignment(Teaching_Assignment teaching_assignment) {
 
         return teaching_assignment_repo.save(teaching_assignment);
@@ -367,11 +405,13 @@ public class EducaServices {
         return teaching_assignment_repo.findAll();
     }
 
-    private GradeRepository grade_repo;
+    //----------------------------------------------------------------//
 
     private notificationsService notificationService;
     private NotificationRepository notificationRepository;
 
+    //Grades
+    //----------------------------------------------------------------//
     public Grade createGrade(Grade grade) {
         String message = String.format("Grade %s was added to %s by %s for subject %s", grade.getGrade(), grade.getStudent().getName(), grade.getTeacher().getName(), grade.getSubject().getName());
 
@@ -434,5 +474,163 @@ public class EducaServices {
     public List<Grade> getAllGrades() {
 
         return grade_repo.findAll();
+    }
+
+    //----------------------------------------------------------------//
+
+    public void AddStudent(JSONObject jsonObject) {
+        Student student = new Student();
+        student.setName(jsonObject.getString("name"));
+        student.setEmail(jsonObject.getString("email"));
+        student.setPassword(jsonObject.getString("password"));
+        student.setNmec(jsonObject.getLong("nmec"));
+        student.setSchool(jsonObject.getString("school"));
+
+        JSONObject studentClassJson = jsonObject.getJSONObject("studentclass");
+        S_class studentClass = sclass_repo.findById((long) studentClassJson.getInt("id")).get();
+
+        if (studentClass != null) {
+            student.setStudentclass(studentClass);
+        }
+
+
+        std_repo.save(student);
+    }
+
+    public void AddClass(JSONObject jsonObject){
+        S_class studentClass = new S_class();
+        studentClass.setClassname(jsonObject.getString("classname"));
+        studentClass.setSchool(jsonObject.getString("school"));
+        JSONArray studentsArray = jsonObject.getJSONArray("students");
+        List<Student> studentsList = new ArrayList<>();
+        for (int i = 0; i < studentsArray.length(); i++) {
+            JSONObject studentObj = studentsArray.getJSONObject(i);
+            Student student = std_repo.findByNmec(studentObj.getLong("nmec")).get();
+            if (student != null)
+                studentsList.add(student);
+        }
+        studentClass.setStudents(studentsList);
+
+        JSONArray teachersArray = jsonObject.getJSONArray("teachers");
+        List<Teacher> teachersList = new ArrayList<>();
+        for (int i = 0; i < teachersArray.length(); i++) {
+            JSONObject teacherObj = teachersArray.getJSONObject(i);
+            Teacher teacher = teacher_repo.findByNmec(teacherObj.getLong("nmec")).get();
+            if (teacher != null)
+                teachersList.add(teacher);
+        }
+        studentClass.setTeachers(teachersList);
+
+        JSONArray subjectsArray = jsonObject.getJSONArray("subjects");
+        List<Subject> subjectsList = new ArrayList<>();
+
+        for (int i = 0; i < subjectsArray.length(); i++) {
+            JSONObject subjectObj = subjectsArray.getJSONObject(i);
+            Subject subject = subject_repo.findById((long) subjectObj.getInt("id")).get();
+            if (subject != null)
+                subjectsList.add(subject);
+        }
+        studentClass.setSubjects(subjectsList);
+
+        sclass_repo.save(studentClass);
+    }
+
+    public void AddTeacher(JSONObject jsonObject){
+        Teacher teacher = new Teacher();
+        teacher.setName(jsonObject.getString("name"));
+        teacher.setEmail(jsonObject.getString("email"));
+        teacher.setPassword(jsonObject.getString("password"));
+        teacher.setNmec(jsonObject.getLong("nmec"));
+        teacher.setSchool(jsonObject.getString("school"));
+        JSONArray classesArray = jsonObject.getJSONArray("s_classes");
+
+        List<S_class> classesList = new ArrayList<>();
+        for (int i = 0; i < classesArray.length(); i++) {
+            JSONObject classObj = classesArray.getJSONObject(i);
+            S_class s_Class = sclass_repo.findById((long) classObj.getInt("id")).get();
+            if (s_Class != null)
+                classesList.add(s_Class);
+        }
+        JSONArray subjectsArray = jsonObject.getJSONArray("subjects");
+        List<Subject> subjectsList = new ArrayList<>();
+        for (int i = 0; i < subjectsArray.length(); i++) {
+            JSONObject subjectObj = subjectsArray.getJSONObject(i);
+            Subject subject = subject_repo.findById((long) subjectObj.getInt("id")).get();
+            if (subject != null)
+                subjectsList.add(subject);
+        }
+        teacher.setSubjects(subjectsList);
+        teacher.setClasses(classesList);
+        teacher_repo.save(teacher);
+    }
+
+    public void AddSubject(JSONObject jsonObject){
+        Subject subject = new Subject();
+        subject.setName(jsonObject.getString("name"));
+
+        JSONArray teachersArray = jsonObject.getJSONArray("teachers");
+        List<Teacher> teachersList = new ArrayList<>();
+        for (int i = 0; i < teachersArray.length(); i++) {
+            JSONObject teacherObj = teachersArray.getJSONObject(i);
+            Teacher teacher = teacher_repo.findByNmec(teacherObj.getLong("nmec")).get();
+            if (teacher != null)
+                teachersList.add(teacher);
+        }
+        subject.setTeachers(teachersList);
+
+        JSONArray classesArray = jsonObject.getJSONArray("classes");
+        List<S_class> classesList = new ArrayList<>();
+        for (int i = 0; i < classesArray.length(); i++) {
+            JSONObject classObj = classesArray.getJSONObject(i);
+            S_class s_Class = sclass_repo.findById((long) classObj.getInt("id")).get();
+            if (s_Class != null)
+                classesList.add(s_Class);
+        }
+        subject.setClasses(classesList);
+
+        subject_repo.save(subject);
+    }
+
+    public void AddAssigment(JSONObject jsonObject){
+        Teaching_Assignment assignment = new Teaching_Assignment();
+        JSONObject ClassJson = jsonObject.getJSONObject("class");
+        S_class class_ = sclass_repo.findById((long) ClassJson.getInt("id")).get();
+        if (class_ != null)
+            assignment.setSclass(class_);
+
+        JSONObject subjectJson = jsonObject.getJSONObject("subject");
+        Subject subject = subject_repo.findById((long) subjectJson.getInt("id")).get();
+        if (subject != null)
+            assignment.setSubject(subject);
+
+        JSONObject teacherJson = jsonObject.getJSONObject("teacher");
+        Teacher teacher = teacher_repo.findByNmec(teacherJson.getLong("nmec")).get();
+        if (teacher != null)
+            assignment.setTeacher(teacher);
+
+        teaching_assignment_repo.save(assignment);
+    }
+
+    public void AddGrade(JSONObject jsonObject){
+        Grade grade = new Grade();
+        grade.setGrade(jsonObject.getInt("grade"));
+        //grade.setWeight(jsonObject.getInt("weight"));
+
+        JSONObject studentJson = jsonObject.getJSONObject("student");
+        Student student = std_repo.findByNmec(studentJson.getLong("nmec")).get();
+        if (student != null)
+            grade.setStudent(student);
+
+        JSONObject subjectJson = jsonObject.getJSONObject("subject");
+        Subject subject = subject_repo.findById((long) subjectJson.getInt("id")).get();
+        if (subject != null)
+            grade.setSubject(subject);
+
+        JSONObject teacherJson = jsonObject.getJSONObject("teacher");
+        Teacher teacher = teacher_repo.findByNmec(teacherJson.getLong("nmec")).get();
+        if (teacher != null)
+            grade.setTeacher(teacher);
+
+        grade_repo.save(grade);
     }
 }

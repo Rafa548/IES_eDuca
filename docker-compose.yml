@@ -1,0 +1,60 @@
+# Use root/examplerootpass as user/password credentials
+version: '3.9'
+
+services:
+  mysql_db:
+    image: mysql/mysql-server:5.7
+    restart: unless-stopped
+    container_name: eDuca_db	
+    environment:
+      MYSQL_ROOT_PASSWORD: 'rootpass'
+      MYSQL_DATABASE: 'eDuca'
+      MYSQL_USER: 'spring'
+      MYSQL_PASSWORD: 'springpass'
+    ports:
+      - "3306:3306"
+    
+  zookeeper:
+    image: confluentinc/cp-zookeeper:6.0.1
+    container_name: zookeeper
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:6.0.1
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    restart: unless-stopped
+    container_name: kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: ["CMD", "nc", "-vz", "localhost", "9092"]
+      interval: 30s
+      timeout: 10s
+      retries: 4
+
+    mongodb:
+      image: mongo:latest
+      container_name: mongodb
+      restart: always
+      environment:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: rootpass
+          MONGO_INITDB_DATABASE: admin
+      ports:
+          - 27017:27017
+      volumes:
+          - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+
+  
