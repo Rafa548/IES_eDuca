@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -68,6 +69,20 @@ public class StudentController {
     public ResponseEntity<?> deleteStudent(@PathVariable("nmec") Long nmec){
         studentService.deleteStudent(nmec);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/login/student")
+    public ResponseEntity<String> login(@RequestBody Map<String, String> credentials) {
+        String username = credentials.get("username");
+        String password = credentials.get("password");
+
+        Student user = studentService.getStudentByEmailAndPassword(username, password);
+
+        if (user != null) {
+            return ResponseEntity.ok("Login successful!");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
     }
 
 }

@@ -80,6 +80,11 @@ public class EducaServices {
         std_repo.delete(student);
     }
 
+    //novo
+    public Student getStudentByEmailAndPassword(String email, String password) {
+        Optional<Student> studentOptional = std_repo.findByEmailAndPassword(email, password);
+        return studentOptional.orElse(null);
+    }
 
 
     private TeacherRepository teacher_repo;
