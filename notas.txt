@@ -1,0 +1,11 @@
+geraçao de dados->localhost nao deve ser static deve ser um argumento nome do container
+frontend->backend igual
+alert se notas de turma for muito baixa (alunos proria nota) etc... ter mais bussiness logic para alem de meter e ver dados
+impedir mais que 50 grades para um dado subject
+
+
+
+
+
+
+
