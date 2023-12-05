@@ -616,6 +616,8 @@ public class EducaServices {
         grade.setGrade(jsonObject.getInt("grade"));
         //grade.setWeight(jsonObject.getInt("weight"));
 
+        System.out.println("Grade: " + grade.getGrade());
+
         JSONObject studentJson = jsonObject.getJSONObject("student");
         Student student = std_repo.findByNmec(studentJson.getLong("nmec")).get();
         if (student != null)
@@ -630,6 +632,20 @@ public class EducaServices {
         Teacher teacher = teacher_repo.findByNmec(teacherJson.getLong("nmec")).get();
         if (teacher != null)
             grade.setTeacher(teacher);
+
+        String message = String.format("Grade %s was added to %s by %s for subject %s", grade.getGrade(), grade.getStudent().getName(), grade.getTeacher().getName(), grade.getSubject().getName());
+
+        Notification notification = new Notification( message , NotificationType.GRADE);
+        
+        Notification savedNotification = notificationRepository.save(notification);
+        System.out.println(savedNotification);
+        try{
+            notificationService.sendNotification(savedNotification);
+            System.out.println("Notification sent");
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
 
         grade_repo.save(grade);
     }

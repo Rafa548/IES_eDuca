@@ -82,7 +82,7 @@ public class ClassController {
                 }
 
                 if (studentGrades.isEmpty()) {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No grades found for the student in the subject.");
+                    return ResponseEntity.status(HttpStatus.OK).body("N/A");
                 }
 
                 double median;

@@ -43,18 +43,18 @@ services:
       timeout: 10s
       retries: 4
 
-    mongodb:
-      image: mongo:latest
-      container_name: mongodb
-      restart: always
-      environment:
-          MONGO_INITDB_ROOT_USERNAME: root
-          MONGO_INITDB_ROOT_PASSWORD: rootpass
-          MONGO_INITDB_DATABASE: admin
-      ports:
-          - 27017:27017
-      volumes:
-          - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: rootpass
+        MONGO_INITDB_DATABASE: admin
+    ports:
+        - 27017:27017
+    volumes:
+        - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
 
   

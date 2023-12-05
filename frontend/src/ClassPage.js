@@ -7,6 +7,7 @@ import WebSocketService from './WebSocketService';
 const ClassPage = ({ match }) => {
   const [classDetails, setClassDetails] = useState(null);
   const [studentDetails, setStudentDetails] = useState(null);
+  const [subjectAverages, setSubjectAverages] = useState({});
 
   const studentId = match.params.studentId;
   const classId = match.params.classId;
@@ -17,7 +18,7 @@ const ClassPage = ({ match }) => {
 
   // Define onMessage function before using it in useEffect
   function onMessage(notification) {
-    console.log('Received notification:', notification);
+    //console.log('Received notification:', notification);
     setNotifications((prevNotifications) => [...prevNotifications, notification]);
   }
 
@@ -49,12 +50,24 @@ const ClassPage = ({ match }) => {
       const response = await fetch(`/classes/${classId}`);
       const data = await response.json();
       setClassDetails(data);
+
+      const averages = {};
+      for (const student of data.students) {
+        for (const subject of data.subjects) {
+          const gradeResponse = await fetch(`/classes/${data.classname}/${student.nmec}/${subject.name}/grade`);
+          const gradeData = await gradeResponse.text();
+
+          averages[`${student.id}-${subject.id}`] = gradeData || 'N/A';
+        }
+      }
+      setSubjectAverages(averages);
+
     } catch (error) {
       console.error('Error fetching class details:', error);
     }
   };
 
-  const calculateAverage = (grades) => {
+  /* const calculateAverage = (grades) => {
     if (grades.length === 0) {
       return undefined;
     }
@@ -66,13 +79,14 @@ const ClassPage = ({ match }) => {
   const calculateSubjectAverage = (student, subjectId) => {
     const subjectGrades = student.grades.filter((grade) => grade.subject.id === subjectId);
     return calculateAverage(subjectGrades);
-  };
+  }; */
+
 
   useEffect(() => {
     fetchData(); // Initial data fetch
 
     // Set up an interval to fetch updated data every, for example, 10 seconds
-    const intervalId = setInterval(fetchData, 30000);
+    const intervalId = setInterval(fetchData, 3000);
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(intervalId);
@@ -104,7 +118,7 @@ const ClassPage = ({ match }) => {
                 <td>{student.name}</td>
                 {classDetails.subjects.map((subject) => (
                   <td key={subject.id}>
-                    {calculateSubjectAverage(student, subject.id) || 'N/A'}
+                    {subjectAverages[`${student.id}-${subject.id}`] || 'N/A'}
                   </td>
                 ))}
               </tr>
@@ -115,7 +129,7 @@ const ClassPage = ({ match }) => {
       <div>
         <h1>Notifications</h1>
         <ul>
-          {notifications.map((notification, index) => (
+          {notifications.slice(-10).map((notification, index) => (
             <li key={index}>{notification.message}</li>
           ))}
         </ul>

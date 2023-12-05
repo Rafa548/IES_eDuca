@@ -17,7 +17,7 @@ const WebSocketService = (onMessageCallback) => {
     console.log('WebSocket connected');
     const subscription = client.subscribe(`/topic/notifications`, (message) => {
       onMessageCallback(JSON.parse(message.body));
-      console.log('Received message:', JSON.parse(message.body));
+      //console.log('Received message:', JSON.parse(message.body));
     });
   };
 

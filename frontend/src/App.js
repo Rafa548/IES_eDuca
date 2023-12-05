@@ -40,7 +40,7 @@ const App = () => {
 	  fetchData(); // Initial data fetch
 
 	  
-	  const intervalId = setInterval(fetchData, 30000);
+	  const intervalId = setInterval(fetchData, 3000);
 
 	  // Clean up the interval when the component unmounts
 	  return () => clearInterval(intervalId);
