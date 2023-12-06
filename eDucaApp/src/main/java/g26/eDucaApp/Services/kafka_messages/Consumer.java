@@ -1,5 +1,6 @@
 package g26.eDucaApp.Services.kafka_messages;
 
+import g26.eDucaApp.Services.DatainitServices;
 import g26.eDucaApp.Services.EducaServices;
 import g26.eDucaApp.Controller.ProgressController;
 import org.json.JSONException;
@@ -23,7 +24,7 @@ public class Consumer {
     }
 
     @Autowired
-    private EducaServices educaServices;
+    private DatainitServices educaServices;
 
     @Autowired
     private ProgressController progressController;

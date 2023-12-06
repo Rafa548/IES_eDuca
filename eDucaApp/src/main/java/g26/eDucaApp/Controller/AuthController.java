@@ -27,4 +27,5 @@ public class AuthController {
         var response = AuthenticationService.signin(request);
         return ResponseEntity.ok(response);
     }
+
 }

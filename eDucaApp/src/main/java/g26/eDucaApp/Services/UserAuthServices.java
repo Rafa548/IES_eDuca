@@ -48,10 +48,12 @@ public class UserAuthServices implements UserServices{
             }
 
             private UserDetails buildUserDetails(String username, String password, String role) {
+                System.out.println(new SimpleGrantedAuthority(role));
+                String formattedRole = "ROLE_" + role;
                 return org.springframework.security.core.userdetails.User
                         .withUsername(username)
                         .password(password)
-                        .authorities(new SimpleGrantedAuthority(role))
+                        .authorities((new SimpleGrantedAuthority(formattedRole)))
                         .build();
             }
         };

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,58 +23,51 @@ public class AuthenticationService {
 
     @Autowired
     private EducaServices educaServices;
-
-    @Autowired
-    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     @Autowired
     private final AuthenticationManager authenticationManager;
 
     public JwtAuthenticationResponse signin(SigninReq request) {
-
-        //System.out.println(request.getPassword());
-        //System.out.println(bcryptEncoder.encode(request.getPassword()));
         String email = request.getEmail();
         String password = request.getPassword();
 
-        // Authenticate using AuthenticationManager
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(email, password)
-            );
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (AuthenticationException e) {
-            // Handle authentication failure (e.g., invalid credentials)
-            throw new IllegalArgumentException("Invalid email or password.", e);
+            throw new IllegalArgumentException("Invalid credentials.");
         }
 
-        Teacher teacher = educaServices.getTeacherByEmail(request.getEmail());
-        Sch_Admin sch_admin = educaServices.getSch_AdminByEmail(request.getEmail());
-        Student student = educaServices.getStudentByEmail(request.getEmail());
+        UserDetails userDetails = getUserDetailsByEmail(email);
+
+        if (userDetails != null) {
+            var jwt = jwtService.generateToken(userDetails);
+            return JwtAuthenticationResponse.builder().token(jwt).build();
+        } else {
+            throw new IllegalArgumentException("User details not found.");
+        }
+    }
+
+    private UserDetails getUserDetailsByEmail(String email) {
+        Teacher teacher = educaServices.getTeacherByEmail(email);
+        Sch_Admin schAdmin = educaServices.getSch_AdminByEmail(email);
+        Student student = educaServices.getStudentByEmail(email);
 
         if (teacher != null) {
-            var userDetails = convertToTeacherDetails(teacher);
-            var jwt = jwtService.generateToken(userDetails);
-            return JwtAuthenticationResponse.builder().token(jwt).build();
+            return convertToTeacherDetails(teacher);
+        } else if (schAdmin != null) {
+            return convertToSch_AdminDetails(schAdmin);
+        } else if (student != null) {
+            return convertToStudentDetails(student);
         }
-        else if (sch_admin != null) {
-            var userDetails = convertToSch_AdminDetails(sch_admin);
-            var jwt = jwtService.generateToken(userDetails);
-            return JwtAuthenticationResponse.builder().token(jwt).build();
-        }
-        else if (student != null) {
-            var userDetails = convertToStudentDetails(student);
-            var jwt = jwtService.generateToken(userDetails);
-            return JwtAuthenticationResponse.builder().token(jwt).build();
-        }
-        else {
-            throw new IllegalArgumentException("Invalid email or password.");
-        }
+
+        return null;
     }
 
     private UserDetails convertToTeacherDetails(Teacher teacher) {
         return org.springframework.security.core.userdetails.User
                 .withUsername(teacher.getEmail())
                 .password(teacher.getPassword())
+                .authorities(new SimpleGrantedAuthority("ROLE_TEACHER"))
                 .build();
     }
 
@@ -81,6 +75,7 @@ public class AuthenticationService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(student.getEmail())
                 .password(student.getPassword())
+                .authorities(new SimpleGrantedAuthority("ROLE_STUDENT"))
                 .build();
     }
 
@@ -88,7 +83,9 @@ public class AuthenticationService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(sch_admin.getEmail())
                 .password(sch_admin.getPassword())
+                .authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))
                 .build();
     }
+
 }
 
