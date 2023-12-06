@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin(maxAge = 3600)
 @RestController
 @AllArgsConstructor
 @RequestMapping("classes")

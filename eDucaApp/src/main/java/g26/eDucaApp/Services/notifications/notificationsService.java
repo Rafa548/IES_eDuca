@@ -25,7 +25,7 @@ public class notificationsService {
     public void sendNotification(Notification notification) {
         try {
             String json = toJson(notification);
-            simpMessagingTemplate.convertAndSend("/topic/notifications", json);
+            simpMessagingTemplate.convertAndSendToUser(notification.getReceiver(), "/queue/notifications", json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

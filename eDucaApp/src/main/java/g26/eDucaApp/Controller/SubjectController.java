@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-
+@CrossOrigin(maxAge = 3600)
 @RestController
 @AllArgsConstructor
 @RequestMapping("subjects")

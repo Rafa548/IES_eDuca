@@ -415,7 +415,7 @@ public class EducaServices {
     public Grade createGrade(Grade grade) {
         String message = String.format("Grade %s was added to %s by %s for subject %s", grade.getGrade(), grade.getStudent().getName(), grade.getTeacher().getName(), grade.getSubject().getName());
 
-        Notification notification = new Notification( message , NotificationType.GRADE);
+        Notification notification = new Notification( message , NotificationType.GRADE, grade.getStudent().getName());
         
         Notification savedNotification = notificationRepository.save(notification);
         //System.out.println(savedNotification);
@@ -633,9 +633,26 @@ public class EducaServices {
         if (teacher != null)
             grade.setTeacher(teacher);
 
+        //media turma
+        /* S_class s_class = student.getStudentclass();
+        List<Student> students = s_class.getStudents();
+        List<Grade> grades = new ArrayList<>();
+        for (Student s : students){
+            grades.addAll(s.getGrades());
+        }
+        int sum = 0;
+        for (Grade g : grades){
+            sum += g.getGrade();
+        }
+        double average = sum / grades.size();
+        if (average < 10){
+            System.out.println("Class average is below 10");
+        } */
+
+
         String message = String.format("Grade %s was added to %s by %s for subject %s", grade.getGrade(), grade.getStudent().getName(), grade.getTeacher().getName(), grade.getSubject().getName());
 
-        Notification notification = new Notification( message , NotificationType.GRADE);
+        Notification notification = new Notification( message , NotificationType.GRADE, grade.getStudent().getName());
         
         Notification savedNotification = notificationRepository.save(notification);
         System.out.println(savedNotification);

@@ -116,11 +116,17 @@ const ClassPage = ({ match }) => {
             {classDetails.students.map((student) => (
               <tr key={student.id}>
                 <td>{student.name}</td>
-                {classDetails.subjects.map((subject) => (
-                  <td key={subject.id}>
-                    {subjectAverages[`${student.id}-${subject.id}`] || 'N/A'}
-                  </td>
-                ))}
+                {classDetails.subjects.map((subject) => {
+                  const averageKey = `${student.id}-${subject.id}`;
+                  const average = subjectAverages[averageKey] || 'N/A';
+                  const isBelowTen = average !== 'N/A' && parseFloat(average) < 10;
+
+                  return (
+                    <td key={subject.id} style={{ color: isBelowTen ? 'red' : 'black' }}>
+                      {average}
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>

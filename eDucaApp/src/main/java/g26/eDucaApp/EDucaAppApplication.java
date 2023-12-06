@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @SpringBootApplication
@@ -36,5 +38,20 @@ public class EDucaAppApplication implements CommandLineRunner {
 		schAdmin.setPassword(passwordEncoder.encode("admin"));
 		schAdmin.setSchool("SampleSchool");
 		schAdminRepository.save(schAdmin);
+	}
+
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+
+			@Override
+			public void addCorsMappings(org.springframework.web.servlet.config.annotation.CorsRegistry registry) {
+				registry.addMapping("/*")
+						.allowedOrigins("http://localhost:3000") // Replace with your frontend URL
+						.allowedMethods("GET", "POST", "PUT", "DELETE")
+						.allowedHeaders("")
+						.allowCredentials(true);
+			}
+		};
 	}
 }

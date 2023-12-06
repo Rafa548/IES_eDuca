@@ -16,19 +16,7 @@ def main():
 
     producer = KafkaProducer(bootstrap_servers=['localhost:9092'], value_serializer=lambda x: json.dumps(x).encode('utf-8'))
 
-    admin_token_url = "http://localhost:8080/auth/signin"
-    data = {
-        'email': "admin@gmail.com",
-        'password': "admin"
-    }
-
     
-    response = requests.post(admin_token_url, json=data)
-    token = response.json().get('token')
-
-    headers = {
-        'Authorization': 'Bearer ' + token 
-    }
     
     send_topic = 'eDuca_dataGen'
     receive_topic = 'eDucaApp'
@@ -201,6 +189,20 @@ def main():
         print("Waiting for messages...")
         for message in consumer:
                 print(message.value)
+
+                admin_token_url = "http://localhost:8080/auth/signin"
+                data = {
+                    'email': "admin@gmail.com",
+                    'password': "admin"
+                }
+
+                
+                response = requests.post(admin_token_url, json=data)
+                token = response.json().get('token')
+
+                headers = {
+                    'Authorization': 'Bearer ' + token 
+                }
                 
                 #producer.send(send_topic, message.value)
                 

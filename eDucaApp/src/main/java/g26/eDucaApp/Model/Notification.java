@@ -22,6 +22,8 @@ public class Notification implements Serializable{
 
     private String message;
 
+    private String receiver;
+
     @Enumerated(EnumType.STRING)
     private NotificationType type;
 
@@ -31,9 +33,10 @@ public class Notification implements Serializable{
     public Notification() {
     }
 
-    public Notification(String message, NotificationType type) {
+    public Notification(String message, NotificationType type, String receiver) {
         this.message = message;
         this.type = type;
+        this.receiver = receiver;
     }
 
     @Override
