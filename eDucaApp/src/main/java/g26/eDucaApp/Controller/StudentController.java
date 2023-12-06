@@ -17,18 +17,21 @@ public class StudentController {
 
     private EducaServices studentService;
 
+    @CrossOrigin(maxAge = 3600)
     @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody Student student){
         Student savedStudent = studentService.createStudent(student);
         return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
     }
 
+    @CrossOrigin(maxAge = 3600)
     @GetMapping("{nmec}")
     public ResponseEntity<Student> getStudentById(@PathVariable("nmec") Long nmec){
         Student student = studentService.getStudentByNmec(nmec);
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
 
+    @CrossOrigin(maxAge = 3600)
     @GetMapping
     public ResponseEntity<?> getStudents(@RequestParam(value = "email", required = false) String studentEmail,
                                          @RequestParam(value = "name", required = false) String studentName,
@@ -55,6 +58,7 @@ public class StudentController {
         }
     }
 
+    @CrossOrigin(maxAge = 3600)
     @PutMapping("{nmec}")
     public ResponseEntity<Student> updateStudent(@PathVariable("nmec") Long nmec,
                                                   @RequestBody Student student){
@@ -64,6 +68,7 @@ public class StudentController {
         return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
     }
 
+    @CrossOrigin(maxAge = 3600)
     @DeleteMapping("{nmec}")
     public ResponseEntity<?> deleteStudent(@PathVariable("nmec") Long nmec){
         studentService.deleteStudent(nmec);

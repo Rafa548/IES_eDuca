@@ -5,6 +5,7 @@ import logo from './logo.svg';
 import './App.css';
 import ClassPage from './ClassPage';
 import Navbar from './Navbar';
+import ProfileStudent from './ProfileStudent';
 
 const ClassCard = ({ sClass }) => (
   <div className="class-container">
@@ -57,6 +58,7 @@ const App = () => {
                 <Switch>
                   <Route path="/class/:classId" component={ClassPage} />
                   <Route path="/" render={() => <ClassList classes={classes} />} />
+                    <Route path="/profile-student/:email" component={ProfileStudent} />
                 </Switch>
               </div>
             </header>
