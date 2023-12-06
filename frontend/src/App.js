@@ -5,6 +5,8 @@ import logo from './logo.svg';
 import './App.css';
 import ClassPage from './ClassPage';
 import Navbar from './Navbar';
+import ProfileStudent from './ProfileStudent';
+
 
 const ClassCard = ({ sClass }) => (
   <div className="class-container">
@@ -77,7 +79,7 @@ const App = () => {
 
 	  fetchData(); // Initial data fetch
 
-	  
+
 	  const intervalId = setInterval(fetchData, 3000);
 
 	  // Clean up the interval when the component unmounts
@@ -95,6 +97,7 @@ const App = () => {
                 <Switch>
                   <Route path="/class/:classId" component={ClassPage} />
                   <Route path="/" render={() => <ClassList classes={classes} />} />
+                  <Route path="/profile_student" component={ProfileStudent} />
                 </Switch>
               </div>
             </header>
