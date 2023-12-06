@@ -5,6 +5,10 @@ import logo from './logo.svg';
 import './App.css';
 import ClassPage from './ClassPage';
 import Navbar from './Navbar';
+import WebSocketService from './WebSocketService';
+import { useAuth } from './AuthContext';
+
+
 
 const ClassCard = ({ sClass }) => (
   <div className="class-container">
@@ -24,38 +28,38 @@ const ClassList = ({ classes }) => (
 );
 
 const App = () => {
+  const { token } = useAuth();
+  //save token to local storage
+  useEffect(() => { localStorage.setItem('token', token); }, [token]);
+    //notifications
+  /* const [notifications, setNotifications] = useState([]);
+  const webSocketService = WebSocketService(onMessage);
 
-  const [token, setToken] = useState(null);
+  function onMessage(notification) {
+    //console.log('Received notification:', notification);
+    setNotifications((prevNotifications) => [...prevNotifications, notification]);
+  }
 
   useEffect(() => {
-    const fetchToken = async () => {
-      try {
-        const response = await fetch('http://localhost:8080/auth/signin', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: 'admin@gmail.com',
-            password: 'admin',
-          }),
-        });
+    console.log('Connecting to WebSocket...');
+    webSocketService.connect();
 
-        const data = await response.json();
+    // Subscribe to the class (replace 'ClassName' with the actual class name)
+    const subscription = webSocketService.subscribeToClass('ClassName');
 
-        if (response.ok) {
-          setToken(data.token);
-          console.log('Token fetched successfully', data.token);
-        } else {
-          console.error('Authentication error:', data.error);
-        }
-      } catch (error) {
-        console.error('Error fetching token:', error);
+    return () => {
+      // Check if subscription is not null before unsubscribing
+      if (subscription) {
+        subscription.unsubscribe();
       }
+      console.log('Disconnecting from WebSocket...');
+      webSocketService.disconnect();
     };
+  }, [webSocketService]); */
 
-    fetchToken(); // Fetch token on component mount
-  }, []);
+
+
+  
 
   const [classes, setClasses] = useState([]);
 

@@ -3,8 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ClassPage.css';
 import WebSocketService from './WebSocketService';
+import { useAuth } from './AuthContext';
 
 const ClassPage = ({ match }) => {
+
+  const { token } = useAuth();
+
   const [classDetails, setClassDetails] = useState(null);
   const [studentDetails, setStudentDetails] = useState(null);
   const [subjectAverages, setSubjectAverages] = useState({});
@@ -42,19 +46,19 @@ const ClassPage = ({ match }) => {
   const fetchData = async () => {
     try {
       if (studentId) {
-        const response1 = await fetch(`/students/${studentId}`);
+        const response1 = await fetch(`/students/${studentId}` , { headers: { Authorization: `Bearer ${token}` } });
         const data1 = await response1.json();
         setStudentDetails(data1);
       }
 
-      const response = await fetch(`/classes/${classId}`);
+      const response = await fetch(`/classes/${classId}`, { headers: { Authorization: `Bearer ${token}` } });
       const data = await response.json();
       setClassDetails(data);
 
       const averages = {};
       for (const student of data.students) {
         for (const subject of data.subjects) {
-          const gradeResponse = await fetch(`/classes/${data.classname}/${student.nmec}/${subject.name}/grade`);
+          const gradeResponse = await fetch(`/classes/${data.classname}/${student.nmec}/${subject.name}/grade` , { headers: { Authorization: `Bearer ${token}` } });
           const gradeData = await gradeResponse.text();
 
           averages[`${student.id}-${subject.id}`] = gradeData || 'N/A';

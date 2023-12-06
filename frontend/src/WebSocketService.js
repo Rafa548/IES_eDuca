@@ -1,10 +1,17 @@
 // WebSocketService.js
 
 import { Client } from '@stomp/stompjs';
+import { useAuth } from './AuthContext';
+
 
 const WebSocketService = (onMessageCallback) => {
+  const { token } = useAuth();
+
   const client = new Client({
     brokerURL: 'ws://localhost:8080/ws', // Your WebSocket endpoint
+    connectHeaders: {
+      Authorization: `Bearer ${token}`,
+    },
     debug: function (str) {
       console.log(str);
     },
