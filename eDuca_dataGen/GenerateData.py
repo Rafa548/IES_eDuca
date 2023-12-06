@@ -15,6 +15,20 @@ def main():
     consumer = KafkaConsumer(bootstrap_servers=['localhost:9092'], auto_offset_reset='earliest', enable_auto_commit=True, group_id='my-group', value_deserializer=lambda x: json.loads(x.decode('utf-8')))
 
     producer = KafkaProducer(bootstrap_servers=['localhost:9092'], value_serializer=lambda x: json.dumps(x).encode('utf-8'))
+
+    admin_token_url = "http://localhost:8080/auth/signin"
+    data = {
+        'email': "admin@gmail.com",
+        'password': "admin"
+    }
+
+    
+    response = requests.post(admin_token_url, json=data)
+    token = response.json().get('token')
+
+    headers = {
+        'Authorization': 'Bearer ' + token 
+    }
     
     send_topic = 'eDuca_dataGen'
     receive_topic = 'eDucaApp'
@@ -193,7 +207,7 @@ def main():
 
                 if message.value['type'] == 'init':
                     subjects_api_url = "http://localhost:8080/subjects"
-                    current_subjects = requests.get(subjects_api_url).json()
+                    current_subjects = requests.get(subjects_api_url,headers=headers).json()
                     subjects_messages = []
                     
                     for subject in subjects_objects:
@@ -230,7 +244,7 @@ def main():
 
 
                     classes_api_url = "http://localhost:8080/classes"
-                    current_classes = requests.get(classes_api_url).json()
+                    current_classes = requests.get(classes_api_url,headers=headers).json()
                     classes_messages = []
                     for class_ in class_objects:
                         existing_class = next((c for c in current_classes if c['classname'] == class_['classname']), None) #and c["school"] == class_["school"]), None)
@@ -268,7 +282,7 @@ def main():
                             
 
                     students_api_url = "http://localhost:8080/students"
-                    current_students = requests.get(students_api_url).json()
+                    current_students = requests.get(students_api_url,headers=headers).json()
                     students_messages = []
 
                     for student in students:
@@ -309,7 +323,7 @@ def main():
                     
                     
                     teachers_api_url = "http://localhost:8080/teachers"
-                    current_teachers = requests.get(teachers_api_url).json()
+                    current_teachers = requests.get(teachers_api_url,headers=headers).json()
                     teachers_messages = []
                     for teacher in teachers:
                         existing_teacher = next((t for t in current_teachers if t['nmec'] == teacher['nmec']), None)
@@ -354,7 +368,7 @@ def main():
                         producer.send(send_topic, teacher_json)
 
                     assigments_api_url = "http://localhost:8080/teaching_assignments"
-                    current_assigments = requests.get(assigments_api_url).json()
+                    current_assigments = requests.get(assigments_api_url,headers=headers).json()
                     assigments_messages = []
                     for assigment in teacher_assignment:
                         existing_assigment = next((s for s in current_assigments if s['id'] == subject['id']), None)
@@ -393,65 +407,65 @@ def main():
                     
 
                     std_progress_api_url = "http://localhost:8080/progress/insertion/students"
-                    response = requests.get(std_progress_api_url)
+                    response = requests.get(std_progress_api_url,headers=headers)
                     while response.status_code != 200:
-                        response = requests.get(std_progress_api_url)
+                        response = requests.get(std_progress_api_url,headers=headers)
                         time.sleep(1)
                     std_progress = response.json()
                     while std_progress < 99.99999:
-                        response = requests.get(std_progress_api_url)
+                        response = requests.get(std_progress_api_url,headers=headers)
                         std_progress = response.json()
                         time.sleep(1)
                     students_api_url = "http://localhost:8080/students"
-                    current_students = requests.get(students_api_url).json()
+                    current_students = requests.get(students_api_url,headers=headers).json()
                     class_progress_api_url = "http://localhost:8080/progress/insertion/classes"
-                    response = requests.get(class_progress_api_url)
+                    response = requests.get(class_progress_api_url,headers=headers)
                     while response.status_code != 200:
-                        response = requests.get(class_progress_api_url)
+                        response = requests.get(class_progress_api_url,headers=headers)
                         time.sleep(1)
                     class_progress = response.json()
                     while class_progress < 99.99999:
-                        response = requests.get(class_progress_api_url)
+                        response = requests.get(class_progress_api_url,headers=headers)
                         class_progress = response.json()
                         time.sleep(1)
                     class_api_url = "http://localhost:8080/classes"
-                    current_classes = requests.get(class_api_url).json()
+                    current_classes = requests.get(class_api_url,headers=headers).json()
                     teacher_progress_api_url = "http://localhost:8080/progress/insertion/teachers"
-                    response = requests.get(teacher_progress_api_url)
+                    response = requests.get(teacher_progress_api_url,headers=headers)
                     while response.status_code != 200:
-                        response = requests.get(teacher_progress_api_url)
+                        response = requests.get(teacher_progress_api_url,headers=headers)
                         time.sleep(1)
                     teacher_progress = response.json()
                     while teacher_progress < 99.99999:
-                        response = requests.get(teacher_progress_api_url)
+                        response = requests.get(teacher_progress_api_url,headers=headers)
                         teacher_progress = response.json()
                         time.sleep(1)
                     teacher_api_url = "http://localhost:8080/teachers"
-                    current_teachers = requests.get(teacher_api_url).json()
+                    current_teachers = requests.get(teacher_api_url,headers=headers).json()
                     subject_progress_api_url = "http://localhost:8080/progress/insertion/subjects"
-                    response = requests.get(subject_progress_api_url)
+                    response = requests.get(subject_progress_api_url,headers=headers)
                     while response.status_code != 200:
-                        response = requests.get(subject_progress_api_url)
+                        response = requests.get(subject_progress_api_url,headers=headers)
                         time.sleep(1)
                     subject_progress = response.json()
                     while subject_progress < 99.99999:
-                        response = requests.get(subject_progress_api_url)
+                        response = requests.get(subject_progress_api_url,headers=headers)
                         subject_progress = response.json()
                         time.sleep(1)
                     subjects_api_url = "http://localhost:8080/subjects"
-                    current_subjects = requests.get(subjects_api_url).json()
+                    current_subjects = requests.get(subjects_api_url,headers=headers).json()
                     assigment_progress_api_url = "http://localhost:8080/progress/insertion/assigments"
                     response = requests.get(assigment_progress_api_url)
                     while response.status_code != 200:
-                        response = requests.get(assigment_progress_api_url)
+                        response = requests.get(assigment_progress_api_url,headers=headers)
                         time.sleep(1)
                     assigment_progress = response.json()
                     while assigment_progress < 99.99999:
-                        response = requests.get(assigment_progress_api_url)
+                        response = requests.get(assigment_progress_api_url,headers=headers)
                         assigment_progress = response.json()
                         time.sleep(1)
                     assigments_api_url = "http://localhost:8080/teaching_assignments"
-                    current_assigments = requests.get(assigments_api_url).json()
+                    current_assigments = requests.get(assigments_api_url,headers=headers).json()
                     """ grade_progress_api_url = "http://localhost:8080/progress/insertion/grades"
                     response = requests.get(grade_progress_api_url)
                     while response.status_code != 200:
@@ -466,7 +480,7 @@ def main():
                     grades = {}
                     new_grades = []
                     grades_api_url = "http://localhost:8080/grades"
-                    current_grades = requests.get(grades_api_url).json()
+                    current_grades = requests.get(grades_api_url,headers=headers).json()
 
                     for existing_grade in current_grades:
                         pair_id = (
