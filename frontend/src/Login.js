@@ -25,11 +25,9 @@ const Login = () => {
                     password,
                 });
             } else {
-                const schoolAdminToken = localStorage.getItem('token');
                 response = await axios.post(`http://localhost:8080/auth/signin`, {
                     email,
                     password,
-                    schoolAdminToken,
                 });
             }
 
