@@ -1,0 +1,59 @@
+div {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full height of the viewport */
+  }
+  
+  /* Style for the login form */
+  form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    width: 100%;
+  }
+  
+  /* Style for labels */
+  label {
+    margin-bottom: 6px;
+  }
+  
+  /* Style for input fields */
+  input {
+    padding: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box; /* Ensure padding and border don't increase width */
+  }
+  
+  /* Style for the login button */
+  button {
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  /* Style for the user type toggle button */
+  button:last-child {
+    margin-top: 10px;
+    background-color: #2196f3;
+    width: 100%;
+  }
+  
+  /* Style for error messages */
+  p {
+    color: red;
+    margin-top: 10px;
+  }
+  
