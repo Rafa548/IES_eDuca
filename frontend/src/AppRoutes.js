@@ -9,7 +9,6 @@ const AppRoutes = () => {
             <Switch>
                 <Route path="/login" component={Login} />
                 <Route path="/profile-student" component={ProfileStudent} />
-                {/* Add other routes for different user roles */}
             </Switch>
         </Router>
     );

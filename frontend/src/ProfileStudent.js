@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Navbar from './Navbar';
 
 const ProfileStudent = ({ location }) => {
     const [studentEmail, setStudentEmail] = useState('');
@@ -88,5 +89,6 @@ const ProfileStudent = ({ location }) => {
         </div>
     );
 };
+
 
 export default ProfileStudent;

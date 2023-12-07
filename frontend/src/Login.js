@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { jwtDecode as jwt_decode } from 'jwt-decode';
-import { Redirect, useHistory } from 'react-router-dom';
+import { Redirect,Switch, useHistory } from 'react-router-dom';
 import AppRoutes from './AppRoutes';
 import './Login.css';
 
@@ -87,7 +87,6 @@ const Login = () => {
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 <button type="submit">Login</button>
             </form>
-            <AppRoutes />
             <button onClick={handleUserTypeToggle}>
                 Switch to {userType === 'student' ? 'Teacher' : userType === 'teacher' ? 'School Admin' : 'Student'}
             </button>
