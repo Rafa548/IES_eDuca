@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { jwtDecode as jwt_decode } from 'jwt-decode';
-import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
+import AppRoutes from './AppRoutes';
 import './Login.css';
-import ProfileStudent from './ProfileStudent';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -72,7 +72,8 @@ const Login = () => {
 
     // Render the Redirect component if redirectTo is set
     if (redirectTo) {
-        return <Redirect to={redirectTo} />;
+        // Instead of returning Redirect, use history.push
+        history.push(redirectTo);
     }
 
     return (
@@ -86,10 +87,7 @@ const Login = () => {
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 <button type="submit">Login</button>
             </form>
-            <Switch>
-                <Route path="/profile-student" component={ProfileStudent} />
-                {/* Add other routes as needed */}
-            </Switch>
+            <AppRoutes />
             <button onClick={handleUserTypeToggle}>
                 Switch to {userType === 'student' ? 'Teacher' : userType === 'teacher' ? 'School Admin' : 'Student'}
             </button>
@@ -98,3 +96,4 @@ const Login = () => {
 };
 
 export default Login;
+
