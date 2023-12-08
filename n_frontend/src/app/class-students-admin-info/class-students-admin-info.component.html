@@ -1,0 +1,14 @@
+<div class="container">
+  <h2>Classes</h2>
+
+  <!-- Add Class button -->
+  <button class="add-button">Add Class</button>
+
+  <!-- Display classes information as smaller cards in rows -->
+  <div class="class-row">
+    <div class="class-card" *ngFor="let classItem of classes" (click)="navigateToClassDetails(classItem.id)">
+      <!-- Display only class name -->
+      <p>{{ classItem.classname }}</p>
+    </div>
+  </div>
+</div>

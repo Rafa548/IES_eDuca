@@ -35,6 +35,12 @@ public class ClassController {
         return new ResponseEntity<>(s_class, HttpStatus.OK);
     }
 
+    @GetMapping("/byID/{id}")
+    public ResponseEntity<S_class> getClassById(@PathVariable("id") Long id){
+        S_class s_class = educaServices.getS_classById(id);
+        return new ResponseEntity<>(s_class, HttpStatus.OK);
+    }
+
 
     @GetMapping
     public ResponseEntity<?> getClasses(@RequestParam(value = "classname", required = false) String c_name ){

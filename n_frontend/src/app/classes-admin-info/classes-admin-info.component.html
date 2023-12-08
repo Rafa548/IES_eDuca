@@ -1,0 +1,28 @@
+<div class="container">
+  <h2>Show Information</h2>
+
+  <!-- Buttons to switch content -->
+  <div class="button-group">
+    <button (click)="showStudents()">Students</button>
+    <button (click)="showSubjectsAndTeachers()">Subjects & Teachers</button>
+  </div>
+
+  <!-- Content area to display respective information -->
+  <div *ngIf="selectedContent === 'students'" class="content-section">
+    <h3>Students' Information</h3>
+    <div *ngFor="let grade of grades">
+      <h4>{{ grade.student.name }}</h4>
+        <p>{{ grade.subject }} - {{grade.grade}}</p>
+    </div>
+  </div>
+
+
+
+  <div *ngIf="selectedContent === 'subjectsAndTeachers'" class="content-section">
+    <h3>Subjects & Teachers' Information</h3>
+    <div *ngFor="let subject of class?.subjects">
+      <h4>{{ subject.subjectName }}</h4>
+      <p>Teacher: {{ subject.teacher }}</p>
+    </div>
+  </div>
+</div>

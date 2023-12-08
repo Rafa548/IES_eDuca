@@ -36,19 +36,22 @@ export class LoginComponent {
 
   async login() {
     try {
+      localStorage.clear();
       console.log('Logging in user:', this.email);
       console.log("password: ", this.password);
       this.GenTokenService.getToken(this.email, this.password).then(token => {
         const helper = new JwtHelperService();
         const decodedToken = helper.decodeToken(token);
-        localStorage.setItem('token', decodedToken);
+        const u_token:string =token;
+        localStorage.setItem('token', u_token);
+        console.log(localStorage.getItem('token'));
         console.log('Login successful');
         const userRole: string = decodedToken.role;
         console.log('User role:', userRole);
       });
 
       // Redirect based on user role
-      this.router.navigate(['student_home']);
+      this.router.navigate(['admin_dashboard']);
 
     } catch (error) {
       console.error(error);
