@@ -7,6 +7,9 @@ import g26.eDucaApp.Services.EducaServices;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -111,15 +114,56 @@ public class ClassController {
 
     @PutMapping("{classname}")
     public ResponseEntity<?> updateClass(@PathVariable("classname") String classname, @RequestBody S_class s_class){
-        s_class = educaServices.getS_classByClassname(classname);
-        s_class.setClassname(classname);
-        S_class updatedClass = educaServices.updateS_class(s_class);
-        return new ResponseEntity<>(updatedClass, HttpStatus.OK);
+        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains("ADMIN")) {
+            s_class = educaServices.getS_classByClassname(classname);
+            s_class.setClassname(classname);
+            S_class updatedClass = educaServices.updateS_class(s_class);
+            return new ResponseEntity<>(updatedClass, HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+
+    @DeleteMapping("{classname}/students/{nmec}")
+    public ResponseEntity<?> deleteStudentFromClass(@PathVariable("classname") String classname, @PathVariable("nmec") Long nmec){
+
+        for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
+            System.out.println(grantedAuthority.getAuthority());
+            System.out.println(grantedAuthority.getAuthority().equals("ADMIN"));
+            if (grantedAuthority.getAuthority().equals("ADMIN")){
+                S_class s_class = educaServices.getS_classByClassname(classname);
+                List<Student> students = s_class.getStudents();
+                for (Student student : students) {
+                    if (student.getNmec().equals(nmec)) {
+                        students.remove(student);
+                        student.setStudentclass(null);
+                        s_class.setStudents(students);
+                        educaServices.updateS_class(s_class);
+                        return new ResponseEntity<>(HttpStatus.OK);
+                    }
+                }
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     @DeleteMapping("{classname}")
     public ResponseEntity<?> deleteClass(@PathVariable("classname") String classname){
-        educaServices.deleteS_class(classname);
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()){
+            if (grantedAuthority.getAuthority() == "ADMIN"){
+                educaServices.deleteS_class(classname);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 }

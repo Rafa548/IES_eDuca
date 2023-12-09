@@ -43,12 +43,13 @@ h2 {
 .class-row {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Center align the cards */
+  justify-content: space-around; /* Center align the cards */
   gap: 20px;
 }
 
 .class-card {
   width: calc(25% - 20px);
+  position: relative; /* Relative positioning for button placement */
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -63,6 +64,20 @@ h2 {
   color: #333;
   font-size: 18px;
   text-align: center; /* Center align the text */
+}
+
+.delete-button {
+  position: absolute; /* Absolute positioning for the delete button */
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.delete-button:hover {
+  color: red; /* Change color on hover for better visibility */
 }
 
 .class-card:hover {

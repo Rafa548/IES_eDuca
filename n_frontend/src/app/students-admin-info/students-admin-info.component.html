@@ -1,0 +1,26 @@
+<h2>All Students</h2>
+<app-info-table
+  [headers]="tableHeaders"
+  [data]="tableData"
+  [onDeleteRow]="deleteStudent"
+  [onViewRow]="navigateToStudentDetails"
+  [onEditRow]="studentEdit"
+
+></app-info-table>
+
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h2>User Details</h2>
+    <p>Name: <input id="name" type="text" ></p>
+    <p>Email: <input id="email" type="email" ></p>
+    <p>Password: <input id="password" type="password" ></p>
+    <select id="modalSelect">
+      <option *ngFor="let class of classes">{{class.classname}}</option>
+    </select>
+    <!-- Add more fields as needed -->
+    <button (click)="saveChanges()">Save Changes</button>
+    <button (click)="closeEditModal()">Close</button>
+  </div>
+</div>
+
+

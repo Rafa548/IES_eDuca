@@ -34,4 +34,15 @@ export class ClassStudentsAdminInfoComponent {
     this.router.navigate(['admin/class', classId]); // Navigate to a route like '/class/1' based on the class ID
   }
 
+  deleteClass(event: Event, classname: string) {
+    event.stopPropagation();
+    this.ApiDataService.deleteClass(localStorage.getItem('token'), classname).then((response : any) => {
+      //console.log(response);
+      this.ApiDataService.getClasses(localStorage.getItem('token')).then((classes : any[]) => {
+        this.classes = classes;
+        //console.log(classes);
+      });
+    });
+
+  }
 }

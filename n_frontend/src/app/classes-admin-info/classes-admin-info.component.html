@@ -1,3 +1,4 @@
+
 <div class="container">
   <h2>Show Information</h2>
 
@@ -7,22 +8,55 @@
     <button (click)="showSubjectsAndTeachers()">Subjects & Teachers</button>
   </div>
 
-  <!-- Content area to display respective information -->
   <div *ngIf="selectedContent === 'students'" class="content-section">
     <h3>Students' Information</h3>
-    <div *ngFor="let grade of grades">
-      <h4>{{ grade.student.name }}</h4>
-        <p>{{ grade.subject }} - {{grade.grade}}</p>
-    </div>
+    <table>
+      <thead>
+      <tr>
+        <th>Student</th>
+        <th *ngFor="let subject of class?.subjects">{{ subject.name }}</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let student of class?.students">
+        <td>{{ student.name }}</td>
+        <td *ngFor="let subject of class?.subjects">
+          <ng-container *ngIf="getGrade(student, subject)">
+            <span class="grade-content">{{ getGrade(student, subject).grade }}</span>
+          </ng-container>
+        </td>
+        <td>
+          <i class="fas fa-trash" (click)="deleteStudent(student)"></i>
+          <span style="margin: 0 5px;"></span>
+          <i class="fa-solid fa-eye" (click)="studentDetails(student)"></i>
+        </td>
+      </tr>
+      </tbody>
+    </table>
   </div>
+
+
+
 
 
 
   <div *ngIf="selectedContent === 'subjectsAndTeachers'" class="content-section">
     <h3>Subjects & Teachers' Information</h3>
-    <div *ngFor="let subject of class?.subjects">
-      <h4>{{ subject.subjectName }}</h4>
-      <p>Teacher: {{ subject.teacher }}</p>
-    </div>
+    <table>
+      <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Teacher</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let subject of class?.subjects">
+        <td>{{ subject.name }}</td>
+        <td>{{ class.name }}</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </div>
+

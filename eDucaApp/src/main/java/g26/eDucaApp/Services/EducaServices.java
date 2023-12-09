@@ -196,6 +196,12 @@ public class EducaServices {
             return;
         }
         S_class s_class = sclass_repo.findByClassname(classname).get();
+        for (Student student : s_class.getStudents()){
+            student.setStudentclass(null);
+            std_repo.save(student);
+        }
+
+        s_class.getStudents().clear();
         sclass_repo.delete(s_class);
     }
 

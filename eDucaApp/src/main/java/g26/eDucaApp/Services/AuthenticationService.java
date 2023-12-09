@@ -34,15 +34,16 @@ public class AuthenticationService {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (AuthenticationException e) {
+            System.out.println("Invalid credentials.");
             throw new IllegalArgumentException("Invalid credentials.");
         }
-
         UserDetails userDetails = getUserDetailsByEmail(email);
 
         if (userDetails != null) {
             var jwt = jwtService.generateToken(userDetails);
             return JwtAuthenticationResponse.builder().token(jwt).build();
         } else {
+            System.out.println("User details not found.");
             throw new IllegalArgumentException("User details not found.");
         }
     }
@@ -67,7 +68,7 @@ public class AuthenticationService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(teacher.getEmail())
                 .password(teacher.getPassword())
-                .authorities(new SimpleGrantedAuthority("ROLE_TEACHER"))
+                .authorities(new SimpleGrantedAuthority("TEACHER"))
                 .build();
     }
 
@@ -75,7 +76,7 @@ public class AuthenticationService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(student.getEmail())
                 .password(student.getPassword())
-                .authorities(new SimpleGrantedAuthority("ROLE_STUDENT"))
+                .authorities(new SimpleGrantedAuthority("STUDENT"))
                 .build();
     }
 
@@ -83,7 +84,7 @@ public class AuthenticationService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(sch_admin.getEmail())
                 .password(sch_admin.getPassword())
-                .authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))
+                .authorities(new SimpleGrantedAuthority("ADMIN"))
                 .build();
     }
 

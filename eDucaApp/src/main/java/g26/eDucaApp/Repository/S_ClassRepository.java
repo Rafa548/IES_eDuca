@@ -12,6 +12,5 @@ import java.util.Optional;
 public interface S_ClassRepository extends JpaRepository<S_class, Long>{
     Optional<S_class> findByClassname(String classname);
 
-
     List<S_class> findByStudentsContaining(Student student);
 }

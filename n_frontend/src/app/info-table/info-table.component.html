@@ -1,0 +1,27 @@
+
+
+<div class="table-container">
+  <table class="info-table">
+    <thead>
+    <tr>
+      <th *ngFor="let header of headers">{{ header }}</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let row of data">
+      <td>{{ row.nmec }}</td>
+      <td>{{ row.name }}</td>
+      <td>{{ row.email }}</td>
+      <td class="action-icons">
+        <i class="fa-solid fa-pen-to-square action-icon edit" *ngIf="onEditRow" (click)="onEditRow(row)"></i>
+        <i class="fas fa-eye action-icon view" *ngIf="onViewRow" (click)="onViewRow(row)"></i>
+        <i class="fas fa-trash action-icon delete" *ngIf="onDeleteRow" (click)="onDeleteRow(row)"></i>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+
+

@@ -1,0 +1,56 @@
+/* info-table.component.css */
+.info-table {
+  width: auto;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-family: 'Roboto', sans-serif; /* Roboto font */
+
+  /* Styling for a subtle gradient background */
+  background: linear-gradient(45deg, #f3f3f3, #ffffff);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adding a subtle box shadow */
+}
+
+.info-table th,
+.info-table td {
+  padding: 12px; /* Increased padding for better spacing */
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.info-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.info-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+
+
+
+.action-icon {
+  cursor: pointer;
+  margin-right: 8px;
+  font-size: 18px; /* Increase the icon size */
+  transition: transform 0.3s ease, color 0.3s ease; /* Add transition for color and transform */
+}
+
+.action-icon.delete:hover {
+  color: red; /* Change color on hover */
+  transform: scale(1.2); /* Scale the icon slightly on hover */
+}
+
+/* Hover styles for the eye icon */
+.action-icon.view:hover {
+  color: green; /* Change color on hover */
+  transform: scale(1.2); /* Scale the icon slightly on hover */
+}
+
+
+.table-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
