@@ -1,0 +1,23 @@
+<!-- Include Font Awesome icons in your navbar.component.html -->
+<nav class="navbar">
+    <div class="navbar-logo">
+      <a routerLink="/">eDuca</a>
+    </div>
+    <ul class="navbar-links">
+      <li><a (click)="redirectTo('classes')">Home</a></li>
+      <li><a (click)="redirectTo('classes')">Classes</a></li>
+      <li><a (click)="redirectTo('classes')">Students</a></li>
+      <li><a (click)="redirectTo('classes')">Teachers</a></li>
+    </ul>
+    <div class="navbar-actions">
+        <div class="notification-dropdown" >
+            <!-- Replace this with your actual notification content -->
+            <p>Notification 1</p>
+            <p>Notification 2</p>
+          </div>
+          <i class="fa fa-bell fa-lg" style="color: white; margin-right: 20px;" (click)="toggleDropdown()"></i>        <!-- Add login/logout buttons or user-related actions here -->
+      <button *ngIf="!isLoggedIn" (click)="login()">Login</button>
+      <button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
+    </div>
+  </nav>
+  
