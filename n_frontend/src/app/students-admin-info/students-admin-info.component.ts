@@ -1,8 +1,7 @@
 import {Component, inject} from '@angular/core';
-import {InfoTableComponent} from "../info-table/info-table.component";
 import {Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import { ApiDataService } from '../api-data.service';
 
 
@@ -11,9 +10,9 @@ import { ApiDataService } from '../api-data.service';
   selector: 'app-students-admin-info',
   standalone: true,
   imports: [
-    InfoTableComponent,
     FormsModule,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './students-admin-info.component.html',
   styleUrl: './students-admin-info.component.css'
@@ -21,7 +20,7 @@ import { ApiDataService } from '../api-data.service';
 export class StudentsAdminInfoComponent {
   tableHeaders: string[];
   tableData: any[] = [];
-  selectedUser: any;
+  selectedUser: any | undefined ;
   classes: any[] = [];
   ApiDataService = inject(ApiDataService)
 
@@ -38,12 +37,17 @@ export class StudentsAdminInfoComponent {
 
     }
 
-    navigateToStudentDetails(studentId: number) {
-      this.router.navigate(['admin/student', studentId]); // Navigate to a route like '/student/1' based on the student ID
+    navigateToStudentDetails(nmec: number) {
+      this.router.navigate(['admin/student', nmec]); // Navigate to a route like '/student/1' based on the student ID
     }
 
-    deleteStudent(studentId: number) {
-
+    deleteStudent(student: any) {
+      this.ApiDataService.deleteStudent(localStorage.getItem('token'), student.nmec).then((response : any) => {
+        //console.log(response);
+        this.ApiDataService.getStudents(localStorage.getItem('token')).then((students : any[]) => {
+          this.tableData = students;
+        });
+      } );
     }
 
     studentEdit(user: any) {
@@ -61,8 +65,8 @@ export class StudentsAdminInfoComponent {
       }
       if (modalSelectElement) {
         // Change the selected option
-        const newSelectedValue = '2a'; // Change this to the value of the desired new class
-        modalSelectElement.value = newSelectedValue;
+        //console.log(this.selectedUser.studentclass.classname);
+        modalSelectElement.value = this.selectedUser.studentclass.classname;
       }
       if (email) {
         email.value = this.selectedUser.email;
@@ -70,6 +74,7 @@ export class StudentsAdminInfoComponent {
       if (password) {
         password.value = this.selectedUser.password;
       }
+      //console.log(this.selectedUser);
     }
 
   closeEditModal() {
@@ -80,6 +85,7 @@ export class StudentsAdminInfoComponent {
   }
 
   saveChanges() {
+    this.selectedUser = {};
     const name = document.getElementById('name') as HTMLInputElement;
     const email = document.getElementById('email') as HTMLInputElement;
     const password = document.getElementById('password') as HTMLInputElement;
@@ -88,15 +94,26 @@ export class StudentsAdminInfoComponent {
       this.selectedUser.name = name.value;
     }
     if (modalSelectElement) {
-      this.selectedUser.class = modalSelectElement.value;
+      this.selectedUser.studentclass = modalSelectElement.value;
     }
     if (email) {
       this.selectedUser.email = email.value;
     }
+    for (let i = 0; i < this.tableData.length; i++) {
+      if (this.tableData[i].email === this.selectedUser.email) {
+        this.selectedUser.nmec = this.tableData[i].nmec;
+      }
+    }
     if (password) {
       this.selectedUser.password = password.value;
     }
-    console.log(this.selectedUser);
+
+    this.ApiDataService.updateStudent(localStorage.getItem('token'), this.selectedUser).then((response : any) => {
+      //console.log(response);
+      this.ApiDataService.getStudents(localStorage.getItem('token')).then((students : any[]) => {
+        this.tableData = students;
+      });
+    });
 
 
     this.closeEditModal(); // Close the modal after saving changes

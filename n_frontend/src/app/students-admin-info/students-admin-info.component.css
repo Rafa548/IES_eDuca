@@ -1,4 +1,4 @@
-/* Styling for the heading */
+/* Style for the modal container */
 h2 {
   font-size: 24px;
   color: #333;
@@ -7,7 +7,7 @@ h2 {
 }
 
 .modal {
-  display: none;
+  display: none; /* Hide the modal by default */
   position: fixed;
   z-index: 1;
   left: 0;
@@ -15,13 +15,138 @@ h2 {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
 }
 
+/* Style for the modal content */
 .modal-content {
   background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 70%;
+  max-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+
+/* Style for the heading */
+.modal-content h2 {
+  margin-top: 0;
+}
+
+/* Style for the form paragraph */
+.modal-content p {
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 8px 15px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Apply specific styles to buttons based on their purpose */
+button:nth-child(1) {
+  background-color: #4caf50;
+  color: white;
+}
+
+button:nth-child(2) {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Additional styles for input and select layout */
+.input-group {
+  display: flex;
+  align-items: flex-start; /* Align items at the start */
+}
+
+.input {
+  flex: 1; /* Take remaining space */
+}
+
+.select {
+  margin-left: 20px; /* Adjust spacing between input and select */
+}
+
+/* Style for the select element */
+.select select {
+  width: 100%; /* Full width within its container */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+
+/* info-table.component.css */
+.info-table {
+  width: auto;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-family: 'Roboto', sans-serif; /* Roboto font */
+
+  /* Styling for a subtle gradient background */
+  background: linear-gradient(45deg, #f3f3f3, #ffffff);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adding a subtle box shadow */
+}
+
+.info-table th,
+.info-table td {
+  padding: 12px; /* Increased padding for better spacing */
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.info-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.info-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+
+
+
+.action-icon {
+  cursor: pointer;
+  margin-right: 8px;
+  font-size: 18px; /* Increase the icon size */
+  transition: transform 0.3s ease, color 0.3s ease; /* Add transition for color and transform */
+}
+
+.action-icon.delete:hover {
+  color: red; /* Change color on hover */
+  transform: scale(1.2); /* Scale the icon slightly on hover */
+}
+
+/* Hover styles for the eye icon */
+.action-icon.view:hover {
+  color: green; /* Change color on hover */
+  transform: scale(1.2); /* Scale the icon slightly on hover */
+}
+
+
+.table-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+
+
+
+
+
+
+
+
+

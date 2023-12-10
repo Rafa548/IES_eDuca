@@ -5,6 +5,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { ClassStudentsAdminInfoComponent } from './class-students-admin-info/class-students-admin-info.component';
 import { ClassesAdminInfoComponent } from './classes-admin-info/classes-admin-info.component';
 import { StudentsAdminInfoComponent } from './students-admin-info/students-admin-info.component';
+import { StudentAdminInfoComponent } from './student-admin-info/student-admin-info.component';
 
 
 export const routes: Routes = [
@@ -14,6 +15,7 @@ export const routes: Routes = [
   { path: 'admin/class_students', component: ClassStudentsAdminInfoComponent },
   { path: 'admin/class/:classId', component: ClassesAdminInfoComponent },
   { path: 'admin/students', component: StudentsAdminInfoComponent },
+  {path:'admin/student/:nmec', component: StudentAdminInfoComponent},
 
 ];
 

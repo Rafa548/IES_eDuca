@@ -56,4 +56,27 @@ export class ApiDataService {
     //console.log(data.json());
     return await data.json() ?? undefined;
   }
+
+  async updateStudent(token: string|null, student : any): Promise<any> {
+    const studentnmec = student.nmec;
+
+    const url = this.baseURL + '/students/' + studentnmec;
+    console.log(url);
+    console.log(JSON.stringify(student));
+    const data = await fetch(url, {method: 'PUT', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(student) });
+    if (!data.ok) {
+      throw new Error('Failed to update student');
+    }
+    return await data.text() ?? undefined;
+  }
+
+  async deleteStudent(token: string|null, studentnmec: number): Promise<any> {
+    const url = this.baseURL + '/students/' + studentnmec;
+    //console.log(url);
+    const data = await fetch(url, {method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+    if (!data.ok) {
+      throw new Error('Failed to delete student');
+    }
+    return await data.text() ?? undefined;
+  }
 }
