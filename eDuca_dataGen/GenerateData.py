@@ -128,11 +128,14 @@ def main():
             #print("--------------------")
             if assignment["teacher_id"] == i:
                 #print(assignment["assigned_class"])
-                assigned_classes.append(assignment["assigned_class"])
-                assigned_subjects.append(assignment["assigned_subject"])
+                if assignment["assigned_class"] not in assigned_classes:
+                    assigned_classes.append(assignment["assigned_class"])
+                if assignment["assigned_subject"] not in assigned_subjects:
+                    assigned_subjects.append(assignment["assigned_subject"])
                 assigned_assigments.append(assignment)
         #print(assigned_subjects)
         #print(assigned_classes)
+        #print("--------------------")
         #classes_assigned = random.sample(class_objects, num_classes)
 
 
@@ -154,7 +157,7 @@ def main():
         #print(teacher["s_classes"])
         teachers.append(teacher)
 
-
+    
     
 
     assigned_classes = {class_id: set() for class_id in range(1, 41)}
@@ -257,7 +260,7 @@ def main():
                                 "school": class_['school'],
                                 "students": class_['students'],
                                 "subjects": class_['subjects'],
-                                "teachers": class_['teachers']
+                                "teachers": [   ]
                             })
                             """ producer.send(send_topic,       
                             {
