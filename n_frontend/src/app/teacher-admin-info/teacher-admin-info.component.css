@@ -143,3 +143,13 @@ button[type="submit"]:hover {
 .selected {
   background-color: #b8daff;
 }
+
+.container #rad{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-group {
+  flex: 1;
+}

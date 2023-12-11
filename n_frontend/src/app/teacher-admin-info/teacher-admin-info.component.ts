@@ -181,7 +181,7 @@ export class TeacherAdminInfoComponent {
         //console.log(grades[i])
         this.grades.push(grades[i]);
       }
-      //console.log(this.grades);
+      console.log(this.grades);
     } );
   }
 
@@ -244,5 +244,9 @@ export class TeacherAdminInfoComponent {
         });
       }
     }
+    if (this.showDropdown = true) {
+      this.showDropdown = false;
+    }
+
   }
 }
