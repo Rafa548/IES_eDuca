@@ -172,7 +172,7 @@ public class DatainitServices {
         grade.setGrade(jsonObject.getInt("grade"));
         //grade.setWeight(jsonObject.getInt("weight"));
 
-        System.out.println("Grade: " + grade.getGrade());
+        //System.out.println("Grade: " + grade.getGrade());
 
         JSONObject studentJson = jsonObject.getJSONObject("student");
         Student student = std_repo.findByNmec(studentJson.getLong("nmec")).get();

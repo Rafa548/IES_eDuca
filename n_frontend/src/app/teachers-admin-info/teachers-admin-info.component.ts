@@ -56,6 +56,12 @@ export class TeachersAdminInfoComponent {
   }
 
   deleteTeacher(row: any) {
+    this.ApiDataService.deleteTeacher(localStorage.getItem('token'), row.nmec).then((response : any) => {
+      //console.log(response);
+      this.ApiDataService.getTeachers(localStorage.getItem('token')).then((teachers : any[]) => {
+        this.tableData = teachers;
+      });
+    } );
 
   }
 
@@ -64,6 +70,7 @@ export class TeachersAdminInfoComponent {
   }
 
   saveChanges() {
+
   }
   closeEditModal() {
     const modal = document.getElementById('editModal');

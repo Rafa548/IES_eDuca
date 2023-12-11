@@ -25,7 +25,7 @@ public class Grade {
 
         @ManyToOne
         @JoinColumn(name = "student", nullable = false)
-        @JsonIgnoreProperties({"grades", "studentclass"})
+        @JsonIgnoreProperties({"grades"})
         private Student student;
 
         @ManyToOne

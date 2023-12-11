@@ -159,4 +159,30 @@ export class ApiDataService {
   }
 
 
+
+  async addTeachingAssigment(item: string | null, json: { subject: string; class: string; email: any }):Promise<any> {
+      const url = this.baseURL + '/teaching_assignments';
+      const data = await fetch(url, {method: 'POST', headers: { Authorization: `Bearer ${item}`, 'Content-Type': 'application/json' }, body: JSON.stringify(json) });
+      return await data.text() ?? undefined;
+  }
+
+  async deleteTeachingAssigment(item: string | null, json: { subject: string; class: string; email: any }):Promise<any> {
+    const url = this.baseURL + '/teaching_assignments';
+    const data = await fetch(url, {method: 'DELETE', headers: { Authorization: `Bearer ${item}`, 'Content-Type': 'application/json' }, body: JSON.stringify(json) });
+    return await data.text() ?? undefined;
+
+  }
+
+  async getTeacherGrades(item: string | null, TeacherNmec: number):Promise<any> {
+    const url = this.baseURL + '/grades/'  + 'teacher/' + TeacherNmec;
+    const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${item}` } });
+    return await data.json() ?? undefined;
+
+  }
+
+  async deleteTeacher(item: string | null,TeacherNmec: number):Promise<any>{
+    const url = this.baseURL + '/teachers/' + TeacherNmec;
+    const data = await fetch(url, {method: 'DELETE', headers: { Authorization: `Bearer ${item}` } });
+    return await data.text() ?? undefined;
+  }
 }
