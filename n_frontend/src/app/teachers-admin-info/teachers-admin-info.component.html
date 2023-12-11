@@ -1,0 +1,50 @@
+<h2>All Teachers</h2>
+
+<div class="table-container">
+  <table class="info-table">
+    <thead>
+    <tr>
+      <th *ngFor="let header of tableHeaders">{{ header }}</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let row of tableData">
+      <td>{{ row.nmec }}</td>
+      <td>{{ row.name }}</td>
+      <td>{{ row.email }}</td>
+      <td class="action-icons">
+        <i class="fa-solid fa-pen-to-square action-icon edit"  (click)="TeacherEdit(row)"></i>
+        <i class="fas fa-eye action-icon view"  (click)="navigateToTeacherDetails(row.nmec)"></i>
+        <i class="fas fa-trash action-icon delete" (click)="deleteTeacher(row)"></i>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h2>User Details</h2>
+    <div class="input-group">
+      <div class="input">
+        <p>Name: <input id="name" type="text"></p>
+        <p>Email: <input id="email" type="email"></p>
+        <p>Password: <input id="password" type="password"></p>
+      </div>
+      <div class="select">
+        <p>Select Class:
+          <select id="modalSelect" multiple>
+            <option *ngFor="let class of classes">{{class.classname}}</option>
+          </select>
+        </p>
+      </div>
+    </div>
+    <!-- Add more fields as needed -->
+    <button (click)="saveChanges()">Save Changes</button>
+    <button (click)="closeEditModal()">Close</button>
+  </div>
+</div>
+
+
+

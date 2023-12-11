@@ -79,4 +79,43 @@ export class ApiDataService {
     }
     return await data.text() ?? undefined;
   }
+
+  async getTeachers(token: string|null): Promise<any[]> {
+    const url = this.baseURL + '/teachers';
+    //console.log(url);
+    const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${token}` } });
+    //console.log(data.json());
+    return await data.json() ?? undefined;
+  }
+
+
+  async getTeacher(token: string|null, teacherNmec: number): Promise<any> {
+    const url = this.baseURL + '/teachers/' + teacherNmec;
+    //console.log(url);
+    const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${token}` } });
+    //console.log(data.json());
+    return await data.json() ?? undefined;
+  }
+
+
+  async getTeachingAssigmments(token: string|null): Promise<any[]> {
+    const url = this.baseURL + '/teaching_assignments';
+    //console.log(url);
+    const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${token}` } });
+    //console.log(data.json());
+    return await data.json() ?? undefined;
+  }
+
+  async updateTeacher(token: string|null , teacher: any): Promise<any> {
+    console.log(teacher);
+    const teacherNmec = teacher.nmec;
+    const url = this.baseURL + '/teachers/' + teacherNmec;
+    console.log(url);
+    //console.log(JSON.stringify(teacher));
+    const data = await fetch(url, {method: 'PUT', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(teacher) });
+    //console.log(data);
+    return await data.text() ?? undefined;
+  }
+
+
 }

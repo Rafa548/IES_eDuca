@@ -75,15 +75,6 @@ public class DatainitServices {
         }
         studentClass.setStudents(studentsList);
 
-        JSONArray teachersArray = jsonObject.getJSONArray("teachers");
-        List<Teacher> teachersList = new ArrayList<>();
-        for (int i = 0; i < teachersArray.length(); i++) {
-            JSONObject teacherObj = teachersArray.getJSONObject(i);
-            Teacher teacher = teacher_repo.findByNmec(teacherObj.getLong("nmec")).get();
-            if (teacher != null)
-                teachersList.add(teacher);
-        }
-        studentClass.setTeachers(teachersList);
 
         JSONArray subjectsArray = jsonObject.getJSONArray("subjects");
         List<Subject> subjectsList = new ArrayList<>();
@@ -111,10 +102,11 @@ public class DatainitServices {
         List<S_class> classesList = new ArrayList<>();
         for (int i = 0; i < classesArray.length(); i++) {
             JSONObject classObj = classesArray.getJSONObject(i);
-            S_class s_Class = sclass_repo.findById((long) classObj.getInt("id")).get();
-            if (s_Class != null)
+            S_class s_Class = sclass_repo.findByClassname(classObj.getString("classname")).get();
+            if (s_Class != null && !classesList.contains(s_Class))
                 classesList.add(s_Class);
         }
+
         JSONArray subjectsArray = jsonObject.getJSONArray("subjects");
         List<Subject> subjectsList = new ArrayList<>();
         for (int i = 0; i < subjectsArray.length(); i++) {

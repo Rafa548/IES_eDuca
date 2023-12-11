@@ -1,5 +1,6 @@
 package g26.eDucaApp.Services;
 
+import g26.eDucaApp.Model.Student;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,4 +55,5 @@ public class initScript {
             e.printStackTrace();
         }
     }
+
 }

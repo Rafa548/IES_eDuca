@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -58,11 +59,32 @@ public class StudentController {
 
     @PutMapping("{nmec}")
     public ResponseEntity<Student> updateStudent(@PathVariable("nmec") Long nmec,
-                                                  @RequestBody Student student){
+                                                 @RequestBody Map<String, String> updates) {
+        Student studentToUpdate = studentService.getStudentByNmec(nmec);
 
-        student.setNmec(nmec);
-        Student updatedStudent = studentService.updateStudent(student);
-        return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
+        if (studentToUpdate != null) {
+            if (updates.containsKey("name")) {
+                studentToUpdate.setName(updates.get("name"));
+            }
+
+            if (updates.containsKey("email")) {
+                studentToUpdate.setEmail(updates.get("email"));
+            }
+
+            if (updates.containsKey("password")) {
+                studentToUpdate.setPassword(updates.get("password"));
+            }
+
+            if (updates.containsKey("studentclass")) {
+                S_class updatedClass = studentService.getS_classByClassname(updates.get("studentclass"));
+                studentToUpdate.setStudentclass(updatedClass);
+            }
+
+            Student updatedStudent = studentService.updateStudent(studentToUpdate);
+            return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("{nmec}")

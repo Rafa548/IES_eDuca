@@ -32,10 +32,11 @@ public class TeachingAssignmentController {
         }
 
         @GetMapping
-        public ResponseEntity<?> getTeachingAssignments(@RequestParam(value="teacher", required = false) Teacher teacher,
+        public ResponseEntity<?> getTeachingAssignments(@RequestParam(value="email", required = false) String email,
                                                         @RequestParam(value="class", required = false) S_class s_class,
                                                         @RequestParam(value="subject", required = false) Subject subject){
-            if (teacher != null) {
+            if (email != null) {
+                Teacher teacher = teachingAssignmentService.getTeacherByEmail(email);
                 List<Teaching_Assignment> teachingAssignments = teachingAssignmentService.getTeachingAssignmentByTeacher(teacher);
                 return new ResponseEntity<>(teachingAssignments, HttpStatus.OK);
             } else if (s_class != null) {
@@ -48,6 +49,8 @@ public class TeachingAssignmentController {
                 return new ResponseEntity<>(teachingAssignmentService.getAllTeachingAssignments(), HttpStatus.OK);
             }
         }
+
+
 
 
 }

@@ -3,7 +3,10 @@ import g26.eDucaApp.Model.*;
 import g26.eDucaApp.Repository.*;
 
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -478,5 +481,86 @@ public class EducaServices {
         return grade_repo.findAll();
     }
 
+    public List<Teaching_Assignment> getTeachingAssignmentsByTeacherAndClassAndSubject(Teacher teacher, S_class sClass, Subject subject) {
+        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findByTeacherAndSclassAndSubject(teacher, sClass, subject);
+
+        if (teaching_assignments.isEmpty()) {
+            return null;
+        } else {
+            return teaching_assignments;
+        }
+    }
+
+    public List<Teaching_Assignment> getTeachingAssignmentsByTeacherAndClass(Teacher teacher, S_class sClass) {
+        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findByTeacherAndSclass(teacher, sClass);
+
+        if (teaching_assignments.isEmpty()) {
+            return null;
+        } else {
+            return teaching_assignments;
+        }
+    }
+
+    public List<Teaching_Assignment> getTeachingAssignmentsByTeacherAndSubject(Teacher teacher, Subject subject) {
+        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findByTeacherAndSubject(teacher, subject);
+
+        if (teaching_assignments.isEmpty()) {
+            return null;
+        } else {
+            return teaching_assignments;
+        }
+    }
+
+    public List<Teaching_Assignment> getTeachingAssignmentsByClassAndSubject(S_class sClass, Subject subject) {
+        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findBySclassAndSubject(sClass, subject);
+
+        if (teaching_assignments.isEmpty()) {
+            return null;
+        } else {
+            return teaching_assignments;
+        }
+    }
+
+    public List<Teaching_Assignment> getTeachingAssignmentsByTeacher(Teacher teacher) {
+        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findByTeacher(teacher);
+
+        if (teaching_assignments.isEmpty()) {
+            return null;
+        } else {
+            return teaching_assignments;
+        }
+    }
+
+    public List<Teaching_Assignment> getTeachingAssignmentsBySubject(Subject subject) {
+        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findBySubject(subject);
+
+        if (teaching_assignments.isEmpty()) {
+            return null;
+        } else {
+            return teaching_assignments;
+        }
+    }
+
+    public List<Teaching_Assignment> getTeachingAssignmentsByClass(S_class sClass) {
+        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findBySclass(sClass);
+
+        if (teaching_assignments.isEmpty()) {
+            return null;
+        } else {
+            return teaching_assignments;
+        }
+    }
+
+    public List<Teaching_Assignment> getTeachingAssignments() {
+            return teaching_assignment_repo.findAll();
+    }
+
+    public Teacher getTeacherByNmec(Long teacherNmec) {
+        if (teacher_repo.findByNmec(teacherNmec).isEmpty()) {
+            return null;
+        }
+        return teacher_repo.findByNmec(teacherNmec).get();
+    }
+    
     //----------------------------------------------------------------//
 }

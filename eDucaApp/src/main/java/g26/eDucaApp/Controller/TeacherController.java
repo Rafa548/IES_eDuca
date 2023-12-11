@@ -1,6 +1,7 @@
 package g26.eDucaApp.Controller;
 
 
+import g26.eDucaApp.Model.S_class;
 import g26.eDucaApp.Model.Teacher;
 import g26.eDucaApp.Services.EducaServices;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -72,6 +74,32 @@ public class TeacherController {
         return new ResponseEntity<>(teacher.getClasses(), HttpStatus.OK);
     }
 
+    @PutMapping("{nmec}")
+    public ResponseEntity<Teacher> updateTeacher(@PathVariable("nmec") Long nmec,
+                                                 @RequestBody Map<String, String> updates){
+        Teacher teacherToUpdate = teacherService.getTeacherByN_mec(nmec);
+
+        if (teacherToUpdate != null) {
+            if (updates.containsKey("name")) {
+                teacherToUpdate.setName(updates.get("name"));
+            }
+
+            if (updates.containsKey("email")) {
+                teacherToUpdate.setEmail(updates.get("email"));
+            }
+
+            if (updates.containsKey("password")) {
+                teacherToUpdate.setPassword(updates.get("password"));
+            }
+
+            if (updates.containsKey("classes")) {
+                List<S_class> updatedClasses = (List<S_class>) teacherService.getS_classByClassname(updates.get("classes"));
+                teacherToUpdate.setClasses(updatedClasses);
+            }
+        }
+
+        return new ResponseEntity<>(teacherToUpdate, HttpStatus.OK);
+    }
 
 
 }

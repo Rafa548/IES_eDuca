@@ -15,4 +15,12 @@ public interface Teaching_AssignmentRepository extends JpaRepository<Teaching_As
     List<Teaching_Assignment> findBySclass(S_class s_class);
 
     List<Teaching_Assignment> findBySubject(Subject subject);
+
+    List<Teaching_Assignment> findByTeacherAndSclassAndSubject(Teacher teacher, S_class sClass, Subject subject);
+
+    List<Teaching_Assignment> findByTeacherAndSclass(Teacher teacher, S_class sClass);
+
+    List<Teaching_Assignment> findByTeacherAndSubject(Teacher teacher, Subject subject);
+
+    List<Teaching_Assignment> findBySclassAndSubject(S_class sClass, Subject subject);
 }
