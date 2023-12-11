@@ -32,13 +32,6 @@
         <p>Email: <input id="email" type="email"></p>
         <p>Password: <input id="password" type="password"></p>
       </div>
-      <div class="select">
-        <p>Select Class:
-          <select id="modalSelect" multiple>
-            <option *ngFor="let class of classes">{{class.classname}}</option>
-          </select>
-        </p>
-      </div>
     </div>
     <!-- Add more fields as needed -->
     <button (click)="saveChanges()">Save Changes</button>

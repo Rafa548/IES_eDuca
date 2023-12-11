@@ -362,7 +362,6 @@ public class EducaServices {
     //Teaching_Assigment
     //----------------------------------------------------------------//
     public Teaching_Assignment createTeachingAssignment(Teaching_Assignment teaching_assignment) {
-
         return teaching_assignment_repo.save(teaching_assignment);
     }
 
@@ -481,15 +480,6 @@ public class EducaServices {
         return grade_repo.findAll();
     }
 
-    public List<Teaching_Assignment> getTeachingAssignmentsByTeacherAndClassAndSubject(Teacher teacher, S_class sClass, Subject subject) {
-        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findByTeacherAndSclassAndSubject(teacher, sClass, subject);
-
-        if (teaching_assignments.isEmpty()) {
-            return null;
-        } else {
-            return teaching_assignments;
-        }
-    }
 
     public List<Teaching_Assignment> getTeachingAssignmentsByTeacherAndClass(Teacher teacher, S_class sClass) {
         List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findByTeacherAndSclass(teacher, sClass);
@@ -561,6 +551,24 @@ public class EducaServices {
         }
         return teacher_repo.findByNmec(teacherNmec).get();
     }
-    
+
+    public Teaching_Assignment getTeachingAssignmentByTeacherAndS_classAndSubject(Teacher teacher, S_class sClass, Subject subject) {
+        Teaching_Assignment teaching_assignment = teaching_assignment_repo.findByTeacherAndSclassAndSubject(teacher, sClass, subject);
+
+        if (teaching_assignment == null) {
+            return null;
+        } else {
+            return teaching_assignment;
+        }
+    }
+
+    public void deleteTeachingAssignment(Long id) {
+        if (teaching_assignment_repo.findById(id).isEmpty()) {
+            return;
+        }
+        Teaching_Assignment teaching_assignment = teaching_assignment_repo.findById(id).get();
+        teaching_assignment_repo.delete(teaching_assignment);
+    }
+
     //----------------------------------------------------------------//
 }

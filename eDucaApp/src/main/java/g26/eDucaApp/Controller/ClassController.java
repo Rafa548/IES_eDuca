@@ -82,10 +82,10 @@ public class ClassController {
         for (Student student : students) {
             if (student.getNmec().equals(nmec)) {
                 List<Integer> studentGrades = new ArrayList<>();
-                System.out.println(student.getGrades());
+                //System.out.println(student.getGrades());
                 for (Grade grade : student.getGrades()) {
-                    System.out.println(grade.getSubject());
-                    System.out.println(grade.getSubject().getName());
+                    //System.out.println(grade.getSubject());
+                    //System.out.println(grade.getSubject().getName());
                     if (grade.getSubject().getName().equals(subject)) {
                         studentGrades.add(grade.getGrade());
                     }
@@ -129,8 +129,8 @@ public class ClassController {
     public ResponseEntity<?> deleteStudentFromClass(@PathVariable("classname") String classname, @PathVariable("nmec") Long nmec){
 
         for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
-            System.out.println(grantedAuthority.getAuthority());
-            System.out.println(grantedAuthority.getAuthority().equals("ADMIN"));
+            //System.out.println(grantedAuthority.getAuthority());
+            //System.out.println(grantedAuthority.getAuthority().equals("ADMIN"));
             if (grantedAuthority.getAuthority().equals("ADMIN")){
                 S_class s_class = educaServices.getS_classByClassname(classname);
                 List<Student> students = s_class.getStudents();

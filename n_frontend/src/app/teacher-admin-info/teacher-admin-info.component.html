@@ -25,7 +25,7 @@
 
       <div class="form-group">
         <label >Password:</label>
-        <input id="password" type="password">
+        <input id="password" type="password" >
       </div>
 
       <div class="form-group">
@@ -71,6 +71,8 @@
         </p>
       </div>
 
+      <button type="submit" (click)="UpdateTeachingAss()">Save</button>
+
       <div class="form-group">
         <label >Teacher Classes:</label>
         <div class="custom-select">
@@ -110,10 +112,10 @@
         </thead>
         <tbody>
         <tr *ngFor="let grade of grades; let i = index">
-          <td>{{ studentName }}</td>
-          <td>{{ studentClass }}</td>
-          <td>{{ subjects[i] }}</td>
-          <td>{{ grade }}</td>
+          <td>{{ grade.student.name}}</td>
+          <td>{{ grade.student.studentclass.classname }}</td>
+          <td>{{ grade.subject.name }}</td>
+          <td>{{ grade.grade }}</td>
         </tr>
         </tbody>
       </table>

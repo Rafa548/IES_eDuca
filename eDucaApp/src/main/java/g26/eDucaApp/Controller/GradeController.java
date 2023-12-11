@@ -30,6 +30,13 @@ public class GradeController {
         return new ResponseEntity<>(grade, HttpStatus.OK);
     }
 
+    @GetMapping("teacher/{t_nmec}")
+    public ResponseEntity<?> getGradeByTeacher(@PathVariable("t_nmec") Long nmec){
+        Teacher teacher = gradeService.getTeacherByN_mec(nmec);
+        List<Grade> grade = gradeService.getGradeByTeacher(teacher);
+        return new ResponseEntity<>(grade, HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<?> getGrades(@RequestParam(value = "student", required = false) Student student,
                                        @RequestParam(value = "subject", required = false) Subject subject,

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -20,9 +21,26 @@ public class TeachingAssignmentController {
         private EducaServices teachingAssignmentService;
 
         @PostMapping
-        public ResponseEntity<?> createTeachingAssignment(@RequestBody Teaching_Assignment teachingAssignment){
-            Teaching_Assignment savedTeachingAssignment = teachingAssignmentService.createTeachingAssignment(teachingAssignment);
-            return new ResponseEntity<>(savedTeachingAssignment, HttpStatus.CREATED);
+        public ResponseEntity<?> createTeachingAssignment(@RequestBody Map<String, String> updates){
+
+            if (!updates.containsKey("email") || !updates.containsKey("class") || !updates.containsKey("subject")) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            String email = updates.get("email");
+            String classname = updates.get("class");
+            String subjectname = updates.get("subject");
+            Teacher teacher = teachingAssignmentService.getTeacherByEmail(email);
+            S_class s_class = teachingAssignmentService.getS_classByClassname(classname);
+            Subject subject = teachingAssignmentService.getSubjectByName(subjectname);
+            Teaching_Assignment teachingAssignment = new Teaching_Assignment();
+            teachingAssignment.setSclass(s_class);
+            teachingAssignment.setSubject(subject);
+            teachingAssignment.setTeacher(teacher);
+
+            teachingAssignmentService.createTeachingAssignment(teachingAssignment);
+
+            return new ResponseEntity<>(teachingAssignment, HttpStatus.OK);
         }
 
         @GetMapping("{id}")
@@ -48,6 +66,23 @@ public class TeachingAssignmentController {
             } else {
                 return new ResponseEntity<>(teachingAssignmentService.getAllTeachingAssignments(), HttpStatus.OK);
             }
+        }
+
+
+        @DeleteMapping
+        public ResponseEntity<?> deleteTeachingAssignment(@RequestBody Map<String, String> updates){
+            if (!updates.containsKey("email") || !updates.containsKey("class") || !updates.containsKey("subject")) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            String email = updates.get("email");
+            String classname = updates.get("class");
+            String subjectname = updates.get("subject");
+            Teacher teacher = teachingAssignmentService.getTeacherByEmail(email);
+            S_class s_class = teachingAssignmentService.getS_classByClassname(classname);
+            Subject subject = teachingAssignmentService.getSubjectByName(subjectname);
+            Teaching_Assignment teachingAssignment = teachingAssignmentService.getTeachingAssignmentByTeacherAndS_classAndSubject(teacher, s_class, subject);
+            teachingAssignmentService.deleteTeachingAssignment(teachingAssignment.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
 
