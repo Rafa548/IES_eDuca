@@ -23,4 +23,6 @@ public interface NotificationRepository extends MongoRepository<Notification, St
     List<Notification> findByTypeAndCreatedDateLessThan(NotificationType type, Date createdDate, Pageable pageable);
     
     List<Notification> findByTypeAndCreatedDateBetween(NotificationType type, Date createdDate1, Date createdDate2, Pageable pageable);
+
+    List<Notification> findByReceiver(String receiver, Pageable pageable);
 }

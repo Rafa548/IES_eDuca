@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import g26.eDucaApp.Services.kafka_messages.Producer;
 import jakarta.annotation.PostConstruct;
+import g26.eDucaApp.Model.Student;
+import g26.eDucaApp.Repository.StudentRepository;
+import g26.eDucaApp.Services.EducaServices;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,4 +57,7 @@ public class initScript {
             e.printStackTrace();
         }
     }
+    
+
+    
 }

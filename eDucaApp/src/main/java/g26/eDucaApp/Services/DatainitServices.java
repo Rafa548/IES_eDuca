@@ -3,6 +3,8 @@ package g26.eDucaApp.Services;
 import g26.eDucaApp.Model.*;
 import g26.eDucaApp.Repository.*;
 import lombok.AllArgsConstructor;
+
+import org.hibernate.Hibernate;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import g26.eDucaApp.Model.Notification;
-import g26.eDucaApp.Model.NotificationType;
 import g26.eDucaApp.Services.notifications.notificationsService;
+import jakarta.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 
@@ -44,6 +46,7 @@ public class DatainitServices {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Transactional
     public void AddStudent(JSONObject jsonObject) {
         Student student = new Student();
         student.setName(jsonObject.getString("name"));
@@ -57,6 +60,21 @@ public class DatainitServices {
 
         if (studentClass != null) {
             student.setStudentclass(studentClass);
+            Hibernate.initialize(studentClass.getTeachers());
+            for (Teacher teacher : studentClass.getTeachers()) {
+                String message = String.format("Student %s was added to %s", student.getName(), studentClass.getClassname());
+                Notification notification = new Notification(message, NotificationType.ADDSTUDENT, teacher.getEmail());
+                Notification savedNotification = notificationRepository.save(notification);
+                System.out.println(savedNotification);
+                try {
+                    notificationService.sendNotification(savedNotification);
+                    System.out.println("Notification sent");
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+            
+            
         }
         std_repo.save(student);
     }
@@ -214,9 +232,9 @@ public class DatainitServices {
         } */
 
 
-        String message = String.format("Grade %s was added to %s by %s for subject %s", grade.getGrade(), grade.getStudent().getName(), grade.getTeacher().getName(), grade.getSubject().getName());
+        String message = String.format("Grade %s was added by %s for subject %s", grade.getGrade(), grade.getTeacher().getName(), grade.getSubject().getName());
 
-        Notification notification = new Notification( message , NotificationType.GRADE, grade.getStudent().getName());
+        Notification notification = new Notification( message , NotificationType.GRADE, grade.getStudent().getEmail());
 
         Notification savedNotification = notificationRepository.save(notification);
         System.out.println(savedNotification);

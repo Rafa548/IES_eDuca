@@ -3,6 +3,7 @@ package g26.eDucaApp.Model;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.EnumType;
@@ -12,8 +13,12 @@ import javax.persistence.GenerationType;
 import java.io.Serializable;
 import java.util.Date;
 
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime;
+
 @Document(collection = "notifications")
 @Data
+@EnableMongoAuditing
 public class Notification implements Serializable{
 
     @Id
@@ -27,8 +32,7 @@ public class Notification implements Serializable{
     @Enumerated(EnumType.STRING)
     private NotificationType type;
 
-    @CreatedDate
-    private Date createdDate;
+    private String createdDate;
 
     public Notification() {
     }
@@ -37,6 +41,7 @@ public class Notification implements Serializable{
         this.message = message;
         this.type = type;
         this.receiver = receiver;
+        this.createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     @Override

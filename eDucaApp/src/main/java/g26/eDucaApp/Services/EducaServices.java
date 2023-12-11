@@ -3,13 +3,18 @@ import g26.eDucaApp.Model.*;
 import g26.eDucaApp.Repository.*;
 
 import lombok.AllArgsConstructor;
+
+import org.aspectj.weaver.ast.Not;
+import org.springframework.data.mongodb.core.aggregation.ConvertOperators.ToString;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import g26.eDucaApp.Model.Notification;
-import g26.eDucaApp.Model.NotificationType;
 import g26.eDucaApp.Services.notifications.notificationsService;
+import jakarta.transaction.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +35,7 @@ public class EducaServices {
     private Teaching_AssignmentRepository teaching_assignment_repo;
 
     private GradeRepository grade_repo;
+
 
     // Student
     //----------------------------------------------------------------//
@@ -100,6 +106,97 @@ public class EducaServices {
         Student student = std_repo.findByNmec(n_mec).get();
         std_repo.delete(student);
     }
+
+    @Scheduled(fixedDelay = 30000)
+    @Transactional
+    public void sendStudentMedianTooLowNotification() {
+        
+        try {
+            List<S_class> classes = new ArrayList<>();
+            classes = sclass_repo.findAll();
+
+            for (S_class s_class : classes) {
+                List<Student> students = new ArrayList<>();
+                students = s_class.getStudents();
+                
+
+
+                for (Student student : students) {
+                    List<Subject> subjects = new ArrayList<>();
+                    subjects = s_class.getSubjects();
+                    
+
+                    for (Subject subject : subjects) {
+                        List<Grade> grades = new ArrayList<>();
+                        grades = grade_repo.findByStudentAndSubject(student, subject);
+                        
+
+                        if (grades.size() > 0) {
+                            double sum = 0;
+                            for (Grade grade : grades) {
+                                sum += grade.getGrade();
+                            }
+                            double median = sum / grades.size();
+                            if (median < 10) {
+                                String median1 = Double.toString(median);
+                                String message = String.format("Your median of %s is too low: %s", subject.getName(), median1);
+                                Notification notification = new Notification(message, NotificationType.MEDIAN, student.getEmail());
+                                Notification savedNotification = notificationRepository.save(notification);
+                                notificationService.sendNotification(savedNotification);
+                            }
+                        }
+                    }
+                }
+            }
+            
+        } catch (Exception e) {
+            // Handle any exceptions or errors here
+            e.printStackTrace();
+        }
+    }
+
+    @Scheduled(fixedDelay = 30000)
+    @Transactional
+    public void sendClassMedianOfSubjectTooLowNotification() {
+            
+        try {
+            List<S_class> classes = new ArrayList<>();
+            classes = sclass_repo.findAll();
+
+            for (S_class s_class : classes) {
+                List<Subject> subjects = new ArrayList<>();
+                subjects = s_class.getSubjects();
+
+                for (Subject subject : subjects) {
+                    List<Grade> Subjectgrades = new ArrayList<>();
+                    for (Student student : s_class.getStudents()) {
+                        List<Grade> grades = new ArrayList<>();
+                        grades = grade_repo.findByStudentAndSubject(student, subject);
+                        Subjectgrades.addAll(grades);
+                    }
+                    if (Subjectgrades.size() > 0) {
+                        double sum = 0;
+                        for (Grade grade : Subjectgrades) {
+                            sum += grade.getGrade();
+                        }
+                        double median = sum / Subjectgrades.size();
+                        if (median < 10) {
+                            String median1 = Double.toString(median);
+                            String message = String.format("The median of %s in %s is too low: %s", s_class.getClassname(), subject.getName(), median1);
+                            Notification notification = new Notification(message, NotificationType.MEDIAN, "admin@gmail.com");
+                            Notification savedNotification = notificationRepository.save(notification);
+                            notificationService.sendNotification(savedNotification);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Handle any exceptions or errors here
+            e.printStackTrace();
+        }
+    }
+
+
 
     //----------------------------------------------------------------//
 
@@ -406,12 +503,23 @@ public class EducaServices {
     private notificationsService notificationService;
     private NotificationRepository notificationRepository;
 
+    //Notifications
+    //----------------------------------------------------------------//
+
+    public Notification createNotification(Notification notification) {
+
+        notificationService.sendNotification(notification);
+        return notificationRepository.save(notification);
+    }
+
+    //----------------------------------------------------------------//
+
     //Grades
     //----------------------------------------------------------------//
     public Grade createGrade(Grade grade) {
         String message = String.format("Grade %s was added to %s by %s for subject %s", grade.getGrade(), grade.getStudent().getName(), grade.getTeacher().getName(), grade.getSubject().getName());
 
-        Notification notification = new Notification( message , NotificationType.GRADE, grade.getStudent().getName());
+        Notification notification = new Notification( message , NotificationType.GRADE, grade.getStudent().getEmail());
         
         Notification savedNotification = notificationRepository.save(notification);
         //System.out.println(savedNotification);

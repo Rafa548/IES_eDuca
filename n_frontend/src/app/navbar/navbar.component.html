@@ -10,12 +10,24 @@
       <li><a (click)="redirectTo('classes')">Teachers</a></li>
     </ul>
     <div class="navbar-actions">
-        <div class="notification-dropdown" >
-            <!-- Replace this with your actual notification content -->
-            <p>Notification 1</p>
-            <p>Notification 2</p>
-          </div>
-          <i class="fa fa-bell fa-lg" style="color: white; margin-right: 20px;" (click)="toggleDropdown()"></i>        <!-- Add login/logout buttons or user-related actions here -->
+      <div class="dropdown">
+        <a class="me-3 dropdown-toggle hidden-arrow" id="navbarDropdownMenuLink" role="button" aria-expanded="false">
+            <i class="fas fa-bell"></i>
+            <span class="badge rounded-pill badge-notification bg-danger">1</span>
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li>
+                <a class="dropdown-item" href="#">Some news</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#">Another news</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </li>
+        </ul>
+    </div>
+          
       <button *ngIf="!isLoggedIn" (click)="login()">Login</button>
       <button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
     </div>

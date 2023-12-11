@@ -15,7 +15,7 @@ const WebSocketService = (onMessageCallback) => {
 
   client.onConnect = () => {
     console.log('WebSocket connected');
-    const subscription = client.subscribe(`/user/queue/notifications`, (message) => {
+    const subscription = client.subscribe(`/user/admin/queue/notifications`, (message) => {
       onMessageCallback(JSON.parse(message.body));
       //console.log('Received message:', JSON.parse(message.body));
     });
@@ -41,7 +41,7 @@ const WebSocketService = (onMessageCallback) => {
   const subscribeToClass = (className) => {
     if (client.connected) {
       //const subscription = client.subscribe(`/class/${className}`, (message) => {
-      const subscription = client.subscribe(`/user/queue/notifications`, (message) => {
+      const subscription = client.subscribe(`/user/admin/queue/notifications`, (message) => {
         onMessageCallback(JSON.parse(message.body));
         console.log('Received message:', JSON.parse(message.body));
       });

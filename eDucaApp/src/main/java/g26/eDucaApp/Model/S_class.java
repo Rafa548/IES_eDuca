@@ -37,7 +37,7 @@ public class S_class {
 
     private List<Subject> subjects;
 
-    @OneToMany(mappedBy = "studentclass", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "studentclass", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"studentclass"})
     private List<Student> students;
 

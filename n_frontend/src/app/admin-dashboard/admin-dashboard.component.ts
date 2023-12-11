@@ -2,18 +2,19 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { WebSocketService } from '../websocket.service';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { CommonModule, NgFor} from '@angular/common';
 
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [ NavbarComponent ],
+  imports: [ NavbarComponent , NgFor, CommonModule],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.css'
 })
 export class AdminDashboardComponent {
   webSocketService: WebSocketService;
-  private notifications: any[] = [];
+  notifications: any[] = [];
   private subscription: any;
 
 

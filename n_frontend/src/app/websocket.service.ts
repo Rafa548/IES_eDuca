@@ -36,12 +36,17 @@ export class WebSocketService {
   public async connect(onMessageCallback: (message: any) => void): Promise<void> {
     await this.initializeStompClient();
 
-    this.stompClient.onConnect = () => {
-      console.log('WebSocket connected');
-      const subscription = this.stompClient.subscribe(`/user/admin/queue/notifications`, (message: Message) => {
-        onMessageCallback(JSON.parse(message.body));
-      });
-    };
+    const intervalId = setInterval(() => {
+      const email = localStorage.getItem('user');
+      if (email) {
+        clearInterval(intervalId); // Stop the interval
+        console.log('WebSocket connected');
+        const subscription = this.stompClient.subscribe(`/user/` + email + `/queue/notifications`, (message: Message) => {
+          onMessageCallback(JSON.parse(message.body));
+        });
+      }
+    }, 1000);
+    
 
     this.stompClient.onDisconnect = () => {
       console.log('WebSocket disconnected');
@@ -61,7 +66,7 @@ export class WebSocketService {
 
   public subscribeToClass(className: string): any {
     if (this.stompClient.connected) {
-      const subscription = this.stompClient.subscribe(`/class/${className}`, (message: Message) => {
+      const subscription = this.stompClient.subscribe(`/user/admin/queue/notifications`, (message: Message) => {
         // You can handle the received message here
         console.log('Received message:', JSON.parse(message.body));
       });
