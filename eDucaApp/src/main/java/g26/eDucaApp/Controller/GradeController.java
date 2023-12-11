@@ -48,5 +48,19 @@ public class GradeController {
         }
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<Grade> updateGrade(@PathVariable("id") Long id, @RequestBody Grade grade){
+        Grade gradeToUpdate = gradeService.getGradeById(id);
+        gradeToUpdate.setGrade(grade.getGrade());
+        Grade updatedGrade = gradeService.createGrade(gradeToUpdate);
+        return new ResponseEntity<>(updatedGrade, HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteGrade(@PathVariable("id") Long id){
+        gradeService.deleteGrade(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 }

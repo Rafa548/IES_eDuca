@@ -63,7 +63,8 @@ export class TeachersAdminInfoComponent {
     this.router.navigate(['admin/teacher', nmec]);
   }
 
-  saveChanges() { }
+  saveChanges() {
+  }
   closeEditModal() {
     const modal = document.getElementById('editModal');
     if (modal) {

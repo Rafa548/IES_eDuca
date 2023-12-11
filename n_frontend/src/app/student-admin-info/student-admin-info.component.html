@@ -1,1 +1,73 @@
-<p>student-admin-info works!</p>
+<div class="container">
+    <h2>Show Information</h2>
+
+    <!-- Buttons to switch content -->
+    <div class="button-group">
+        <button (click)="showProfile()">Profile</button>
+        <button (click)="showGrades()">Grades</button>
+    </div>
+    <div *ngIf="selectedContent === 'Profile'" class="content-section">
+        <form #teacherForm="ngForm"  class="profile-form">
+          <div class="form-group">
+            <label >Name:</label>
+            <input id="name" type="text">
+    
+    
+    
+          </div>
+    
+          <div class="form-group">
+            <label >Email:</label>
+            <input id="email" type="email">
+    
+          </div>
+    
+          <div class="form-group">
+            <label >Password:</label>
+            <input id="password" type="password">
+          </div>
+          <button type="submit" (click)="submitStudentProfile()">Save</button>
+    </form>
+  </div>
+  <div *ngIf="selectedContent === 'Grades'" class="content-section">
+    <h3>Student's Grades Information</h3>
+    <div class="table-container">
+      <table class="grade-table">
+        <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Grades</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let grade of studentGrades; let i = index">
+              
+              <td>{{ grade.subject.name }}</td>
+              <td>{{ grade.grade }}</td>
+              <td class="action-icons">
+                <i class="fa-solid fa-pen-to-square action-icon edit"  (click)="EditGrade(grade)"></i>
+                <i class="fas fa-trash action-icon delete" (click)="deleteGrade(grade)"></i>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+          <h2>User Details</h2>
+          <div class="input-group">
+            <div class="input">
+              <p>Grade: <input id="grade" type="text" [(ngModel)]="gradeInput"></p>
+            </div>
+            <div class="select">
+              
+            </div>
+          </div>
+          <!-- Add more fields as needed -->
+          <button (click)="saveChanges(selectedUser, gradeInput)">Save Changes</button>
+          <button (click)="closeEditModal()">Close</button>
+        </div>
+      </div>

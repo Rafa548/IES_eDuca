@@ -437,6 +437,14 @@ public class EducaServices {
         return grade_repo.save(grade);
     }
 
+    public void deleteGrade(Long id) {
+        if (grade_repo.findById(id).isEmpty()) {
+            return;
+        }
+        Grade grade = grade_repo.findById(id).get();
+        grade_repo.delete(grade);
+    }
+
     public List<Grade> getGradeByStudent(Student student) {
         List<Grade> grades = grade_repo.findByStudent(student);
 

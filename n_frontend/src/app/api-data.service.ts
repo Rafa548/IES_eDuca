@@ -57,6 +57,14 @@ export class ApiDataService {
     return await data.json() ?? undefined;
   }
 
+  async getStudent(token: string|null, studentNmec: number): Promise<any> {
+    const url = this.baseURL + '/students/' + studentNmec;
+    //console.log(url);
+    const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${token}` } });
+    //console.log(data.json());
+    return await data.json() ?? undefined;
+  }
+
   async updateStudent(token: string|null, student : any): Promise<any> {
     const studentnmec = student.nmec;
 
@@ -77,6 +85,18 @@ export class ApiDataService {
     if (!data.ok) {
       throw new Error('Failed to delete student');
     }
+    return await data.text() ?? undefined;
+  }
+
+  async addStudent(token: string|null, student: any): Promise<any> {
+    const url = this.baseURL + '/students';
+    //console.log(url);
+    //console.log(JSON.stringify(student));
+    const data = await fetch(url, {method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(student) });
+    if (!data.ok) {
+      throw new Error('Failed to add student');
+    }
+    console.log(data);
     return await data.text() ?? undefined;
   }
 
@@ -114,6 +134,27 @@ export class ApiDataService {
     //console.log(JSON.stringify(teacher));
     const data = await fetch(url, {method: 'PUT', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(teacher) });
     //console.log(data);
+    return await data.text() ?? undefined;
+  }
+
+  async updateGrade(token: string|null, grade: any): Promise<any> {
+    const id = grade.id;
+    const url = this.baseURL + '/grades/' + id;
+    //console.log(url);
+    //console.log(JSON.stringify(grade));
+    const data = await fetch(url, {method: 'PUT', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(grade) });
+    //console.log(data);
+    return await data.text() ?? undefined;
+  }
+
+  async deleteGrade(token: string|null, grade: any): Promise<any> {
+    const id = grade.id;
+    const url = this.baseURL + '/grades/' + id;
+    //console.log(url);
+    const data = await fetch(url, {method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+    if (!data.ok) {
+      throw new Error('Failed to delete grade');
+    }
     return await data.text() ?? undefined;
   }
 

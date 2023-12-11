@@ -1,6 +1,7 @@
 <h2>All Students</h2>
 
 <div class="table-container">
+  <button class="button" (click)="showAddStudentModal()">Add Student</button>
   <table class="info-table">
     <thead>
     <tr>
@@ -43,6 +44,29 @@
     <!-- Add more fields as needed -->
     <button (click)="saveChanges()">Save Changes</button>
     <button (click)="closeEditModal()">Close</button>
+  </div>
+</div>
+
+<div id="addModal" class="modal">
+  <div class="modal-content">
+    <h2>Add Student</h2>
+    <div class="input-group">
+      <div class="input">
+        <p>Name: <input id="name1" type="text"></p>
+        <p>Email: <input id="email1" type="email"></p>
+        <p>Password: <input id="password1" type="password"></p>
+      </div>
+      <div class="select">
+        <p>Select Class:
+          <select id="modalSelect" [(ngModel)]="selectedClass">
+            <option *ngFor="let class of classes">{{class.classname}}</option>
+          </select>
+        </p>
+      </div>
+    </div>
+    <!-- Add more fields as needed -->
+    <button (click)="addStudent()">Save Changes</button>
+    <button (click)="closeAddModal()">Close</button>
   </div>
 </div>
 

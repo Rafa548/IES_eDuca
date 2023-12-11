@@ -23,6 +23,7 @@ export class StudentsAdminInfoComponent {
   selectedUser: any | undefined ;
   classes: any[] = [];
   ApiDataService = inject(ApiDataService)
+  selectedClass: any | undefined ;
 
 
 
@@ -117,6 +118,54 @@ export class StudentsAdminInfoComponent {
 
 
     this.closeEditModal(); // Close the modal after saving changes
+  }
+
+  addStudent() {
+    this.selectedUser = {};
+    const name = document.getElementById('name1') as HTMLInputElement;
+    const email = document.getElementById('email1') as HTMLInputElement;
+    const password = document.getElementById('password1') as HTMLInputElement;
+    const class_ = this.selectedClass;
+    const nmec = this.tableData[this.tableData.length - 1].nmec + 1;
+
+    if (name) {
+      this.selectedUser.name = name.value;
+    }
+    if (email) {
+      this.selectedUser.email = email.value;
+    }
+    if (password) {
+      this.selectedUser.password = password.value;
+    }
+    if (class_) {
+      this.selectedUser.studentclass = class_;
+    }
+    this.selectedUser.nmec = nmec;
+
+    this.ApiDataService.addStudent(localStorage.getItem('token'), this.selectedUser).then((response : any) => {
+      //console.log(response);
+      this.ApiDataService.getStudents(localStorage.getItem('token')).then((students : any[]) => {
+        this.tableData = students;
+      });
+    });
+
+    console.log("Student added", this.selectedUser);
+
+
+  }
+
+  showAddStudentModal() {
+    const modal = document.getElementById('addModal');
+    if (modal) {
+      modal.style.display = 'block';
+    }
+  }
+
+  closeAddModal() {
+    const modal = document.getElementById('addModal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
   }
 
 
