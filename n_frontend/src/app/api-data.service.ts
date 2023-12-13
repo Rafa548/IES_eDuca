@@ -17,6 +17,22 @@ export class ApiDataService {
     return await data.json() ?? undefined;
   }
 
+  async sendMsg(token: string|null, msg: string, receiver: string): Promise<any> {
+    const url = this.baseURL + '/notification';
+    //console.log(url);
+    const data = await fetch(url, {method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({message: msg, receiver: receiver, type: "CLASS"}) });
+    //console.log(data.json());
+    return await data.json() ?? undefined;
+  }
+
+  async sendMsgStudent(token: string|null, msg: string, receiver: string): Promise<any> {
+    const url = this.baseURL + '/notification';
+    //console.log(url);
+    const data = await fetch(url, {method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({message: msg, receiver: receiver, type: "ALERT"}) });
+    //console.log(data.json());
+    return await data.json() ?? undefined;
+  }
+
   async getClass(token: string|null, classId: number): Promise<any> {
     const url = this.baseURL + '/classes/byID/' + classId;
     const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${token}` } });

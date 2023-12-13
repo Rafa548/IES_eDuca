@@ -49,7 +49,7 @@ export class WebSocketService {
             console.log("-------#---------");
             console.log(student);
             console.log(student.studentclass);
-            const studentclass = student.studentclass.id;
+            const studentclass = student.studentclass.classname;
             console.log("-------#---------");
             const subscription2 = this.stompClient.subscribe(`/topic/` + studentclass, (message: Message) => {
               onMessageCallback(JSON.parse(message.body));

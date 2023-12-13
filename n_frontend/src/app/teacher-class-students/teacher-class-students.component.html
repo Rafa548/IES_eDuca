@@ -1,5 +1,5 @@
 <div>
-  <h2>Class Grades</h2><button class="button" >Send Alert</button>
+  <h2>Class Grades</h2><button class="button" (click)="openMsgModal()">Send Alert</button>
   <div *ngIf="teachersubjects.length > 0">
     <p>Subjects:</p>
     <ul class="horizontal-buttons">
@@ -32,6 +32,8 @@
           <td>
             <i class="fas fa-edit" style="margin-left: 5px;" (click)="studentEdit(gradeObj)"></i>
             <i class="fas fa-trash-alt" style="margin-left: 5px;" (click)="deleteStudentGrade(gradeObj)"></i>
+            <i class="fas fa-paper-plane" style="margin-left: 5px;" (click)="openMsgModal1(gradeObj)"></i>
+
           </td>
         </tr>
       </ng-container>
@@ -73,5 +75,33 @@
     </div>
     <button (click)="addStudentGrade()">Add</button>
     <button (click)="closeAddModal()">Close</button>
+  </div>
+</div>
+
+<div id="msgModal" class="modal_add">
+  <div class="modal-content">
+    <h2>Send Alert</h2>
+    <div class="input-group">
+      <label for="message">Message:</label>
+      <textarea id="message" style="width: 100%; height: 100px;"></textarea>
+    </div>
+    <div class="button-group">
+      <button (click)="sendMsg()">Send</button>
+      <button (click)="closeMsgModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="msgModalStudent" class="modal_add">
+  <div class="modal-content">
+    <h2>Send Alert</h2>
+    <div class="input-group">
+      <label for="message">Message:</label>
+      <textarea id="messageStudent" style="width: 100%; height: 100px;"></textarea>
+    </div>
+    <div class="button-group">
+      <button (click)="sendMsgStudent()">Send</button>
+      <button (click)="closeMsgModal1()">Close</button>
+    </div>
   </div>
 </div>

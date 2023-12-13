@@ -6,6 +6,8 @@ import {JwtHelperService} from "@auth0/angular-jwt";
 import {StudentService} from "../student.service";
 import {FormsModule} from "@angular/forms";
 import {GradesService} from "../grades.service";
+import { json } from 'stream/consumers';
+import { ApiDataService } from '../api-data.service';
 
 @Component({
   selector: 'app-teacher-class-students',
@@ -23,6 +25,7 @@ export class TeacherClassStudentsComponent implements OnInit, OnDestroy {
   selectedStudent: any;
   add_subject: string | undefined;
   email_s :string | undefined;
+  ApiDataService = inject(ApiDataService);
 
   TeacherService = inject(TeacherService);
   StudentService = inject(StudentService);
@@ -221,6 +224,65 @@ export class TeacherClassStudentsComponent implements OnInit, OnDestroy {
     if (modal) {
       modal.style.display = 'block';
     }
+  }
+
+  openMsgModal() {
+    const modal = document.getElementById('msgModal');
+    if (modal) {
+      modal.style.display = 'block';
+    }
+  }
+
+  openMsgModal1(student :any) {
+    this.selectedStudent = student;
+    console.log("student: ", student.student.email);
+    const modal = document.getElementById('msgModalStudent');
+    if (modal) {
+      modal.style.display = 'block';
+    }
+  }
+
+  closeMsgModal() {
+    const modal = document.getElementById('msgModal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+  }
+
+  closeMsgModal1() {
+    const modal = document.getElementById('msgModalStudent');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+  }
+
+  sendMsg() {
+    const classname = this.route.snapshot.paramMap.get('classname');
+    console.log("classname: ", classname);
+    const message = document.getElementById('message') as HTMLInputElement;
+    const message_s = message.value;
+    console.log("message: ", message_s);
+    const token= localStorage.getItem('token');
+
+    if(classname && message_s && token){
+      this.ApiDataService.sendMsg(token,message_s,classname).then(() => {
+      });
+    }
+    this.closeMsgModal();
+  }
+
+  sendMsgStudent() {
+    const message = document.getElementById('messageStudent') as HTMLInputElement;
+    const message_s = message.value;
+    console.log("message: ", message_s);
+    const token= localStorage.getItem('token');
+    const email = this.selectedStudent.student.email;
+    console.log("email: ", email);
+    if(email && message_s && token){
+      this.ApiDataService.sendMsgStudent(token,message_s,email).then(() => {
+      });
+    }
+    this.closeMsgModal1();
   }
 
   deleteStudentGrade(student: any) {
