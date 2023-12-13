@@ -27,14 +27,12 @@ export class AdminDashboardComponent {
     this.webSocketService.connect(this.onMessage.bind(this));
 
     // Subscribe to the class (replace 'ClassName' with the actual class name)
-    this.subscription = this.webSocketService.subscribeToClass('ClassName');
+    //this.subscription = this.webSocketService.subscribeToClass('ClassName');
   }
 
   ngOnDestroy(): void {
     // Check if subscription is not null before unsubscribing
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    
     console.log('Disconnecting from WebSocket...');
     this.webSocketService.disconnect();
   }

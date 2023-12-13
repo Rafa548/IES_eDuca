@@ -28,4 +28,10 @@ export class ApiDataService {
     const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${token}` } });
     return await data.text() ?? undefined;
   }
+
+  async getStudentByEmail(token: string|null, email: string): Promise<any> {
+    const url = this.baseURL + '/students?email=' + email;
+    const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${token}` } });
+    return await data.json() ?? undefined;
+  }
 }

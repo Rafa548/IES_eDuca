@@ -35,6 +35,7 @@ public class Notification implements Serializable{
     private String createdDate;
 
     public Notification() {
+        this.createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public Notification(String message, NotificationType type, String receiver) {

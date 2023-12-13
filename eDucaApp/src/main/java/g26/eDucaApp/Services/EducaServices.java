@@ -507,7 +507,13 @@ public class EducaServices {
     //----------------------------------------------------------------//
 
     public Notification createNotification(Notification notification) {
+        System.out.println("Notification created");
 
+        if (notification.getType() == NotificationType.CLASS) {
+            System.out.println("Notification is class");
+            notificationService.sendNotificationToClass(notification, notification.getReceiver());
+            return notificationRepository.save(notification);
+        }
         notificationService.sendNotification(notification);
         return notificationRepository.save(notification);
     }
@@ -525,7 +531,7 @@ public class EducaServices {
         //System.out.println(savedNotification);
         try{
             notificationService.sendNotification(savedNotification);
-            System.out.println("Notification sent");
+            //System.out.println("Notification sent");
         }
         catch(Exception e){
             System.out.println(e);

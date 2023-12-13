@@ -39,5 +39,16 @@ public class notificationsService {
         }
     }
 
+    public void sendNotificationToClass(Notification notification, String classId) {
+        try {
+            String json = toJson(notification);
+            simpMessagingTemplate.convertAndSend("/topic/" + classId, json);
+            System.out.println("Notification sent to /topic/" + classId);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+       
+
     
 }

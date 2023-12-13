@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable , inject} from '@angular/core';
 import { Client, Message } from '@stomp/stompjs';
+import { ApiDataService } from './api-data.service';
+
 
 @Injectable({
   providedIn: 'root',
@@ -7,6 +9,9 @@ import { Client, Message } from '@stomp/stompjs';
 export class WebSocketService {
   private stompClient!: Client;
   private getTokenCallback: (() => Promise<string>) | null = null;
+  ApiDataService = inject(ApiDataService);
+  studentclass: string = "";
+  
 
   constructor() {
     const token = localStorage.getItem('token');
@@ -39,11 +44,24 @@ export class WebSocketService {
     const intervalId = setInterval(() => {
       const email = localStorage.getItem('user');
       if (email) {
+        if (email != "admin@gmail.com"){
+          this.ApiDataService.getStudentByEmail(localStorage.getItem('token'), email).then((student : any) => {
+            console.log("-------#---------");
+            console.log(student);
+            console.log(student.studentclass);
+            const studentclass = student.studentclass.id;
+            console.log("-------#---------");
+            const subscription2 = this.stompClient.subscribe(`/topic/` + studentclass, (message: Message) => {
+              onMessageCallback(JSON.parse(message.body));
+            });
+          });
+        }
         clearInterval(intervalId); // Stop the interval
         console.log('WebSocket connected');
         const subscription = this.stompClient.subscribe(`/user/` + email + `/queue/notifications`, (message: Message) => {
           onMessageCallback(JSON.parse(message.body));
         });
+        
       }
     }, 1000);
     
@@ -64,7 +82,7 @@ export class WebSocketService {
     this.stompClient.deactivate();
   }
 
-  public subscribeToClass(className: string): any {
+  /* public subscribeToClass(className: string): any {
     if (this.stompClient.connected) {
       const subscription = this.stompClient.subscribe(`/user/admin/queue/notifications`, (message: Message) => {
         // You can handle the received message here
@@ -76,5 +94,5 @@ export class WebSocketService {
       console.error('WebSocket not connected');
       return null;
     }
-  }
+  } */
 }
