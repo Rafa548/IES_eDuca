@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(maxAge = 3600)
@@ -21,25 +23,46 @@ public class SubjectController {
 
     @PostMapping
     public ResponseEntity<?> createSubject(@RequestBody Subject subject) {
-        Subject savedSubject = subjectService.createSubject(subject);
-        return new ResponseEntity<>(savedSubject, HttpStatus.CREATED);
+        for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()){
+            if (grantedAuthority.getAuthority().equals("ADMIN")) {
+                Subject savedSubject = subjectService.createSubject(subject);
+                return new ResponseEntity<>(savedSubject, HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     @GetMapping
     public ResponseEntity<?> getSubject(@RequestParam(value = "name", required = false) String subjectName){
-        if (subjectName != null) {
-            Subject subject = subjectService.getSubjectByName(subjectName);
-            return new ResponseEntity<>(subject, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(subjectService.getAllSubjects(), HttpStatus.OK);
+        for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()){
+            if (grantedAuthority.getAuthority().equals("ADMIN")) {
+                if (subjectName != null) {
+                    Subject subject = subjectService.getSubjectByName(subjectName);
+                    return new ResponseEntity<>(subject, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(subjectService.getAllSubjects(), HttpStatus.OK);
+                }
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
         }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     @DeleteMapping("{name}")
     public ResponseEntity<?> deleteSubject(@PathVariable("name") String name) {
-        Subject subject = subjectService.getSubjectByName(name);
-        subjectService.deleteSubject(subject.getId());
-        return new ResponseEntity<>(HttpStatus.OK);
+        for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()){
+            if (grantedAuthority.getAuthority().equals("ADMIN")) {
+                Subject subject = subjectService.getSubjectByName(name);
+                subjectService.deleteSubject(subject.getId());
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
 }

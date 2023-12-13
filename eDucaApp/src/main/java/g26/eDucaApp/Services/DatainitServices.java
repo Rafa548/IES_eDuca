@@ -33,7 +33,6 @@ public class DatainitServices {
 
     private SubjectRepository subject_repo;
 
-    private Sys_AdminRepository sys_admin_repo;
 
     private Teaching_AssignmentRepository teaching_assignment_repo;
 

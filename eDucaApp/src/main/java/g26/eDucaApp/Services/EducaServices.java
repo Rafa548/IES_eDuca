@@ -27,7 +27,6 @@ public class EducaServices {
 
     private SubjectRepository subject_repo;
 
-    private Sys_AdminRepository sys_admin_repo;
 
     private Teaching_AssignmentRepository teaching_assignment_repo;
 
@@ -419,46 +418,7 @@ public class EducaServices {
     // Sys_Admin
     //----------------------------------------------------------------//
 
-    public Sys_Admin createSys_Admin(Sys_Admin sys_admin) {
-
-        return sys_admin_repo.save(sys_admin);
-    }
-
-    public Sys_Admin getSys_AdminByEmail(String sys_adminEmail) {
-        if (sys_admin_repo.findByEmail(sys_adminEmail).isEmpty()) {
-            return null;
-        }
-        return sys_admin_repo.findByEmail(sys_adminEmail).get();
-    }
-
-    public Sys_Admin getSys_AdminByName(String sys_adminName) {
-        if (sys_admin_repo.findByName(sys_adminName).isEmpty()) {
-            return null;
-        }
-        return sys_admin_repo.findByName(sys_adminName).get();
-    }
-
-    public List<Sys_Admin> getAllSys_Admin() {
-
-        return sys_admin_repo.findAll();
-    }
-
-    public void deleteSys_Admin(Long id) {
-        if (sys_admin_repo.findById(id).isEmpty()) {
-            return;
-        }
-        Sys_Admin sys_admin = sys_admin_repo.findById(id).get();
-        sys_admin_repo.delete(sys_admin);
-    }
-
-    public Sys_Admin updateSys_Admin(Sys_Admin sys_admin) {
-        Sys_Admin existingSys_Admin = sys_admin_repo.findById(sys_admin.getId()).get();
-        existingSys_Admin.setName(sys_admin.getName());
-        existingSys_Admin.setEmail(sys_admin.getEmail());
-        existingSys_Admin.setPassword(sys_admin.getPassword());
-        Sys_Admin updatedSys_Admin = sys_admin_repo.save(existingSys_Admin);
-        return updatedSys_Admin;
-    }
+    //deleted
 
     //----------------------------------------------------------------//
 
@@ -511,6 +471,24 @@ public class EducaServices {
     public List<Teaching_Assignment> getAllTeachingAssignments() {
 
         return teaching_assignment_repo.findAll();
+    }
+
+    public Teaching_Assignment getTeachingAssignmentByTeacherAndS_classAndSubject(Teacher teacher, S_class sClass, Subject subject) {
+        Teaching_Assignment teaching_assignment = teaching_assignment_repo.findByTeacherAndSclassAndSubject(teacher, sClass, subject);
+
+        if (teaching_assignment == null) {
+            return null;
+        } else {
+            return teaching_assignment;
+        }
+    }
+
+    public void deleteTeachingAssignment(Long id) {
+        if (teaching_assignment_repo.findById(id).isEmpty()) {
+            return;
+        }
+        Teaching_Assignment teaching_assignment = teaching_assignment_repo.findById(id).get();
+        teaching_assignment_repo.delete(teaching_assignment);
     }
 
     //----------------------------------------------------------------//
@@ -610,94 +588,6 @@ public class EducaServices {
     }
 
 
-    public List<Teaching_Assignment> getTeachingAssignmentsByTeacherAndClass(Teacher teacher, S_class sClass) {
-        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findByTeacherAndSclass(teacher, sClass);
-
-        if (teaching_assignments.isEmpty()) {
-            return null;
-        } else {
-            return teaching_assignments;
-        }
-    }
-
-    public List<Teaching_Assignment> getTeachingAssignmentsByTeacherAndSubject(Teacher teacher, Subject subject) {
-        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findByTeacherAndSubject(teacher, subject);
-
-        if (teaching_assignments.isEmpty()) {
-            return null;
-        } else {
-            return teaching_assignments;
-        }
-    }
-
-    public List<Teaching_Assignment> getTeachingAssignmentsByClassAndSubject(S_class sClass, Subject subject) {
-        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findBySclassAndSubject(sClass, subject);
-
-        if (teaching_assignments.isEmpty()) {
-            return null;
-        } else {
-            return teaching_assignments;
-        }
-    }
-
-    public List<Teaching_Assignment> getTeachingAssignmentsByTeacher(Teacher teacher) {
-        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findByTeacher(teacher);
-
-        if (teaching_assignments.isEmpty()) {
-            return null;
-        } else {
-            return teaching_assignments;
-        }
-    }
-
-    public List<Teaching_Assignment> getTeachingAssignmentsBySubject(Subject subject) {
-        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findBySubject(subject);
-
-        if (teaching_assignments.isEmpty()) {
-            return null;
-        } else {
-            return teaching_assignments;
-        }
-    }
-
-    public List<Teaching_Assignment> getTeachingAssignmentsByClass(S_class sClass) {
-        List<Teaching_Assignment> teaching_assignments = teaching_assignment_repo.findBySclass(sClass);
-
-        if (teaching_assignments.isEmpty()) {
-            return null;
-        } else {
-            return teaching_assignments;
-        }
-    }
-
-    public List<Teaching_Assignment> getTeachingAssignments() {
-            return teaching_assignment_repo.findAll();
-    }
-
-    public Teacher getTeacherByNmec(Long teacherNmec) {
-        if (teacher_repo.findByNmec(teacherNmec).isEmpty()) {
-            return null;
-        }
-        return teacher_repo.findByNmec(teacherNmec).get();
-    }
-
-    public Teaching_Assignment getTeachingAssignmentByTeacherAndS_classAndSubject(Teacher teacher, S_class sClass, Subject subject) {
-        Teaching_Assignment teaching_assignment = teaching_assignment_repo.findByTeacherAndSclassAndSubject(teacher, sClass, subject);
-
-        if (teaching_assignment == null) {
-            return null;
-        } else {
-            return teaching_assignment;
-        }
-    }
-
-    public void deleteTeachingAssignment(Long id) {
-        if (teaching_assignment_repo.findById(id).isEmpty()) {
-            return;
-        }
-        Teaching_Assignment teaching_assignment = teaching_assignment_repo.findById(id).get();
-        teaching_assignment_repo.delete(teaching_assignment);
-    }
 
     //----------------------------------------------------------------//
 }

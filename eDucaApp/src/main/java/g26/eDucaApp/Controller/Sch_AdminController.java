@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("school_admin")
 public class Sch_AdminController {
+    // not tested as in the frontend there is no way to create a school admin
+
     private EducaServices sch_adminService;
 
     @PostMapping
