@@ -37,6 +37,7 @@ public class TeacherController {
                                          @RequestParam(value="name", required = false) String teacherName,
                                          @RequestParam(value="nmec", required = false) Long teacherNmec,
                                          @RequestParam(value="school", required = false) String school,
+                                         @RequestParam(value = "subject") String subject,
                                          @RequestParam(defaultValue = "0") int page,
                                          @RequestParam(defaultValue = "1") int size){
         if (teacherEmail != null) {
@@ -51,7 +52,10 @@ public class TeacherController {
         } else if (school != null) {
             List<Teacher> teachers = teacherService.getTeacherBySchool(school);
             return new ResponseEntity<>(teachers, HttpStatus.OK);
-        }else {
+        }else if(subject != null) {
+            List<Teacher> teachers = teacherService.getTeacherBySubject(subject);
+            return new ResponseEntity<>(teachers, HttpStatus.OK);
+        }else{
             return new ResponseEntity<>(teacherService.getAllTeachers(), HttpStatus.OK);
         }
     }

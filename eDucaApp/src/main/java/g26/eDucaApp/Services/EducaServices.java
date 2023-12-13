@@ -209,6 +209,15 @@ public class EducaServices {
         return teacher_repo.save(teacher);
     }
 
+    public List<Teacher> getTeacherBySubject(String subject) {
+        List<Teacher> teachers = teacher_repo.findBySubjectsName(subject);
+        if (teachers.isEmpty()) {
+            return null;
+        } else {
+            return teachers;
+        }
+    }
+
     public Teacher getTeacherByEmail(String teacherEmail) {
         if (teacher_repo.findByEmail(teacherEmail).isEmpty()) {
             return null;

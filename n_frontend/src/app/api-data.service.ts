@@ -207,4 +207,16 @@ export class ApiDataService {
     const data = await fetch(url, {method: 'DELETE', headers: { Authorization: `Bearer ${item}` } });
     return await data.text() ?? undefined;
   }
+
+  async getTeachersBySubject(item: string | null, subjectName: string):Promise<any>{
+    const url = this.baseURL + '/teachers?subject=' + subjectName;
+    const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${item}` } });
+    return await data.json() ?? undefined;
+  }
+
+  async getClassTeachers(item: string | null, className: string):Promise<any>{
+    const url = this.baseURL + '/teaching_assignments?class_name=' + className;
+    const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${item}` } });
+    return await data.json() ?? undefined;
+  }
 }

@@ -3,13 +3,16 @@ import {NgForOf, NgIf} from "@angular/common";
 import { ApiDataService } from '../api-data.service';
 import {Class} from "../class";
 import {Router} from "@angular/router";
+import {FormsModule} from "@angular/forms";
+import {TeacherService} from "../teacher.service";
 
 @Component({
   selector: 'app-classes-admin-info',
   standalone: true,
   imports: [
     NgIf,
-    NgForOf
+    NgForOf,
+    FormsModule
   ],
   templateUrl: './classes-admin-info.component.html',
   styleUrl: './classes-admin-info.component.css'
@@ -18,14 +21,19 @@ export class ClassesAdminInfoComponent implements OnInit, OnDestroy{
   selectedContent: string = 'students'; // Variable to track selected content
   class: any | undefined ;
   ApiDataService = inject(ApiDataService);
+  TeacherService = inject(TeacherService);
   classId: number;
   grades: any[] = [];
   alive: boolean = true;
+  classteachers: any = {};
+  teacherpersubject: any = {};
+  selectedSubject: string | null = null;
+  oldTeacher: string | null = null;
 
 
   constructor(private router: Router) {
     this.classId = Number(this.router.url.split('/').pop());
-    
+    this.fetchData();
   }
 
   ngOnInit() {
@@ -62,7 +70,8 @@ export class ClassesAdminInfoComponent implements OnInit, OnDestroy{
           );
         }
       }
-    });}
+    });
+  }
 
   getGrade(student: any, subject: any): any {
     return this.grades.find(
@@ -71,14 +80,15 @@ export class ClassesAdminInfoComponent implements OnInit, OnDestroy{
     );
   }
 
-
-
   showStudents() {
-    this.selectedContent = 'students'; // Set selected content to students
+    this.selectedContent = 'students';
   }
 
   showSubjectsAndTeachers() {
     this.selectedContent = 'subjectsAndTeachers';
+    this.ApiDataService.getClassTeachers(localStorage.getItem('token'), this.class.classname).then((teachers : any) => {
+      this.classteachers = teachers;
+    });
   }
 
   deleteStudent(student: any) {
@@ -87,7 +97,67 @@ export class ClassesAdminInfoComponent implements OnInit, OnDestroy{
     });
   }
 
+  getTeacherName(subjectName: string): any {
+    for (let i = 0; i < this.classteachers.length; i++) {
+      const teacher = this.classteachers[i];
+      const subject = teacher.subject;
+      const subjectNameInTeacher = subject ? subject.name : null;
+      if (subjectNameInTeacher === subjectName) {
+        return teacher.teacher.name;
+      }
+    }
+  }
+
   studentDetails(student: any) {
 
+  }
+
+  openmodal(subject:string, teacher:string) {
+    const modal = document.getElementById('editModal');
+    const subjectElement = document.getElementById('modalSubject');
+    this.oldTeacher = teacher;
+    if (subjectElement) {
+      subjectElement.innerHTML = subject;
+    }
+    if (modal) {
+      modal.style.display = 'block';
+    }
+    console.log("subject: " + subject);
+    this.selectedSubject = subject;
+    this.ApiDataService.getTeachersBySubject(localStorage.getItem('token'), subject).then((teachers: any) => {
+      console.log(teachers);
+      this.teacherpersubject = teachers;
+    });
+  }
+
+  closeEditModal() {
+    const modal = document.getElementById('editModal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+  }
+
+  saveChanges () {
+    console.log("iofengjkrnmbhokrejm");
+    console.log("teacher_old",this.oldTeacher);
+    const modalSelectElement = document.getElementById('modalSelect') as HTMLSelectElement;
+    console.log("vjegmfjkrmn");
+    if (modalSelectElement) {
+      const teacher = modalSelectElement.value;
+      const subject = this.selectedSubject;
+      console.log("classs",this.class.classname)
+      console.log("subject",subject)
+      this.TeacherService.getByName(this.oldTeacher).then((teacher : any) => {
+        const email = teacher.email;
+        console.log("email",email);
+        const json = {subject: String(subject), class: this.class.classname, email: teacher};
+        this.ApiDataService.deleteTeachingAssigment(localStorage.getItem('token'), json).then((response: any) => {
+          console.log(response);
+          this.ApiDataService.getClassTeachers(localStorage.getItem('token'), this.class.classname).then((teachers: any) => {
+            this.classteachers = teachers;
+          });
+        });
+      });
+    }
   }
 }

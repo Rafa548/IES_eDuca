@@ -51,13 +51,14 @@ public class TeachingAssignmentController {
 
         @GetMapping
         public ResponseEntity<?> getTeachingAssignments(@RequestParam(value="email", required = false) String email,
-                                                        @RequestParam(value="class", required = false) S_class s_class,
+                                                        @RequestParam(value="class_name", required = false) String class_name,
                                                         @RequestParam(value="subject", required = false) Subject subject){
             if (email != null) {
                 Teacher teacher = teachingAssignmentService.getTeacherByEmail(email);
                 List<Teaching_Assignment> teachingAssignments = teachingAssignmentService.getTeachingAssignmentByTeacher(teacher);
                 return new ResponseEntity<>(teachingAssignments, HttpStatus.OK);
-            } else if (s_class != null) {
+            } else if (class_name != null) {
+                S_class s_class = teachingAssignmentService.getS_classByClassname(class_name);
                 List<Teaching_Assignment> teachingAssignments = teachingAssignmentService.getTeachingAssignmentByS_class(s_class);
                 return new ResponseEntity<>(teachingAssignments, HttpStatus.OK);
             } else if (subject != null) {

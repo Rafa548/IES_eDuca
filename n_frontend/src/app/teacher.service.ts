@@ -49,5 +49,11 @@ export class TeacherService {
     return teachingAssignments;
   }
 
+  async getByName(name: string | null): Promise<Teacher> {
+    const url = this.baseURL + "?name=" + name;
+    const data = await fetch(url, {method: 'GET', headers: {Authorization: `Bearer ${localStorage.getItem('token')}`},});
+    return await data.json() ?? undefined;
+  }
+
 
 }

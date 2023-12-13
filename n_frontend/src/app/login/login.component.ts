@@ -52,7 +52,7 @@ export class LoginComponent {
       });
 
       // Redirect based on user role
-      this.router.navigate(['teacher_home']);
+      this.router.navigate(['admin_dashboard']);
 
     } catch (error) {
       console.error(error);

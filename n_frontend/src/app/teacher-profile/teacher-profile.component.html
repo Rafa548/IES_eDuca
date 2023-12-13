@@ -1,0 +1,30 @@
+<div *ngIf="teacherData">
+  <h2>{{ teacherData.name }}</h2>
+  <div>
+    <label for="email">Email:</label>
+    <input type="text" id="email" [(ngModel)]="teacherData.email" name="email" readonly>
+  </div>
+
+  <div>
+    <label for="nmec">NMEC:</label>
+    <input type="text" id="nmec" [(ngModel)]="teacherData.nmec" name="nmec" readonly>
+  </div>
+  <div>
+    <label>Qualifications:</label>
+    <div *ngFor="let subject of teacherData.subjects">
+      <p>Subject: {{ subject.name }}</p>
+    </div>
+  </div>
+  <div>
+    <label for="password">New Password:</label>
+    <input type="password" id="password"  name="password" placeholder="Enter new password">
+  </div>
+
+  <button (click)="updateTeacher()">Update</button>
+</div>
+
+<div *ngIf="!teacherData">
+  <p>Loading student data...</p>
+</div>
+
+
