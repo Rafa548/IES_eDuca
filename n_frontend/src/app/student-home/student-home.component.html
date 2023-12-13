@@ -1,1 +1,18 @@
-<p>student-home works!</p>
+<div>
+  <h2>Welcome, {{ studentData.name }}</h2>
+  <p>NMEC: {{ studentData.nmec }}</p>
+  <p>School: {{ studentData.school }}</p>
+  <p>Class: {{ studentData.studentclass.classname}}</p>
+  <h3>Classes:</h3>
+  <div class="card-deck">
+    <div *ngFor="let subject of studentData.studentclass.subjects" class="card">
+      <img class="card-img-top" src="../../assets/school_stock.jpg" alt="Subject Image">
+      <div class="card-body">
+        <h5 class="card-title">{{ subject.name }}</h5>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

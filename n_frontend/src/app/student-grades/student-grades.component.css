@@ -1,0 +1,56 @@
+/* student-grades.component.css */
+
+table {
+  width: 70%; /* Adjust the width of the table as needed */
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px; /* Reduce padding for smaller columns */
+  text-align: center;
+  vertical-align: middle;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+th:hover {
+  background-color: #ddd;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+p {
+  font-style: italic;
+  color: #777;
+}
+
+h2 {
+  color: #333;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+  background-color: #e5e5e5;
+}
+
+table {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+

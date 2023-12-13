@@ -1,0 +1,20 @@
+<div *ngIf="gradesArray.length > 0">
+  <h2>Student Grades</h2>
+  <table>
+    <thead>
+    <tr>
+      <th *ngFor="let subject of gradesArray">{{ subject.name }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td *ngFor="let subject of gradesArray">
+        <ul>
+          <li *ngFor="let grade of subject.grades">{{ grade }}</li>
+        </ul>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+

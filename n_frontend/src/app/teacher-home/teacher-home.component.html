@@ -1,0 +1,11 @@
+<div class="teacher-home">
+  <div class="teacher-info">
+    <h2>Welcome, {{ teacherData.name }}</h2>
+  </div>
+
+  <div class="class-cards">
+    <div *ngFor="let class of teacherData.classes" class="class-card" (click)="goToClassStudents(class.classname)" >
+      <h3>{{ class.classname }}</h3>
+    </div>
+  </div>
+</div>

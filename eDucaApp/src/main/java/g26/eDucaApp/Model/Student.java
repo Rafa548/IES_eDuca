@@ -31,7 +31,7 @@ public class Student implements UserDetails {
 
     @ManyToOne
     @JoinColumn(name = "studentclass", nullable = true)
-    @JsonIgnoreProperties({"students", "teachers", "subjects", "teaching_assignments"})
+    @JsonIgnoreProperties({"students", "teachers", "teaching_assignments"})
     private S_class studentclass;
 
     @Id

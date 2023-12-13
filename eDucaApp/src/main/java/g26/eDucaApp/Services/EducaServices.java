@@ -82,6 +82,13 @@ public class EducaServices {
         }
     }
 
+    public List<Grade> getGradesBySubject(Subject subject, Long nmec) {
+        Student student = std_repo.findByNmec(nmec).get();
+        List<Grade> grades = student.getGrades();
+        grades.removeIf(grade -> !grade.getSubject().equals(subject));
+        return grades;
+    }
+
     public List<Student> getAllStudents() {
         return std_repo.findAll();
     }

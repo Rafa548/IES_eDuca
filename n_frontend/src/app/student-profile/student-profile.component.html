@@ -1,0 +1,27 @@
+  <div *ngIf="studentData">
+    <h2>{{ studentData.name }}</h2>
+    <p>Class: {{ studentData.studentclass.classname }}</p>
+
+    <!-- Display other student data as read-only fields -->
+    <div>
+      <label for="email">Email:</label>
+      <input type="text" id="email" [(ngModel)]="studentData.email" name="email" readonly>
+    </div>
+
+    <div>
+      <label for="nmec">NMEC:</label>
+      <input type="text" id="nmec" [(ngModel)]="studentData.nmec" name="nmec" readonly>
+    </div>
+
+    <div>
+      <label for="password">New Password:</label>
+      <input type="password" id="password"  name="password" placeholder="Enter new password">
+    </div>
+
+    <button (click)="updateStudent()">Update</button>
+  </div>
+
+  <div *ngIf="!studentData">
+    <p>Loading student data...</p>
+  </div>
+

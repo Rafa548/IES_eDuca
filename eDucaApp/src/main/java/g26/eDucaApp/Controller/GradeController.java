@@ -10,19 +10,46 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+import java.util.Map;
 @CrossOrigin(maxAge = 3600)
 @RestController
 @AllArgsConstructor
 @RequestMapping("grades")
 public class GradeController {
+
     private EducaServices gradeService;
+    private EducaServices studentService;
+    private EducaServices subjectServices;
+    private EducaServices teacherServices;
+    private EducaServices gradeServices;
 
     @PostMapping
-    public ResponseEntity<Grade> createGrade(@RequestBody Grade grade){
-        Grade savedGrade = gradeService.createGrade(grade);
-        return new ResponseEntity<>(savedGrade, HttpStatus.CREATED);
+    public ResponseEntity<Grade> createGrade(@RequestBody Map<String, String> updates) {
+        if (!updates.containsKey("email_s") || !updates.containsKey("subject") || !updates.containsKey("email_t") || !updates.containsKey("grade")) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        String email_s = updates.get("email_s");
+        String subject_name = updates.get("subject");
+        String email_t = updates.get("email_t");
+        String gradeStr = updates.get("grade");
+        int gradeValue = Integer.parseInt(gradeStr);
+
+        Student student = studentService.getStudentByEmail(email_s);
+        Subject subject = subjectServices.getSubjectByName(subject_name);
+        Teacher teacher = teacherServices.getTeacherByEmail(email_t);
+
+        Grade newGrade = new Grade();
+        newGrade.setStudent(student);
+        newGrade.setSubject(subject);
+        newGrade.setTeacher(teacher);
+        newGrade.setGrade(gradeValue);
+
+        gradeServices.createGrade(newGrade);
+
+        return new ResponseEntity<>(newGrade, HttpStatus.CREATED);
     }
+
 
     @GetMapping("{id}")
     public ResponseEntity<Grade> getGradeById(@PathVariable("id") Long id){
@@ -38,10 +65,11 @@ public class GradeController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getGrades(@RequestParam(value = "student", required = false) Student student,
+    public ResponseEntity<?> getGrades(@RequestParam(value = "nmec", required = false) Long nmec,
                                        @RequestParam(value = "subject", required = false) Subject subject,
                                        @RequestParam(value = "teacher", required = false) Teacher teacher){
-        if (student != null) {
+        if (nmec != null) {
+            Student student = studentService.getStudentByNmec(nmec);
             List<Grade> grade1 = gradeService.getGradeByStudent(student);
             return new ResponseEntity<>(grade1, HttpStatus.OK);
         } else if (subject != null) {

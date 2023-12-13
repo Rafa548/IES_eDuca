@@ -8,6 +8,10 @@ import { StudentsAdminInfoComponent } from './students-admin-info/students-admin
 import { StudentAdminInfoComponent } from './student-admin-info/student-admin-info.component';
 import {TeachersAdminInfoComponent} from "./teachers-admin-info/teachers-admin-info.component";
 import {TeacherAdminInfoComponent} from "./teacher-admin-info/teacher-admin-info.component";
+import {StudentGradesComponent} from "./student-grades/student-grades.component";
+import {StudentProfileComponent} from "./student-profile/student-profile.component";
+import {TeacherHomeComponent} from "./teacher-home/teacher-home.component";
+import {TeacherClassStudentsComponent} from "./teacher-class-students/teacher-class-students.component";
 
 
 export const routes: Routes = [
@@ -20,6 +24,14 @@ export const routes: Routes = [
   { path:'admin/student/:nmec', component: StudentAdminInfoComponent},
   { path : 'admin/teachers', component: TeachersAdminInfoComponent},
   { path: 'admin/teacher/:nmec', component: TeacherAdminInfoComponent},
+  { path: 'admin_dashboard', component: AdminDashboardComponent },
+  { path: 'admin/class_students', component: ClassStudentsAdminInfoComponent },
+  { path: 'admin/class/:classId', component: ClassesAdminInfoComponent },
+  { path: 'admin/students', component: StudentsAdminInfoComponent },
+  {path: 'student_grades', component: StudentGradesComponent},
+  {path: 'student_profile', component: StudentProfileComponent},
+  {path: 'teacher_home', component: TeacherHomeComponent},
+  {path: 'teacher/class/:classname/students', component: TeacherClassStudentsComponent}
 
 ];
 

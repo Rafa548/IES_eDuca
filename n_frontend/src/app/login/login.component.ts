@@ -51,11 +51,10 @@ export class LoginComponent {
       });
 
       // Redirect based on user role
-      this.router.navigate(['admin_dashboard']);
+      this.router.navigate(['student_grades']);
 
     } catch (error) {
       console.error(error);
-      // Handle error, display error message, etc.
     }
   }
 

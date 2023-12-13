@@ -1,0 +1,48 @@
+/* student-home.component.css */
+
+/* Center the content */
+div {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Style for the card deck */
+.card-deck {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+/* Style for each card */
+.card {
+  width: calc(25% - 20px);  /* 25% width with margin between cards */
+  margin: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;  /* Rounded corners */
+  overflow: hidden;  /* Ensure rounded corners are applied */
+  transition: transform 0.3s ease-in-out;  /* Hover animation */
+}
+
+/* Hover effect for the card */
+.card:hover {
+  transform: scale(1.05);  /* Scale the card on hover */
+}
+
+/* Style for card body */
+.card-body {
+  padding: 1.25rem;
+}
+
+/* Style for card title */
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+/* Style for the image in the card */
+.card-img-top {
+  max-height: 250px;  /* Adjust the max-height as needed */
+  object-fit: cover;
+  border-radius: 15px 15px 0 0;  /* Rounded corners for the top of the image */
+}
