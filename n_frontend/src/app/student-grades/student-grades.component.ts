@@ -38,6 +38,8 @@ export class StudentGradesComponent implements OnInit, OnDestroy {
   }
 
   fetchData() {
+    this.gradesArray = [];
+    this.gradesMap.clear();
     const token = localStorage.getItem('token');
     if (token) {
       const helper = new JwtHelperService();

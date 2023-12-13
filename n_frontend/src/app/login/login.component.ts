@@ -44,6 +44,7 @@ export class LoginComponent {
         const decodedToken = helper.decodeToken(token);
         const u_token:string =token;
         localStorage.setItem('token', u_token);
+        localStorage.setItem('user', this.email);
         console.log(localStorage.getItem('token'));
         console.log('Login successful');
         const userRole: string = decodedToken.role;
@@ -51,7 +52,7 @@ export class LoginComponent {
       });
 
       // Redirect based on user role
-      this.router.navigate(['student_grades']);
+      this.router.navigate(['teacher_home']);
 
     } catch (error) {
       console.error(error);

@@ -25,7 +25,18 @@ public class notificationsService {
     public void sendNotification(Notification notification) {
         try {
             String json = toJson(notification);
-            simpMessagingTemplate.convertAndSendToUser(notification.getReceiver(), "/queue/notifications", json);
+            simpMessagingTemplate.convertAndSendToUser(notification.getReceiver(), "queue/notifications", json);
+            //simpMessagingTemplate.convertAndSendToUser("admin@gmail.com", "queue/notifications", json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendNotificationToClass(Notification notification, String classId) {
+        try {
+            String json = toJson(notification);
+            simpMessagingTemplate.convertAndSend("/topic/" + classId, json);
+            System.out.println("Notification sent to /topic/" + classId);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

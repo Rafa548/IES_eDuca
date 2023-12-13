@@ -29,6 +29,12 @@ export class ApiDataService {
     return await data.text() ?? undefined;
   }
 
+  async getStudentByEmail(token: string|null, email: string): Promise<any> {
+    const url = this.baseURL + '/students?email=' + email;
+    const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${token}` } });
+    return await data.json() ?? undefined;
+  }
+
   async deleteStudentFromClass(token: string|null, className: string, studentnmec: number): Promise<any> {
     const url = this.baseURL + '/classes/' + className + '/students/' + studentnmec;
     //console.log(url);

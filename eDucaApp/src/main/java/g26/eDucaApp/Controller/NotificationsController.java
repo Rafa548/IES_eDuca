@@ -11,6 +11,7 @@ import g26.eDucaApp.Model.Notification;
 import g26.eDucaApp.Model.NotificationType;
 
 import g26.eDucaApp.Repository.NotificationRepository;
+import g26.eDucaApp.Services.EducaServices;
 import g26.eDucaApp.Services.notifications.notificationsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(maxAge = 3600)
 @RestController
 public class NotificationsController {
+
+    @Autowired
+    private EducaServices EducaServices;
 
     @Autowired
     private NotificationRepository notificationRepository;
@@ -41,6 +45,55 @@ public class NotificationsController {
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/notification/{user}")
+    public ResponseEntity<List<Notification>> getNotificationsByUser(@PathVariable("user") String user, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        try {
+            List<Notification> notifications = new ArrayList<Notification>();
+            notifications = notificationRepository.findByReceiver(user, PageRequest.of(page, size));
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("notifications", notifications);
+            
+            return new ResponseEntity<>(notifications, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/notification")
+    public ResponseEntity<Notification> createNotification(@RequestBody Map<String, String> body) {
+        try {
+            String message = body.get("message");
+            String receiver = body.get("receiver");
+            String type = body.get("type");
+
+            
+
+            Notification notification = new Notification();
+
+            if (message != null) {
+                notification.setMessage(message);
+            }
+            if (receiver != null) {
+                notification.setReceiver(receiver);
+            }
+
+            if (type != null) {
+                notification.setType(NotificationType.valueOf(type));
+            }
+            
+
+            System.out.println(notification);
+
+            Notification _notification = EducaServices.createNotification(notification);
+            System.out.println(_notification);
+            return new ResponseEntity<>(_notification, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

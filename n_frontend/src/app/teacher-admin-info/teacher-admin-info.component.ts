@@ -176,10 +176,11 @@ export class TeacherAdminInfoComponent {
     //console.log(this.TeacherNmec)
     this.ApiDataService.getTeacherGrades(localStorage.getItem('token'), this.TeacherNmec).then((grades : any[]) => {
       this.grades = [];
-      //console.log(grades)
+      console.log(grades)
       for (let i = 0; i < grades.length; i++) {
         //console.log(grades[i])
-        this.grades.push(grades[i]);
+        if (grades[i].student.studentclass != null)
+          this.grades.push(grades[i]);
       }
       console.log(this.grades);
     } );

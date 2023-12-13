@@ -52,6 +52,7 @@ export class StudentAdminInfoComponent {
   }
 
   fetchData() {
+    this.studentGrades = [];
     this.ApiDataService.getStudent(localStorage.getItem('token'), this.StudentNmec).then((student : any) => {
       this.student = student;
       console.log(student);

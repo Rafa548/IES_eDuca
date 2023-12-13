@@ -25,6 +25,7 @@ export class ClassesAdminInfoComponent implements OnInit, OnDestroy{
 
   constructor(private router: Router) {
     this.classId = Number(this.router.url.split('/').pop());
+    
   }
 
   ngOnInit() {

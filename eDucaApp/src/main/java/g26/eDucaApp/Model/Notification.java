@@ -10,7 +10,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime;
 
 @Document(collection = "notifications")
 @Data
@@ -27,16 +32,17 @@ public class Notification implements Serializable{
     @Enumerated(EnumType.STRING)
     private NotificationType type;
 
-    @CreatedDate
-    private Date createdDate;
+    private String createdDate;
 
     public Notification() {
+        this.createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public Notification(String message, NotificationType type, String receiver) {
         this.message = message;
         this.type = type;
         this.receiver = receiver;
+        this.createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     @Override
