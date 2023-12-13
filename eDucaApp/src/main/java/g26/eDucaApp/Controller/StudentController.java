@@ -22,18 +22,15 @@ public class StudentController {
 
     @PostMapping
     public ResponseEntity<?> createStudent(@RequestBody Map<String, String> body){
-        System.out.println(body);
+        //System.out.println(body);
         String name = body.get("name");
         String email = body.get("email");
         String password = body.get("password");
         String school = "SampleSchool";
         String studentclass = body.get("studentclass");
         String nmec = body.get("nmec");
-        //String nmec = "12345554532";
-        //String nmec = generateUniqueIdentifier();
 
         S_class studentClass = studentService.getS_classByClassname(studentclass);
-
         Student student = new Student();
         student.setName(name);
         student.setNmec(Long.parseLong(nmec));

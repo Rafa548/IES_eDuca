@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import g26.eDucaApp.Model.Teaching_Assignment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,67 +24,81 @@ public class TeachingAssignmentController {
 
         @PostMapping
         public ResponseEntity<?> createTeachingAssignment(@RequestBody Map<String, String> updates){
+            for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
+                if (grantedAuthority.getAuthority().equals("ADMIN")) {
+                    if (!updates.containsKey("email") || !updates.containsKey("class") || !updates.containsKey("subject")) {
+                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                    }
 
-            if (!updates.containsKey("email") || !updates.containsKey("class") || !updates.containsKey("subject")) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                    String email = updates.get("email");
+                    String classname = updates.get("class");
+                    String subjectname = updates.get("subject");
+                    Teacher teacher = teachingAssignmentService.getTeacherByEmail(email);
+                    S_class s_class = teachingAssignmentService.getS_classByClassname(classname);
+                    Subject subject = teachingAssignmentService.getSubjectByName(subjectname);
+                    Teaching_Assignment teachingAssignment = new Teaching_Assignment();
+                    teachingAssignment.setSclass(s_class);
+                    teachingAssignment.setSubject(subject);
+                    teachingAssignment.setTeacher(teacher);
+
+                    teachingAssignmentService.createTeachingAssignment(teachingAssignment);
+
+                    return new ResponseEntity<>(teachingAssignment, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
             }
-
-            String email = updates.get("email");
-            String classname = updates.get("class");
-            String subjectname = updates.get("subject");
-            Teacher teacher = teachingAssignmentService.getTeacherByEmail(email);
-            S_class s_class = teachingAssignmentService.getS_classByClassname(classname);
-            Subject subject = teachingAssignmentService.getSubjectByName(subjectname);
-            Teaching_Assignment teachingAssignment = new Teaching_Assignment();
-            teachingAssignment.setSclass(s_class);
-            teachingAssignment.setSubject(subject);
-            teachingAssignment.setTeacher(teacher);
-
-            teachingAssignmentService.createTeachingAssignment(teachingAssignment);
-
-            return new ResponseEntity<>(teachingAssignment, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         @GetMapping("{id}")
         public ResponseEntity<?> getTeachingAssignmentById(@PathVariable("id") Long id){
-            Teaching_Assignment teachingAssignment = teachingAssignmentService.getTeachingAssignmentById(id);
-            return new ResponseEntity<>(teachingAssignment, HttpStatus.OK);
+            for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()){
+                if (grantedAuthority.getAuthority().equals("ADMIN")) {
+                    Teaching_Assignment teachingAssignment = teachingAssignmentService.getTeachingAssignmentById(id);
+                    return new ResponseEntity<>(teachingAssignment, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         @GetMapping
-        public ResponseEntity<?> getTeachingAssignments(@RequestParam(value="email", required = false) String email,
-                                                        @RequestParam(value="class", required = false) S_class s_class,
-                                                        @RequestParam(value="subject", required = false) Subject subject){
-            if (email != null) {
-                Teacher teacher = teachingAssignmentService.getTeacherByEmail(email);
-                List<Teaching_Assignment> teachingAssignments = teachingAssignmentService.getTeachingAssignmentByTeacher(teacher);
-                return new ResponseEntity<>(teachingAssignments, HttpStatus.OK);
-            } else if (s_class != null) {
-                List<Teaching_Assignment> teachingAssignments = teachingAssignmentService.getTeachingAssignmentByS_class(s_class);
-                return new ResponseEntity<>(teachingAssignments, HttpStatus.OK);
-            } else if (subject != null) {
-                List<Teaching_Assignment> teachingAssignments = teachingAssignmentService.getTeachingAssignmentBySubject(subject);
-                return new ResponseEntity<>(teachingAssignments, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(teachingAssignmentService.getAllTeachingAssignments(), HttpStatus.OK);
+        public ResponseEntity<?> getTeachingAssignments(){
+            for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()){
+                if (grantedAuthority.getAuthority().equals("ADMIN")) {
+                    List<Teaching_Assignment> teachingAssignments = teachingAssignmentService.getAllTeachingAssignments();
+                    return new ResponseEntity<>(teachingAssignments, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
             }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
 
         @DeleteMapping
         public ResponseEntity<?> deleteTeachingAssignment(@RequestBody Map<String, String> updates){
-            if (!updates.containsKey("email") || !updates.containsKey("class") || !updates.containsKey("subject")) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
+                if (grantedAuthority.getAuthority().equals("ADMIN")) {
+                    if (!updates.containsKey("email") || !updates.containsKey("class") || !updates.containsKey("subject")) {
+                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                    }
+                    String email = updates.get("email");
+                    String classname = updates.get("class");
+                    String subjectname = updates.get("subject");
+                    Teacher teacher = teachingAssignmentService.getTeacherByEmail(email);
+                    S_class s_class = teachingAssignmentService.getS_classByClassname(classname);
+                    Subject subject = teachingAssignmentService.getSubjectByName(subjectname);
+                    Teaching_Assignment teachingAssignment = teachingAssignmentService.getTeachingAssignmentByTeacherAndS_classAndSubject(teacher, s_class, subject);
+                    teachingAssignmentService.deleteTeachingAssignment(teachingAssignment.getId());
+                    return new ResponseEntity<>(HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
             }
-            String email = updates.get("email");
-            String classname = updates.get("class");
-            String subjectname = updates.get("subject");
-            Teacher teacher = teachingAssignmentService.getTeacherByEmail(email);
-            S_class s_class = teachingAssignmentService.getS_classByClassname(classname);
-            Subject subject = teachingAssignmentService.getSubjectByName(subjectname);
-            Teaching_Assignment teachingAssignment = teachingAssignmentService.getTeachingAssignmentByTeacherAndS_classAndSubject(teacher, s_class, subject);
-            teachingAssignmentService.deleteTeachingAssignment(teachingAssignment.getId());
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
 

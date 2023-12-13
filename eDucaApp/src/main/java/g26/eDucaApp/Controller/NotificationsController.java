@@ -1,5 +1,7 @@
 package g26.eDucaApp.Controller;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class NotificationsController {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    @GetMapping("/class/{classname}")
+    @GetMapping("/class/{classname}") //not used
     public ResponseEntity<List<Notification>> getNotificationsByClassname(@PathVariable("classname") String classname, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         try {
             List<Notification> notifications = new ArrayList<Notification>();
@@ -48,7 +50,7 @@ public class NotificationsController {
         }
     }
 
-    @GetMapping("/notification/{user}")
+    @GetMapping("/notification/{user}") //not used
     public ResponseEntity<List<Notification>> getNotificationsByUser(@PathVariable("user") String user, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         try {
             List<Notification> notifications = new ArrayList<Notification>();
@@ -66,35 +68,36 @@ public class NotificationsController {
 
     @PostMapping("/notification")
     public ResponseEntity<Notification> createNotification(@RequestBody Map<String, String> body) {
-        try {
-            String message = body.get("message");
-            String receiver = body.get("receiver");
-            String type = body.get("type");
+        for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
+            if (grantedAuthority.getAuthority().equals("ADMIN")) {
+                try {
+                    String message = body.get("message");
+                    String receiver = body.get("receiver");
+                    String type = body.get("type");
+                    Notification notification = new Notification();
 
-            
+                    if (message != null) {
+                        notification.setMessage(message);
+                    }
+                    if (receiver != null) {
+                        notification.setReceiver(receiver);
+                    }
 
-            Notification notification = new Notification();
-
-            if (message != null) {
-                notification.setMessage(message);
+                    if (type != null) {
+                        notification.setType(NotificationType.valueOf(type));
+                    }
+                    //System.out.println(notification);
+                    Notification _notification = EducaServices.createNotification(notification);
+                    //System.out.println(_notification);
+                    return new ResponseEntity<>(_notification, HttpStatus.CREATED);
+                } catch (Exception e) {
+                    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-            if (receiver != null) {
-                notification.setReceiver(receiver);
-            }
-
-            if (type != null) {
-                notification.setType(NotificationType.valueOf(type));
-            }
-            
-
-            System.out.println(notification);
-
-            Notification _notification = EducaServices.createNotification(notification);
-            System.out.println(_notification);
-            return new ResponseEntity<>(_notification, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
 }

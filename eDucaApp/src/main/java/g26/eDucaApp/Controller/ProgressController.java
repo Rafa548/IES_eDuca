@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/progress")
 public class ProgressController {
 
+    // made in the api but only used internally between the data_gen scripts and the api
+
     private Map<String, AtomicInteger> insertionProgressMap = new ConcurrentHashMap<>();
     private Map<String, Integer> totalExpectedMap = new ConcurrentHashMap<>();
 

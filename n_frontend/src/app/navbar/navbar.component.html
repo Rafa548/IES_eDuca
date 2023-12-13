@@ -4,19 +4,19 @@
       <a routerLink="/">eDuca</a>
     </div>
     <ul class="navbar-links">
-      <li><a (click)="redirectTo('classes')">Home</a></li>
+      <li><a (click)="redirectTo('')">Home</a></li>
       <li><a (click)="redirectTo('classes')">Classes</a></li>
-      <li><a (click)="redirectTo('classes')">Students</a></li>
-      <li><a (click)="redirectTo('classes')">Teachers</a></li>
+      <li><a (click)="redirectTo('students')">Students</a></li>
+      <li><a (click)="redirectTo('teachers')">Teachers</a></li>
     </ul>
     <div class="navbar-actions">
       <div class="dropdown">
-        
+
         
     </div>
-          
+
       <button *ngIf="!isLoggedIn" (click)="login()">Login</button>
       <button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
     </div>
   </nav>
-  
+

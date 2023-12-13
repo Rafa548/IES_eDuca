@@ -3,7 +3,7 @@
     <p *ngIf="error" style="color: red">{{ error }}</p>
     <form (ngSubmit)="login()">
       <label>
-        {{ userType === 'student' ? 'Student' : userType === 'teacher' ? 'Teacher' : 'School Admin' }} Email:
+        {{ userType === 'STUDENT' ? 'Student' : userType === 'TEACHER' ? 'Teacher' : 'School Admin' }} Email:
       </label>
       <input type="text" [(ngModel)]="email" name="email" />
       <label>Password:</label>
@@ -11,7 +11,6 @@
       <button type="submit">Login</button>
     </form>
     <button (click)="handleUserTypeToggle()">
-      Switch to {{ userType === 'student' ? 'Teacher' : userType === 'teacher' ? 'School Admin' : 'Student' }}
+      Switch to {{ userType === 'STUDENT' ? 'Teacher' : userType === 'TEACHER' ? 'School Admin' : 'Student' }}
     </button>
   </div>
-  
