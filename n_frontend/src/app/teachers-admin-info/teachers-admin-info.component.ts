@@ -79,7 +79,7 @@ export class TeachersAdminInfoComponent {
     const password = document.getElementById('password') as HTMLInputElement;
 
     const json = {name: name.value, email: email.value, password: password.value, nmec: this.selectedUser.nmec};
-    console.log(json);
+    //console.log(json);
 
     this.ApiDataService.updateTeacher(localStorage.getItem('token'), json).then((response: any) => {
       //console.log(response);

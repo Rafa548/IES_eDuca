@@ -60,6 +60,8 @@ button:nth-child(2) {
   color: white;
 }
 
+
+
 /* Additional styles for input and select layout */
 .input-group {
   display: flex;
@@ -133,6 +135,10 @@ button:nth-child(2) {
   transform: scale(1.2); /* Scale the icon slightly on hover */
 }
 
+.action-icon.edit:hover {
+  color: blue; /* Change color on hover */
+  transform: scale(1.2); /* Scale the icon slightly on hover */
+}
 
 .table-container {
   display: flex;

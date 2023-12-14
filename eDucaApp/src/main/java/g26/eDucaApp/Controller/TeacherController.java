@@ -3,6 +3,7 @@ package g26.eDucaApp.Controller;
 
 import g26.eDucaApp.Model.S_class;
 import g26.eDucaApp.Model.Teacher;
+import g26.eDucaApp.Model.TeacherUpdateRequest;
 import g26.eDucaApp.Services.EducaServices;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -116,29 +118,36 @@ public class TeacherController {
     }
 
     @PutMapping("{nmec}")
-    public ResponseEntity<Teacher> updateTeacher(@PathVariable("nmec") Long nmec, @RequestBody Map<String, String> updates) {
+    public ResponseEntity<Teacher> updateTeacher(@PathVariable("nmec") Long nmec, @RequestBody TeacherUpdateRequest updates){
+        System.out.println(updates);
         for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
             if (grantedAuthority.getAuthority().equals("ADMIN") || grantedAuthority.getAuthority().equals("TEACHER")) {
                 Teacher teacherToUpdate = teacherService.getTeacherByN_mec(nmec);
-
-                System.out.println(updates);
+                List<S_class> classes = new ArrayList<>();
+                //System.out.println(updates);
 
                 if (teacherToUpdate != null) {
-                    if (updates.containsKey("name")) {
-                        teacherToUpdate.setName(updates.get("name"));
+                    if (updates.getName() != null) {
+                        teacherToUpdate.setName(updates.getName());
                     }
-
-                    if (updates.containsKey("email")) {
-                        teacherToUpdate.setEmail(updates.get("email"));
+                    if (updates.getEmail() != null) {
+                        teacherToUpdate.setEmail(updates.getEmail());
                     }
-
-                    if (updates.containsKey("password")) {
-                        teacherToUpdate.setPassword(updates.get("password"));
+                    if (updates.getSchool() != null) {
+                        teacherToUpdate.setSchool(updates.getSchool());
                     }
-
-                    if (updates.containsKey("classes")) {
-                        List<S_class> updatedClasses = (List<S_class>) teacherService.getS_classByClassname(updates.get("classes"));
-                        teacherToUpdate.setClasses(updatedClasses);
+                    if (updates.getPassword() != null) {
+                        teacherToUpdate.setPassword(updates.getPassword());
+                    }
+                    if (updates.getSubjects() != null) {
+                        teacherToUpdate.setSubjects(updates.getSubjects());
+                    }
+                    if (updates.getClasses() != null && updates.getClasses().length > 0  ) {
+                        for (String classname : updates.getClasses()) {
+                            S_class s_class = teacherService.getS_classByClassname(classname);
+                            classes.add(s_class);
+                        }
+                        teacherToUpdate.setClasses(classes);
                     }
                 }
 
@@ -152,3 +161,4 @@ public class TeacherController {
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 }
+
