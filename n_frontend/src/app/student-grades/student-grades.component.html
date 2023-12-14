@@ -1,0 +1,37 @@
+<nav class="navbar">
+  <div class="navbar-logo">
+    <a routerLink="/">eDuca</a>
+  </div>
+  <ul class="navbar-links">
+    <li><a (click)="redirectTo('home')">Home</a></li>
+    <li><a (click)="redirectTo('profile')">Profile</a></li>
+    <li><a (click)="redirectTo('grades')">Grades</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <div class="dropdown">
+    </div>
+
+    <button *ngIf="!isLoggedIn" (click)="login()">Login</button>
+    <button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
+  </div>
+</nav>
+<div *ngIf="gradesArray.length > 0">
+  <h2>Student Grades</h2>
+  <table>
+    <thead>
+    <tr>
+      <th *ngFor="let subject of gradesArray">{{ subject.name }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td *ngFor="let subject of gradesArray">
+        <ul>
+          <li *ngFor="let grade of subject.grades">{{ grade }}</li>
+        </ul>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+

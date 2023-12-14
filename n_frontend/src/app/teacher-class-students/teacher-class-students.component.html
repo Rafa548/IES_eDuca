@@ -1,0 +1,107 @@
+<div>
+  <h2>Class Grades</h2><button class="button" (click)="openMsgModal()">Send Alert</button>
+  <div *ngIf="teachersubjects.length > 0">
+    <p>Subjects:</p>
+    <ul class="horizontal-buttons">
+      <li *ngFor="let subject of teachersubjects">
+        <button (click)="selectSubject(subject.subject.name)">{{ subject.subject.name }}</button>
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="selectedSubject">
+    <h3>Grades for {{ selectedSubject }}</h3>
+
+    <i class="fas fa-plus" style="float: right; cursor: pointer; margin-bottom: 10px;" (click)="openAddModal(selectedSubject)"></i>
+
+    <table>
+      <thead>
+      <tr>
+        <th>Student NºMec</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Grade</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngIf="getFilteredGrades(selectedSubject).length > 0; else noGrades">
+        <tr *ngFor="let gradeObj of getFilteredGrades(selectedSubject)">
+          <td>{{ gradeObj.student.nmec }}</td>
+          <td>{{ gradeObj.student.name }}</td>
+          <td>{{ gradeObj.student.email }}</td>
+          <td>{{ gradeObj.grade.grade }}</td>
+          <td>
+            <i class="fas fa-edit" style="margin-left: 5px;" (click)="studentEdit(gradeObj)"></i>
+            <i class="fas fa-trash-alt" style="margin-left: 5px;" (click)="deleteStudentGrade(gradeObj)"></i>
+            <i class="fas fa-paper-plane" style="margin-left: 5px;" (click)="openMsgModal1(gradeObj)"></i>
+
+          </td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </table>
+    <ng-template #noGrades>
+      <p>No grades available for {{ selectedSubject }}</p>
+    </ng-template>
+  </div>
+</div>
+
+
+
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h2>Edit Grade</h2>
+    <div class="input-group">
+      <div class="input">
+        <p>Name: <input id="name" type="text" readonly></p>
+        <p>Email: <input id="email" type="email" readonly></p>
+        <p>Grade: <input id="grade" type="text"></p>
+        <p>Grade ID:<input id="gradeid" type="text" readonly></p>
+      </div>
+    </div>
+    <button (click)="saveChanges()">Save Changes</button>
+    <button (click)="closeEditModal()">Close</button>
+  </div>
+</div>
+
+
+<div id="addModal" class="modal_add">
+  <div class="modal-content">
+    <h2>Add Grade</h2>
+    <div class="input-group">
+      <div class="input">
+        <p>Student NºMec: <input id="nmec" type="text"></p>
+        <p>Grade: <input id="new_grade" type="text"></p>
+      </div>
+    </div>
+    <button (click)="addStudentGrade()">Add</button>
+    <button (click)="closeAddModal()">Close</button>
+  </div>
+</div>
+
+<div id="msgModal" class="modal_add">
+  <div class="modal-content">
+    <h2>Send Alert</h2>
+    <div class="input-group">
+      <label for="message">Message:</label>
+      <textarea id="message" style="width: 100%; height: 100px;"></textarea>
+    </div>
+    <div class="button-group">
+      <button (click)="sendMsg()">Send</button>
+      <button (click)="closeMsgModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="msgModalStudent" class="modal_add">
+  <div class="modal-content">
+    <h2>Send Message</h2>
+    <div class="input-group">
+      <label for="message">Message:</label>
+      <textarea id="messageStudent" style="width: 100%; height: 100px;"></textarea>
+    </div>
+    <div class="button-group">
+      <button (click)="sendMsgStudent()">Send</button>
+      <button (click)="closeMsgModal1()">Close</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<nav class="navbar">
+  <div class="navbar-logo">
+    <a routerLink="/">eDuca</a>
+  </div>
+  <ul class="navbar-links">
+    <li><a (click)="redirectTo('home')">Home</a></li>
+    <li><a (click)="redirectTo('profile')">Profile</a></li>
+    <li><a (click)="redirectTo('grades')">Grades</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <div class="dropdown">
+    </div>
+
+    <button *ngIf="!isLoggedIn" (click)="login()">Login</button>
+    <button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
+  </div>
+</nav>
+<div style="text-align: center;">
+  <h2>Welcome, {{ studentData.name }}</h2>
+  <p>NMEC: {{ studentData.nmec }}</p>
+  <p>School: {{ studentData.school }}</p>
+  <p>Class: {{ studentData.studentclass.classname}}</p>
+  <h3>Classes:</h3>
+  <div class="card-deck">
+    <div *ngFor="let subject of studentData.studentclass.subjects" class="card">
+      <img class="card-img-top" src="../../assets/school_stock.jpg" alt="Subject Image">
+      <div class="card-body">
+        <h5 class="card-title">{{ subject.name }}</h5>
+      </div>
+    </div>
+  </div>
+  <h2>Notifications</h2>
+  <div class="notifications-container">
+    <ul>
+      <li *ngFor="let notification of notifications">
+        {{ notification.message }}
+        <span class="created-date">{{ notification.createdDate | date: 'short' }}</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+
+

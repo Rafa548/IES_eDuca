@@ -1,0 +1,19 @@
+<div class="container">
+  <h2>Classes</h2>
+
+  <!-- Add Class button -->
+  <button class="add-button">Add Class</button>
+
+  <!-- Display classes information as smaller cards in rows -->
+  <div class="class-row">
+    <div class="class-card" *ngFor="let classItem of classes" (click)="navigateToClassDetails(classItem.id)">
+      <!-- Display class name -->
+      <p>{{ classItem.classname }}</p>
+
+      <!-- Delete button with Font Awesome trash icon -->
+      <button class="delete-button" (click)="deleteClass($event, classItem.classname)">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
+  </div>
+</div>

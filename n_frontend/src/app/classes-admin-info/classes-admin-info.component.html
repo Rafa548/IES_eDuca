@@ -1,0 +1,84 @@
+<div class="container">
+  <h2>Show Information</h2>
+
+  <!-- Buttons to switch content -->
+  <div class="button-group">
+    <button (click)="showStudents()">Students</button>
+    <button (click)="showSubjectsAndTeachers()">Subjects & Teachers</button>
+  </div>
+
+  <div *ngIf="selectedContent === 'students'" class="content-section">
+    <h3>Students' Information</h3>
+    <table>
+      <thead>
+      <tr>
+        <th>Student</th>
+        <th *ngFor="let subject of class?.subjects">{{ subject.name }}</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let student of class?.students">
+        <td>{{ student.name }}</td>
+        <td *ngFor="let subject of class?.subjects">
+          <ng-container *ngIf="getGrade(student, subject)">
+            <span class="grade-content">{{ getGrade(student, subject).grade }}</span>
+          </ng-container>
+        </td>
+        <td>
+          <i class="fas fa-trash" (click)="deleteStudent(student)"></i>
+          <span style="margin: 0 5px;"></span>
+          <i class="fa-solid fa-eye" (click)="studentDetails(student)"></i>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+
+
+
+  <div *ngIf="selectedContent === 'subjectsAndTeachers'" class="content-section">
+    <h3>Subjects & Teachers' Information</h3>
+    <table>
+      <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Teacher</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let subject of class?.subjects">
+        <td>{{ subject.name }}</td>
+        <td>{{ getTeacherName(subject.name) }}</td>
+        <td>
+          <span class="edit-icon" (click)="openmodal(subject.name, getTeacherName(subject.name))">
+            <i class="fas fa-pencil-alt"></i>
+          </span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h2>User Details</h2>
+    <div class="input-group">
+      <h2>Modal for {{ selectedSubject }}</h2>
+      <div class="select">
+        <p>Select Class:
+          <select id="modalSelect">
+            <option *ngFor="let teacher of teacherpersubject">{{teacher.name}}</option>
+          </select>
+        </p>
+      </div>
+    </div>
+    <button (click)="saveChanges()">Save Changes</button>
+    <button (click)="closeEditModal()">Close</button>
+  </div>
+</div>

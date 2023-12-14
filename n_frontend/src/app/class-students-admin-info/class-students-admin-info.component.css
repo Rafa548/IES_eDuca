@@ -1,0 +1,85 @@
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+}
+
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center; /* Center align the content */
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.add-button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #2ecc71;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.add-button:hover {
+  background-color: #27ae60;
+  transition: background-color 0.3s ease;
+}
+
+/* Class cards layout */
+.class-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; /* Center align the cards */
+  gap: 20px;
+}
+
+.class-card {
+  width: calc(25% - 20px);
+  position: relative; /* Relative positioning for button placement */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.class-card p {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+  text-align: center; /* Center align the text */
+}
+
+.delete-button {
+  position: absolute; /* Absolute positioning for the delete button */
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.delete-button:hover {
+  color: red; /* Change color on hover for better visibility */
+}
+
+.class-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
