@@ -1,32 +1,43 @@
-<nav class="navbar navbar-expand-lg bg-light navbar-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Brand</a>
+<nav class="navbar navbar-expand-lg navbar-dark" style=" background-color:green;">
+  <div class="container-fluid justify-content-between">
+    <a class="navbar-brand" href="#">eDuca</a>
     <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <i class="fas fa-bars"></i>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0" >
         <!-- Links... -->
+        <li class="nav-item navbar-brand"><a class="nav-link navbar-brand"  (click)="redirectTo('')">Home</a></li>
+        <li class="nav-item navbar-brand"><a class="nav-link navbar-brand"  (click)="redirectTo('classes')">Classes</a></li>
+        <li class="nav-item navbar-brand"><a class="nav-link navbar-brand"  (click)="redirectTo('students')">Students</a></li>
+        <li class="nav-item navbar-brand"><a class="nav-link navbar-brand"  (click)="redirectTo('teachers')">Teachers</a></li>
       </ul>
       <ul class="navbar-nav d-flex flex-row me-1">
         <li class="nav-item position-relative me-3 me-lg-0">
-          <a href="javascript:void(0);" class="nav-link" (click)="toggleNotifications($event)">
-            <i class="fas fa-bell"></i>
+          <a href="javascript:void(0);" class="nav-link navbar-brand" id="notificationsBell" (click)="toggleNotifications($event)">
+            <i class="fas fa-bell" style="margin-right: 20px;" (click)="falseNotification()"></i>
+            <span *ngIf="notification == true" class="badge rounded-pill badge-notification bg-danger">o</span>
+            <button *ngIf="!isLoggedIn" class="button" (click)="login()">Login</button>
+            <button *ngIf="isLoggedIn" class="button" (click)="logout()">Logout</button>
           </a>
-          <div class="dropdown-menu position-absolute" [class.show]="showNotifications" aria-labelledby="notificationsBell">
-            <a class="dropdown-item" href="#">Notification 1</a>
-            <a class="dropdown-item" href="#">Notification 2</a>
+          <!-- Dropdown content -->
+          <div class="custom-dropdown" [class.show]="showNotifications">
+            <!-- Your notification items -->
+            <div *ngFor="let notification of notifications.slice().reverse()" class="notification-item">
+              <div class="notification-content">
+                <span class="message">{{ notification.message }}</span>
+                <span class="created-date">{{ notification.createdDate | date: 'short' }}</span>
+              </div>
+            </div>
             <!-- ... -->
           </div>
-        </li>
-        <li class="nav-item me-3 me-lg-0">
-          <a class="nav-link" href="#"><i class="fab fa-twitter"></i></a>
+          
+        
+        
+      
         </li>
       </ul>
-      <form class="w-auto">
-        <input type="search" class="form-control" placeholder="Type query" aria-label="Search">
-      </form>
     </div>
   </div>
 </nav>

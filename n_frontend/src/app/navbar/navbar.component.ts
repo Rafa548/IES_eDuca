@@ -1,26 +1,70 @@
 import { NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { WebSocketService } from '../websocket.service';
+import { CommonModule, NgFor} from '@angular/common';
+
 
 
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [NgIf],
+  imports: [NgIf, NgFor, CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+  webSocketService: WebSocketService;
   isLoggedIn: boolean = localStorage.getItem('token') !== null;
   showDropdown: boolean = false;
   showNotifications = false;
+  notifications: any[] = [];
+  @ViewChild('dropdownContent') dropdownContent!: ElementRef;
+  @Input() childData: string = '';
+  notification: boolean = false;
 
   toggleNotifications(event: Event) {
     event.stopPropagation(); // Prevent default event behavior to avoid toggling dropdown and closing it immediately
     this.showNotifications = !this.showNotifications;
+    
   }
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    this.webSocketService = new WebSocketService();
+    
+  }
+
+  ngOnInit(): void {
+    console.log('Connecting to WebSocket...');
+    this.webSocketService.connect(this.onMessage.bind(this));
+
+    // Subscribe to the class (replace 'ClassName' with the actual class name)
+    //this.subscription = this.webSocketService.subscribeToClass('ClassName');
+  }
+
+  ngOnDestroy(): void {
+    // Check if subscription is not null before unsubscribing
+    
+    console.log('Disconnecting from WebSocket...');
+    this.webSocketService.disconnect();
+  }
+
+  falseNotification(){
+    this.notification = false;
+  }
+
+  private onMessage(notification: any): void {
+    // Handle WebSocket messages here
+    console.log('Received WebSocket message:', notification);
+    this.notifications = [...this.notifications, notification];
+    setTimeout(() => this.scrollToBottom(), 0);
+    this.notification = true;
+  }
+
+  private scrollToBottom() {
+    const dropdownContentElement = this.dropdownContent.nativeElement;
+    dropdownContentElement.scrollTop = dropdownContentElement.scrollHeight;
+  }
 
   login() {
     // Implement your login logic here

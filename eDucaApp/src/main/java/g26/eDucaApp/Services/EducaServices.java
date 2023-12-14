@@ -139,6 +139,7 @@ public class EducaServices {
                                 sum += grade.getGrade();
                             }
                             double median = sum / grades.size();
+                            median = Math.round(median * 100.0) / 100.0;
                             if (median < 10) {
                                 String median1 = Double.toString(median);
                                 String message = String.format("Your median of %s is too low: %s", subject.getName(), median1);
@@ -182,6 +183,7 @@ public class EducaServices {
                             sum += grade.getGrade();
                         }
                         double median = sum / Subjectgrades.size();
+                        median = Math.round(median * 100.0) / 100.0;
                         if (median < 10) {
                             String median1 = Double.toString(median);
                             String message = String.format("The median of %s in %s is too low: %s", s_class.getClassname(), subject.getName(), median1);
