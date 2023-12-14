@@ -32,6 +32,10 @@ export class TeacherHomeComponent implements OnInit, OnDestroy{
     }, 5000);
   }
 
+  teacherprofile() {
+    this.router.navigate(['teacher/profile']);
+  }
+
   fetchData() {
     const token = localStorage.getItem('token');
     console.log("token1111",token)

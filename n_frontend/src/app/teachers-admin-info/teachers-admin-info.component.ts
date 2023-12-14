@@ -70,7 +70,23 @@ export class TeachersAdminInfoComponent {
   }
 
   saveChanges() {
+    const modal = document.getElementById('editModal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+    const name = document.getElementById('name') as HTMLInputElement;
+    const email = document.getElementById('email') as HTMLInputElement;
+    const password = document.getElementById('password') as HTMLInputElement;
 
+    const json = {name: name.value, email: email.value, password: password.value, nmec: this.selectedUser.nmec};
+    console.log(json);
+
+    this.ApiDataService.updateTeacher(localStorage.getItem('token'), json).then((response: any) => {
+      //console.log(response);
+      this.ApiDataService.getTeachers(localStorage.getItem('token')).then((teachers : any[]) => {
+        this.tableData = teachers;
+      });
+    });
   }
   closeEditModal() {
     const modal = document.getElementById('editModal');

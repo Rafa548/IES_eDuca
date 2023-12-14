@@ -121,6 +121,8 @@ public class TeacherController {
             if (grantedAuthority.getAuthority().equals("ADMIN") || grantedAuthority.getAuthority().equals("TEACHER")) {
                 Teacher teacherToUpdate = teacherService.getTeacherByN_mec(nmec);
 
+                System.out.println(updates);
+
                 if (teacherToUpdate != null) {
                     if (updates.containsKey("name")) {
                         teacherToUpdate.setName(updates.get("name"));
@@ -139,6 +141,8 @@ public class TeacherController {
                         teacherToUpdate.setClasses(updatedClasses);
                     }
                 }
+
+                teacherService.updateTeacher(teacherToUpdate);
 
                 return new ResponseEntity<>(teacherToUpdate, HttpStatus.OK);
             } else {

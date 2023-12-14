@@ -269,6 +269,16 @@ public class EducaServices {
         teacher_repo.delete(teacher);
     }
 
+    public Teacher updateTeacher(Teacher teacher){
+        Teacher existingTeacher = teacher_repo.findById(teacher.getId()).get();
+        existingTeacher.setName(teacher.getName());
+        existingTeacher.setEmail(teacher.getEmail());
+        existingTeacher.setNmec(teacher.getNmec());
+        existingTeacher.setSchool(teacher.getSchool());
+        Teacher updatedTeacher = teacher_repo.save(existingTeacher);
+        return updatedTeacher;
+    }
+
     //----------------------------------------------------------------//
 
 

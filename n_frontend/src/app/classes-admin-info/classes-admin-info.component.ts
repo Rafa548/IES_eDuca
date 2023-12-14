@@ -109,7 +109,7 @@ export class ClassesAdminInfoComponent implements OnInit, OnDestroy{
   }
 
   studentDetails(student: any) {
-
+    this.router.navigate(['/admin/student/', student.nmec]);
   }
 
   openmodal(subject:string, teacher:string) {
