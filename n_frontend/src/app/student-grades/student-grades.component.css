@@ -1,5 +1,3 @@
-/* student-grades.component.css */
-
 table {
   width: 70%; /* Adjust the width of the table as needed */
   border-collapse: collapse;
@@ -54,3 +52,115 @@ table {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.notification-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 4px;
+  display: none;
+}
+
+.notification-dropdown.show {
+  display: block;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown {
+  margin-left: 20px; /* Adjust the margin as needed */
+}
+
+/* Styles for the table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+/* Styles for table header */
+th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+/* Styles for table data cells */
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+/* Style for unordered list */
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Style for list items */
+li {
+  margin-bottom: 5px;
+}
+
+/* Hover effect for list items */
+li:hover {
+  background-color: #f0f0f0;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-logo a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-links li {
+  margin-right: 20px;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+  color: #ffcc00;
+}
+
+.navbar-actions button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.navbar-actions button:hover {
+  background-color: #0056b3;
+}

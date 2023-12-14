@@ -69,7 +69,7 @@ public class NotificationsController {
     @PostMapping("/notification")
     public ResponseEntity<Notification> createNotification(@RequestBody Map<String, String> body) {
         for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
-            if (grantedAuthority.getAuthority().equals("ADMIN")) {
+            if (grantedAuthority.getAuthority().equals("ADMIN") || grantedAuthority.getAuthority().equals("TEACHER")) {
                 try {
                     String message = body.get("message");
                     String receiver = body.get("receiver");

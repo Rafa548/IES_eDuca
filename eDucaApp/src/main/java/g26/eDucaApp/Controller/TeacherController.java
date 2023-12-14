@@ -53,7 +53,7 @@ public class TeacherController {
                                          @RequestParam(value="nmec", required = false) Long teacherNmec, @RequestParam(value="school", required = false) String school)
     {
         for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()){
-            if (grantedAuthority.getAuthority().equals("ADMIN")) {
+            if (grantedAuthority.getAuthority().equals("ADMIN") || grantedAuthority.getAuthority().equals("TEACHER")) {
                 if (teacherEmail != null) {
                     Teacher teacher = teacherService.getTeacherByEmail(teacherEmail);
                     return new ResponseEntity<>(teacher, HttpStatus.OK);

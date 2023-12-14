@@ -3,6 +3,7 @@ import { GradesService } from '../grades.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { StudentService } from '../student.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-student-grades',
@@ -18,8 +19,10 @@ export class StudentGradesComponent implements OnInit, OnDestroy {
   gradesMap: Map<string, number[]> = new Map();
   gradesArray: { name: string; grades: number[] }[] = [];
   private alive = true;
+  isLoggedIn: boolean = localStorage.getItem('token') !== null;
+  showDropdown: boolean = false;
 
-  constructor(private cdr: ChangeDetectorRef) {this.fetchData()}
+  constructor(private cdr: ChangeDetectorRef, private router: Router) {this.fetchData()}
 
   ngOnInit() {
     this.updateContentPeriodically();
@@ -54,6 +57,34 @@ export class StudentGradesComponent implements OnInit, OnDestroy {
       });
     } else {
       console.error('Token not found in localStorage');
+    }
+  }
+
+  login() {
+    // Implement your login logic here
+    // For example, navigate to the login page
+    this.router.navigate(['/']);
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.isLoggedIn = false;
+    this.router.navigate(['/']);
+  }
+
+  redirectTo(path: string): void {
+    switch (path) {
+      case 'grades':
+        this.router.navigate(['student_grades']); // Change the route path as needed
+        break;
+      case 'profile':
+        this.router.navigate(['student_profile']); // Change the route path as needed
+        break;
+      case 'home':
+        this.router.navigate(['student_home']); // Change the route path as needed
+        break;
+      default:
+        break;
     }
   }
 
