@@ -123,7 +123,9 @@ export class TeacherClassStudentsComponent implements OnInit, OnDestroy {
         this.teacherData = teacher;
         this.TeacherService.getTeacherSubjects(email,classname).then(subjects => {
           this.teachersubjects = subjects;
-          this.selectedSubject = subjects[0].subject.name;
+          if (this.selectedSubject == undefined) 
+             this.selectedSubject = subjects[0].subject.name;
+          
           //console.log("selected subject: ", this.selectedSubject);
           //console.log("subjects: ", this.teachersubjects);
         });
