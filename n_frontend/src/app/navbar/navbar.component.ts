@@ -14,8 +14,12 @@ import { Router } from '@angular/router';
 export class NavbarComponent {
   isLoggedIn: boolean = localStorage.getItem('token') !== null;
   showDropdown: boolean = false;
+  showNotifications = false;
 
-
+  toggleNotifications(event: Event) {
+    event.stopPropagation(); // Prevent default event behavior to avoid toggling dropdown and closing it immediately
+    this.showNotifications = !this.showNotifications;
+  }
   constructor(private router: Router) {}
 
   login() {
@@ -46,11 +50,6 @@ export class NavbarComponent {
       default:
         break;
     }
-  }
-
-  showNotifications() {
-    // Implement your logic to show notifications here
-    console.log('Show notifications');
   }
 
   toggleDropdown() {

@@ -1,22 +1,32 @@
-<!-- Include Font Awesome icons in your navbar.component.html -->
-<nav class="navbar">
-    <div class="navbar-logo">
-      <a routerLink="/">eDuca</a>
+<nav class="navbar navbar-expand-lg bg-light navbar-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Brand</a>
+    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!-- Links... -->
+      </ul>
+      <ul class="navbar-nav d-flex flex-row me-1">
+        <li class="nav-item position-relative me-3 me-lg-0">
+          <a href="javascript:void(0);" class="nav-link" (click)="toggleNotifications($event)">
+            <i class="fas fa-bell"></i>
+          </a>
+          <div class="dropdown-menu position-absolute" [class.show]="showNotifications" aria-labelledby="notificationsBell">
+            <a class="dropdown-item" href="#">Notification 1</a>
+            <a class="dropdown-item" href="#">Notification 2</a>
+            <!-- ... -->
+          </div>
+        </li>
+        <li class="nav-item me-3 me-lg-0">
+          <a class="nav-link" href="#"><i class="fab fa-twitter"></i></a>
+        </li>
+      </ul>
+      <form class="w-auto">
+        <input type="search" class="form-control" placeholder="Type query" aria-label="Search">
+      </form>
     </div>
-    <ul class="navbar-links">
-      <li><a (click)="redirectTo('')">Home</a></li>
-      <li><a (click)="redirectTo('classes')">Classes</a></li>
-      <li><a (click)="redirectTo('students')">Students</a></li>
-      <li><a (click)="redirectTo('teachers')">Teachers</a></li>
-    </ul>
-    <div class="navbar-actions">
-      <div class="dropdown">
-
-        
-    </div>
-
-      <button *ngIf="!isLoggedIn" (click)="login()">Login</button>
-      <button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
-    </div>
-  </nav>
-
+  </div>
+</nav>
