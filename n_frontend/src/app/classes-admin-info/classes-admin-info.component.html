@@ -67,12 +67,10 @@
 
 <div id="editModal" class="modal">
   <div class="modal-content">
-    <h2>User Details</h2>
     <div class="input-group">
-      <h2>Modal for {{ selectedSubject }}</h2>
       <div class="select">
-        <p>Select Class:
-          <select id="modalSelect">
+        <p>Select Teacher:
+          <select id="modalSelect" [(ngModel)]="selectedTeacher">
             <option *ngFor="let teacher of teacherpersubject">{{teacher.name}}</option>
           </select>
         </p>

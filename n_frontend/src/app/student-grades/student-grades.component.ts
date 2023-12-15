@@ -4,6 +4,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { StudentService } from '../student.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ApiDataService } from '../api-data.service';
 
 @Component({
   selector: 'app-student-grades',
@@ -14,8 +15,10 @@ import { Router } from '@angular/router';
 })
 export class StudentGradesComponent implements OnInit, OnDestroy {
   studentGrades: any[] = [];
+  studentData: any = {};
   gradesService = inject(GradesService);
-  studentService = inject(StudentService); // corrected from StudentService to studentService
+  studentService = inject(StudentService);
+  apiDataService = inject(ApiDataService);
   gradesMap: Map<string, number[]> = new Map();
   gradesArray: { name: string; grades: number[] }[] = [];
   private alive = true;
@@ -48,11 +51,13 @@ export class StudentGradesComponent implements OnInit, OnDestroy {
       const helper = new JwtHelperService();
       const decodedToken = helper.decodeToken(token);
       const email = decodedToken.sub;
-      this.studentService.getIDofStudent(email).then((id) => {
-        this.gradesService.getStudentGrades(id).then((grades) => {
+      this.studentService.getStudentByEmail(email).then((teacher) => {
+        this.studentData = teacher;
+        const nmec= this.studentData.nmec;
+        this.gradesService.getStudentGrades(nmec).then((grades) => {
           this.studentGrades = grades;
           this.buildGradesMap();
-          this.cdr.detectChanges(); // Trigger change detection
+          this.cdr.detectChanges();
         });
       });
     } else {
@@ -88,8 +93,10 @@ export class StudentGradesComponent implements OnInit, OnDestroy {
     }
   }
 
-  private buildGradesMap(): void {
+  async buildGradesMap(): Promise<void> {
     this.gradesMap.clear();
+
+
     for (let i = 0; i < this.studentGrades.length; i++) {
       const subjectName = this.studentGrades[i].subject.name;
       const grade = this.studentGrades[i].grade;
@@ -100,9 +107,21 @@ export class StudentGradesComponent implements OnInit, OnDestroy {
         this.gradesMap.get(subjectName)?.push(grade);
       }
     }
-    this.gradesArray = Array.from(this.gradesMap.entries()).map(([name, grades]) => ({
-      name,
-      grades,
-    }));
+
+    const averages: number[] = await Promise.all(
+      Array.from(this.gradesMap.keys()).map(subject =>
+        this.apiDataService.getAvgGrade(localStorage.getItem('token'), this.studentData.studentclass.classname, subject, this.studentData.nmec)
+      )
+    );
+
+    this.gradesArray = Array.from(this.gradesMap.entries()).map(([name, grades], index) => {
+      const average = averages[index];
+      return {
+        name,
+        grades: [...grades, average],
+      };
+    });
   }
+
+  protected readonly Array = Array;
 }

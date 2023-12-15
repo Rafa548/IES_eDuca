@@ -16,13 +16,12 @@
   </div>
 </nav>
 <div style="text-align: center;">
-  <h2>Welcome, {{ studentData.name }}</h2>
-  <p>NMEC: {{ studentData.nmec }}</p>
-  <p>School: {{ studentData.school }}</p>
-  <p>Class: {{ studentData.studentclass.classname}}</p>
-  <h3>Classes:</h3>
+  <div class="welcome-container">
+    <h2>Welcome, {{ studentData.name }}</h2>
+    <h3 class="left-aligned">My Subjects</h3>
+  </div>
   <div class="card-deck">
-    <div *ngFor="let subject of studentData.studentclass.subjects" class="card">
+    <div *ngFor="let subject of studentData.studentclass.subjects" class="card" (click)="redirectToGrades()">
       <img class="card-img-top" src="../../assets/school_stock.jpg" alt="Subject Image">
       <div class="card-body">
         <h5 class="card-title">{{ subject.name }}</h5>

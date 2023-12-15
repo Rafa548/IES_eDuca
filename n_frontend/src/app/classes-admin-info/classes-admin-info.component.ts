@@ -29,6 +29,7 @@ export class ClassesAdminInfoComponent implements OnInit, OnDestroy{
   teacherpersubject: any = {};
   selectedSubject: string | null = null;
   oldTeacher: string | null = null;
+  selectedTeacher: any | undefined ;
 
 
   constructor(private router: Router) {
@@ -127,6 +128,7 @@ export class ClassesAdminInfoComponent implements OnInit, OnDestroy{
     this.ApiDataService.getTeachersBySubject(localStorage.getItem('token'), subject).then((teachers: any) => {
       console.log(teachers);
       this.teacherpersubject = teachers;
+      this.selectedTeacher = teacher;
     });
   }
 
@@ -138,24 +140,26 @@ export class ClassesAdminInfoComponent implements OnInit, OnDestroy{
   }
 
   saveChanges () {
-    console.log("iofengjkrnmbhokrejm");
-    console.log("teacher_old",this.oldTeacher);
     const modalSelectElement = document.getElementById('modalSelect') as HTMLSelectElement;
-    console.log("vjegmfjkrmn");
     if (modalSelectElement) {
-      const teacher = modalSelectElement.value;
+      const new_teacher = modalSelectElement.value;
       const subject = this.selectedSubject;
-      console.log("classs",this.class.classname)
-      console.log("subject",subject)
-      this.TeacherService.getByName(this.oldTeacher).then((teacher : any) => {
-        const email = teacher.email;
-        console.log("email",email);
-        const json = {subject: String(subject), class: this.class.classname, email: teacher};
+      this.TeacherService.getByName(this.oldTeacher).then((teacher1: any) => {
+        console.log("old_teacher", teacher1.name)
+        const json = {subject: String(subject), class: this.class.classname, email: teacher1.email};
+        console.log("json", json);
+        console.log("subject", teacher1);
         this.ApiDataService.deleteTeachingAssigment(localStorage.getItem('token'), json).then((response: any) => {
-          console.log(response);
-          this.ApiDataService.getClassTeachers(localStorage.getItem('token'), this.class.classname).then((teachers: any) => {
-            this.classteachers = teachers;
-          });
+          this.TeacherService.getByName(String(new_teacher)).then((teacher2: any) => {
+            const json1 = {subject: String(subject), class: this.class.classname, email: teacher2.email};
+            console.log("new_teacher", teacher2);
+            this.ApiDataService.addTeachingAssigment(localStorage.getItem('token'), json1).then((response: any) => {
+              this.ApiDataService.getClassTeachers(localStorage.getItem('token'), this.class.classname).then((teachers: any) => {
+                this.classteachers = teachers;
+                this.closeEditModal();
+              });
+            });
+          },);
         });
       });
     }

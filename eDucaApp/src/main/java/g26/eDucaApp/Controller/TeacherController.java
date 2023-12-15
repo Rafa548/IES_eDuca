@@ -52,7 +52,9 @@ public class TeacherController {
 
     @GetMapping
     public ResponseEntity<?> getTeachers(@RequestParam(value="email", required = false) String teacherEmail, @RequestParam(value="name", required = false) String teacherName,
-                                         @RequestParam(value="nmec", required = false) Long teacherNmec, @RequestParam(value="school", required = false) String school)
+                                         @RequestParam(value="nmec", required = false) Long teacherNmec, @RequestParam(value="school", required = false) String school,
+                                         @RequestParam(value="subject", required = false) String subject_name)
+
     {
         for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()){
             if (grantedAuthority.getAuthority().equals("ADMIN") || grantedAuthority.getAuthority().equals("TEACHER")) {
@@ -68,7 +70,11 @@ public class TeacherController {
                 } else if (school != null) {
                     List<Teacher> teachers = teacherService.getTeacherBySchool(school);
                     return new ResponseEntity<>(teachers, HttpStatus.OK);
-                }else {
+                }else if (subject_name != null){
+                    List<Teacher> teachers = teacherService.getTeacherBySubject(subject_name);
+                    return new ResponseEntity<>(teachers, HttpStatus.OK);
+                }
+                else {
                     return new ResponseEntity<>(teacherService.getAllTeachers(), HttpStatus.OK);
                 }
             } else {

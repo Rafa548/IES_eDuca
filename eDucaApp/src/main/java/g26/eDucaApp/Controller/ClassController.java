@@ -3,6 +3,7 @@ package g26.eDucaApp.Controller;
 import g26.eDucaApp.Model.Grade;
 import g26.eDucaApp.Model.S_class;
 import g26.eDucaApp.Model.Student;
+import g26.eDucaApp.Model.Subject;
 import g26.eDucaApp.Services.EducaServices;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -32,13 +34,25 @@ public class ClassController {
             @ApiResponse(responseCode = "400", description = "Class already exists", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "403", description = "Forbidden (Not enough authorizations)", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))})
     @PostMapping
-    public ResponseEntity<S_class> createClass(@RequestBody S_class s_class){
+    public ResponseEntity<S_class> createClass(@RequestBody Map<String,String> updates){
         for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
             if (grantedAuthority.getAuthority().equals("ADMIN")) {
-                S_class savedClass = educaServices.createS_class(s_class);
-                if (savedClass == null) {
+                if (!updates.containsKey("classname")) {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
+                String classname = updates.get("classname");
+                S_class s_class = new S_class();
+                s_class.setClassname(classname);
+                s_class.setSchool("Sammple School");
+                s_class.setTeachers(new ArrayList<>());
+                s_class.setSubjects(new ArrayList<>());
+                s_class.setStudents(new ArrayList<>());
+                s_class.setTeaching_assignments(new ArrayList<>());
+                List<Subject> existingSubjects = educaServices.getAllSubjects();
+                for (Subject existingSubject : existingSubjects) {
+                    s_class.getSubjects().add(existingSubject);
+                }
+                S_class savedClass = educaServices.createS_class(s_class);
                 return new ResponseEntity<>(savedClass, HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -138,7 +152,7 @@ public class ClassController {
     @GetMapping("{classname}/{nmec}/{subject}/grade")
     public ResponseEntity<?> getStudentGradeByClassnameAndNmecAndSubject(@PathVariable("classname") String classname, @PathVariable("nmec") Long nmec, @PathVariable("subject") String subject) {
         for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
-            if (grantedAuthority.getAuthority().equals("ADMIN")){
+            if (grantedAuthority.getAuthority().equals("ADMIN")|| grantedAuthority.getAuthority().equals("STUDENT")){
                 S_class s_class = educaServices.getS_classByClassname(classname);
                 List<Student> students = s_class.getStudents();
 

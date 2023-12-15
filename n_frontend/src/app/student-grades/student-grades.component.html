@@ -15,23 +15,41 @@
     <button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
   </div>
 </nav>
+
 <div *ngIf="gradesArray.length > 0">
   <h2>Student Grades</h2>
-  <table>
-    <thead>
-    <tr>
-      <th *ngFor="let subject of gradesArray">{{ subject.name }}</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td *ngFor="let subject of gradesArray">
-        <ul>
-          <li *ngFor="let grade of subject.grades">{{ grade }}</li>
-        </ul>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="grades-tables">
+    <table>
+      <thead>
+      <tr>
+        <th>Subject</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let subject of gradesArray">
+        <tr>
+          <td>{{ subject.name }}</td>
+          <ng-container *ngFor="let grade of subject.grades.slice(0, -1)">
+            <td>{{ grade }}</td>
+          </ng-container>
+        </tr>
+      </ng-container>
+      </tbody>
+    </table>
+    <table class="avg-table">
+      <thead>
+      <tr>
+        <th>Avg</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let subject of gradesArray">
+        <tr>
+          <td>{{ subject.grades.slice(-1)[0] }}</td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </table>
+  </div>
 </div>
 

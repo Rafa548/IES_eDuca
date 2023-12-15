@@ -1,6 +1,6 @@
 package g26.eDucaApp.Repository;
 
-import g26.eDucaApp.Model.Student;
+import  g26.eDucaApp.Model.Student;
 import g26.eDucaApp.Model.Teacher;
 import org.springframework.data.jpa.repository.JpaRepository;
 

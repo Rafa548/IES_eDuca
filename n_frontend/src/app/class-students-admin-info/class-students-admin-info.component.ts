@@ -4,13 +4,16 @@ import { GenTokenService } from '../gen-token.service';
 import { ApiDataService } from '../api-data.service';
 import {Class} from "../class";
 import {NgForOf, NgIf} from "@angular/common";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-class-students-admin-info',
   standalone: true,
   imports: [
     NgForOf,
-    NgIf
+    NgIf,
+    ReactiveFormsModule,
+    FormsModule
   ],
   templateUrl: './class-students-admin-info.component.html',
   styleUrl: './class-students-admin-info.component.css'
@@ -20,13 +23,17 @@ import {NgForOf, NgIf} from "@angular/common";
 export class ClassStudentsAdminInfoComponent {
   classes: any[] = [];
   ApiDataService = inject(ApiDataService);
+  classname: string = '';
+  errorMessage: string = '';
 
 
   constructor(private router: Router) {
-    //console.log(localStorage.getItem('token'));
+    this.fetchData();
+  }
+
+  fetchData(){
     this.ApiDataService.getClasses(localStorage.getItem('token')).then((classes : any[]) => {
       this.classes = classes;
-      //console.log(classes);
     });
   }
 
@@ -37,12 +44,40 @@ export class ClassStudentsAdminInfoComponent {
   deleteClass(event: Event, classname: string) {
     event.stopPropagation();
     this.ApiDataService.deleteClass(localStorage.getItem('token'), classname).then((response : any) => {
-      //console.log(response);
-      this.ApiDataService.getClasses(localStorage.getItem('token')).then((classes : any[]) => {
-        this.classes = classes;
-        //console.log(classes);
-      });
+      this.fetchData();
     });
+  }
 
+  openModal(){
+    const modal = document.getElementById('createModal');
+    if (modal) {
+      modal.style.display = 'block';
+    }
+  }
+
+  saveChanges(){
+    if (!this.classname) {
+      this.errorMessage = 'Class name cannot be empty.';
+      return;
+    }
+    const existingClass = this.classes.find(c => c.classname === this.classname);
+    if (existingClass) {
+      this.errorMessage = 'Class name already exists. Please choose a different name.';
+    } else {
+      this.errorMessage = '';
+      const json = {"classname": this.classname};
+      this.ApiDataService.createClass(localStorage.getItem('token'), json).then((response: any) => {
+        this.fetchData();
+        this.closeCreateModal();
+      });
+    }
+  }
+
+  closeCreateModal(){
+    const modal = document.getElementById('createModal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
   }
 }
+

@@ -72,7 +72,11 @@ export class StudentHomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  
+  redirectToGrades() {
+    this.router.navigate(['student_grades']);
+  }
+
+
 
   updateContentPeriodically() {
     setInterval(() => {

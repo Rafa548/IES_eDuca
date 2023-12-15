@@ -228,4 +228,20 @@ export class ApiDataService {
     const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${item}` } });
     return await data.json() ?? undefined;
   }
+
+  async getAvgGrade(item: string | null, className: string, subject: string, nmec: number): Promise<any> {
+    const url = this.baseURL + '/classes/' + className + '/' + nmec + '/' + subject + '/grade';
+    const data = await fetch(url, {method: 'GET', headers: {Authorization: `Bearer ${item}`}});
+    return await data.text() ?? undefined;
+  }
+
+  async createClass(item: string | null, json: { classname: string; }): Promise<any> {
+    const url = this.baseURL + '/classes';
+    const data = await fetch(url, {
+      method: 'POST',
+      headers: {Authorization: `Bearer ${item}`, 'Content-Type': 'application/json'},
+      body: JSON.stringify(json)
+    });
+    return await data.text() ?? undefined;
+  }
 }
