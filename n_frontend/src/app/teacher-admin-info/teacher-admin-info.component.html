@@ -3,9 +3,9 @@
   <h2>Show Information</h2>
 
   <!-- Buttons to switch content -->
-  <div class="button-group">
-    <button (click)="showProfile()">Profile</button>
-    <button (click)="showGrades()">Grades</button>
+  <div class="btn-group">
+    <button class="btn btn-primary" (click)="showProfile()">Profile</button>
+    <button class="btn btn-primary" (click)="showGrades()">Grades</button>
   </div>
 
   <div *ngIf="selectedContent === 'Profile'" class="content-section">
@@ -43,33 +43,33 @@
       </div>
 
       <div class="container" id="rad">
-        <div class="form-group">
-          <label >Class Subjects of Teacher:</label>
-          <div class="custom-select">
-            <div class="select-box" (click)="toggleDropdown()">
-              <div class="selected-options">
-                <span *ngFor="let option of selectedSubjects" class="selected-option">{{ option }}</span>
+          <div class="form-group">
+            <label >Class Subjects of Teacher:</label>
+            <div class="custom-select">
+              <div class="select-box" (click)="toggleDropdown()">
+                <div class="selected-options">
+                  <span *ngFor="let option of selectedSubjects" class="selected-option">{{ option }}</span>
+                </div>
+                <span class="arrow"></span>
               </div>
-              <span class="arrow"></span>
-            </div>
-            <div class="dropdown-list" [hidden]="!showDropdown">
-              <div *ngFor="let option of teacherSubjects" (click)="toggleOption(option)" class="dropdown-option" [class.selected]="isSelected(option)">
-                {{ option }}
+              <div class="dropdown-list" [hidden]="!showDropdown">
+                <div *ngFor="let option of teacherSubjects" (click)="toggleOption(option)" class="dropdown-option" [class.selected]="isSelected(option)">
+                  {{ option }}
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
 
-        <div class="select">
-          <p>Select Class:
-            <select id="modalSelect" >
-              <option *ngFor="let class of selectedClasses" (click)="updateOptions(class)">{{class}}</option>
-            </select>
-          </p>
-        </div>
+          <div class="select" id="select1">
+            <p>Class:
+              <select id="modalSelect" >
+                <option *ngFor="let class of selectedClasses" (click)="updateOptions(class)">{{class}}</option>
+              </select>
+            </p>
+          </div>
 
-        <button type="submit" (click)="UpdateTeachingAss()">Save</button>
+          <button id="save1" type="submit" (click)="UpdateTeachingAss()">Save</button>
       </div>
 
 
@@ -100,10 +100,11 @@
 
 
 
+  <!-- Grades Section -->
   <div *ngIf="selectedContent === 'Grades'" class="content-section">
     <h3>Subjects & Teachers' Information</h3>
-    <div class="table-container">
-      <table class="grade-table">
+    <div class="table-responsive">
+      <table class="table table-striped">
         <thead>
         <tr>
           <th>Student</th>
@@ -114,7 +115,7 @@
         </thead>
         <tbody>
         <tr *ngFor="let grade of grades; let i = index">
-          <td>{{ grade.student.name}}</td>
+          <td>{{ grade.student.name }}</td>
           <td>{{ grade.student.studentclass.classname }}</td>
           <td>{{ grade.subject.name }}</td>
           <td>{{ grade.grade }}</td>

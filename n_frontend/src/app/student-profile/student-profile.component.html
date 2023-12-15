@@ -21,8 +21,28 @@
 
     <button (click)="updateStudent()">Update</button>
   </div>
-
-  <div *ngIf="!studentData">
-    <p>Loading student data...</p>
+<div *ngIf="studentData" class="container">
+  <h2>{{ studentData.name }}</h2>
+  <p>School:{{studentData.school}}</p>
+  <p>Class: {{ studentData.studentclass.classname }}</p>
+  <div class="text">
+    <label for="email">Email:</label>
+    <input type="text" id="email" [(ngModel)]="studentData.email" name="email" readonly class="text">
   </div>
+  <div class="text1">
+    <label for="nmec">NMEC:</label>
+    <input type="text" id="nmec" [(ngModel)]="studentData.nmec" name="nmec" readonly class="text1">
+  </div>
+
+  <div>
+    <label for="password">New Password:</label>
+    <input type="password" id="password"  name="password" placeholder="Enter new password">
+  </div>
+
+  <button (click)="updateStudent()">Update</button>
+</div>
+
+<div *ngIf="!studentData">
+  <p>Loading student data...</p>
+</div>
 

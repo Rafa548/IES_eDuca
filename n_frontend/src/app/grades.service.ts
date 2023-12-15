@@ -11,8 +11,8 @@ export class GradesService {
   constructor() { }
 
 
-  async getStudentGrades(id:number|undefined): Promise<Grades[]> {
-    const url = this.baseURL + "?student=" + id;
+  async getStudentGrades(nmec:number|undefined): Promise<Grades[]> {
+    const url = this.baseURL + "?nmec=" + nmec;
     const data = await fetch(url,{method: 'GET', headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token')}});
     return await data.json() ?? undefined;
   }
@@ -42,7 +42,6 @@ export class GradesService {
       "email_s": email_s,
       "subject": subject_name
     };
-    console.log("newwwwww grade",new_grade)
     const data = await fetch(url, {
       method: 'POST',
       headers: {

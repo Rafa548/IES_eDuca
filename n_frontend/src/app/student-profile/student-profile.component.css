@@ -1,47 +1,86 @@
+/* Resetting some default styles */
+body, h1, h2, p, ul, li {
+  margin: 0;
+  padding: 0;
+}
+
 .container {
-  max-width: 600px;
+  max-width: 800px;
   margin: auto;
+  padding: 20px;
+  text-align: center; /* Ensure this line is present */
+}
+.text{
+  text-align: center;
+}
+
+.text1{
+  text-align: center;
 }
 
 h2 {
   color: #333;
-}
-
-p {
-  font-size: 18px;
+  font-size: 24px;
   margin-bottom: 20px;
 }
 
+/* Paragraph */
+p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+/* Input Styles */
 input {
-  width: 100%;
-  padding: 8px;
+  width: calc(100% - 16px);
+  padding: 10px;
   box-sizing: border-box;
   margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  font-weight: bold;
 }
 
 #password {
+  width:auto;
   margin-bottom: 15px;
 }
 
+/* Button Styles */
 button {
   background-color: #4CAF50;
   color: white;
-  padding: 10px 15px;
+  padding: 12px 20px;
   border: none;
   cursor: pointer;
   border-radius: 4px;
+  font-size: 16px;
 }
 
+button:hover {
+  background-color: #45a049;
+}
+
+/* Loading */
 .loading {
   text-align: center;
   margin-top: 50px;
 }
 
+/* Read-only Input Styles */
+input[readonly] {
+  border: none;
+  background-color: transparent;
+  outline: none;
+  cursor: default;
+}
+
+/* Navbar Styles */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -85,7 +124,7 @@ button {
   background-color: #007bff;
   color: #fff;
   border: none;
-  padding: 8px 16px;
+  padding: 10px 16px;
   font-size: 14px;
   cursor: pointer;
 }
