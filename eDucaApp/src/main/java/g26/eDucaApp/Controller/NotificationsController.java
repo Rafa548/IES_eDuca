@@ -23,6 +23,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -34,6 +37,12 @@ public class NotificationsController {
     @Autowired
     private NotificationRepository notificationRepository;
 
+
+    @Operation(summary = "Get Notifications of a specific Class")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Notifications found", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Notifications not found", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+    })
     @GetMapping("/class/{classname}") //not used
     public ResponseEntity<List<Notification>> getNotificationsByClassname(@PathVariable("classname") String classname, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         try {
@@ -42,7 +51,9 @@ public class NotificationsController {
 
             Map<String, Object> response = new HashMap<>();
             response.put("notifications", notifications);
-            
+            if(notifications.isEmpty()){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
             return new ResponseEntity<>(notifications, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -50,6 +61,11 @@ public class NotificationsController {
         }
     }
 
+    @Operation(summary = "Get Notifications of a specific User")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Notifications found", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "404", description = "Notifications not found", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+    })
     @GetMapping("/notification/{user}") //not used
     public ResponseEntity<List<Notification>> getNotificationsByUser(@PathVariable("user") String user, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         try {
@@ -58,6 +74,9 @@ public class NotificationsController {
 
             Map<String, Object> response = new HashMap<>();
             response.put("notifications", notifications);
+            if(notifications.isEmpty()){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
             
             return new ResponseEntity<>(notifications, HttpStatus.OK);
 
@@ -66,6 +85,12 @@ public class NotificationsController {
         }
     }
 
+    @Operation(summary = "Create Notification")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Notification created", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "Invalid request body", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "409", description = "Notification already exists", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+    })
     @PostMapping("/notification")
     public ResponseEntity<Notification> createNotification(@RequestBody Map<String, String> body) {
         for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
