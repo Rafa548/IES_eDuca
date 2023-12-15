@@ -5,6 +5,8 @@ import g26.eDucaApp.Model.S_class;
 import g26.eDucaApp.Model.Teacher;
 import g26.eDucaApp.Services.EducaServices;
 import lombok.AllArgsConstructor;
+
+import org.apache.kafka.common.protocol.types.Field.Str;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,16 +25,29 @@ public class TeacherController {
     private EducaServices teacherService;
 
     @PostMapping
-    public ResponseEntity<Teacher> createTeacher(@RequestBody Teacher teacher){
-        for (GrantedAuthority grantedAuthority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()){
-            if (grantedAuthority.getAuthority().equals("ADMIN")) {
-                Teacher savedTeacher = teacherService.createTeacher(teacher);
-                return new ResponseEntity<>(savedTeacher, HttpStatus.CREATED);
-            } else {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    public ResponseEntity<Teacher> createTeacher(@RequestBody Map<String, Object> body){
+        
+        String name = (String) body.get("name");
+        String email = (String) body.get("email");
+        String password = (String) body.get("password");
+        String nmec = (String)body.get("nmec").toString();
+        String school = "SampleSchool";
+        List<S_class> classes = (List<S_class>) body.get("classes");
+        
+
+        Teacher teacher = new Teacher();
+        teacher.setName(name);
+        teacher.setEmail(email);
+        teacher.setPassword(password);
+        teacher.setNmec(Long.parseLong(nmec));
+        teacher.setClasses(classes);
+        teacher.setSchool(school);
+
+        System.out.println(teacher);
+
+        Teacher savedTeacher = teacherService.createTeacher(teacher);
+        return new ResponseEntity<>(savedTeacher, HttpStatus.CREATED);
+
     }
 
     @GetMapping("{nmec}")

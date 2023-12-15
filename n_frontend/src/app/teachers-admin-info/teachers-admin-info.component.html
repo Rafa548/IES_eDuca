@@ -2,6 +2,7 @@
 <h2>All Teachers</h2>
 
 <div class="table-container">
+  <button class="button" (click)="showAddTeacherModal()">Add Teacher</button>
   <table class="info-table">
     <thead>
     <tr>
@@ -37,6 +38,39 @@
     <!-- Add more fields as needed -->
     <button (click)="saveChanges()">Save Changes</button>
     <button (click)="closeEditModal()">Close</button>
+  </div>
+</div>
+
+<div id="addModal" class="modal">
+  <div class="modal-content">
+    <h2>Add Teacher</h2>
+    <div class="input-group">
+      <div class="input">
+        <p>Name: <input id="name1" type="text"></p>
+        <p>Email: <input id="email1" type="email"></p>
+        <p>Password: <input id="password1" type="password"></p>
+      </div>
+      
+      <div class="form-group">
+        <label >Teacher Subjects:</label>
+        <div class="custom-select">
+          <div class="select-box" (click)="toggleDropdown3()">
+            <div class="selected-options">
+              <span *ngFor="let option of teacherSubjects" class="selected-option">{{ option.name }}</span>
+            </div>
+            <span class="arrow"></span>
+          </div>
+          <div class="dropdown-list" [hidden]="!showDropdown3">
+            <div *ngFor="let option of subjects" (click)="toggleOption3(option)" class="dropdown-option" [class.selected]="isSelected3(option)">
+              {{ option.name }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Add more fields as needed -->
+    <button (click)="addTeacher()">Save Changes</button>
+    <button (click)="closeAddModal()">Close</button>
   </div>
 </div>
 

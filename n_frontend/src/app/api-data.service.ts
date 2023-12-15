@@ -17,6 +17,15 @@ export class ApiDataService {
     return await data.json() ?? undefined;
   }
 
+  async getSubjects(token: string|null): Promise<any[]> {
+    const url = this.baseURL + '/subjects';
+    //console.log(url);
+    const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${token}` } });
+    //console.log(data.json());
+    return await data.json() ?? undefined;
+  }
+
+
   async sendMsg(token: string|null, msg: string, receiver: string): Promise<any> {
     const url = this.baseURL + '/notification';
     //console.log(url);
@@ -44,6 +53,7 @@ export class ApiDataService {
     const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${token}` } });
     return await data.text() ?? undefined;
   }
+
 
   async getStudentByEmail(token: string|null, email: string): Promise<any> {
     const url = this.baseURL + '/students?email=' + email;
@@ -218,5 +228,11 @@ export class ApiDataService {
     const url = this.baseURL + '/teaching_assignments?class_name=' + className;
     const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${item}` } });
     return await data.json() ?? undefined;
+  }
+
+  async addTeacher(item: string | null, teacher: any):Promise<any>{
+    const url = this.baseURL + '/teachers';
+    const data = await fetch(url, {method: 'POST', headers: { Authorization: `Bearer ${item}`, 'Content-Type': 'application/json' }, body: JSON.stringify(teacher) });
+    return await data.text() ?? undefined;
   }
 }
