@@ -8,11 +8,12 @@ import {FormsModule} from "@angular/forms";
 import {GradesService} from "../grades.service";
 import { json } from 'stream/consumers';
 import { ApiDataService } from '../api-data.service';
+import { TeacherNavbarComponent } from '../teacher-navbar/teacher-navbar.component';
 
 @Component({
   selector: 'app-teacher-class-students',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TeacherNavbarComponent],
   templateUrl: './teacher-class-students.component.html',
   styleUrls: ['./teacher-class-students.component.css'],
 })

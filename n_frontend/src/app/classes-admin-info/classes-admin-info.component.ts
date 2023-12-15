@@ -5,6 +5,7 @@ import {Class} from "../class";
 import {Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {TeacherService} from "../teacher.service";
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-classes-admin-info',
@@ -12,7 +13,8 @@ import {TeacherService} from "../teacher.service";
   imports: [
     NgIf,
     NgForOf,
-    FormsModule
+    FormsModule,
+    NavbarComponent
   ],
   templateUrl: './classes-admin-info.component.html',
   styleUrl: './classes-admin-info.component.css'

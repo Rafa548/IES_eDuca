@@ -3,10 +3,12 @@ import {TeacherService} from "../teacher.service";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import { CommonModule } from '@angular/common';
 import {Router} from '@angular/router';
+import { TeacherNavbarComponent } from '../teacher-navbar/teacher-navbar.component';
+
 @Component({
   selector: 'app-teacher-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TeacherNavbarComponent],
   templateUrl: './teacher-home.component.html',
   styleUrl: './teacher-home.component.css'
 })

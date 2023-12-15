@@ -3,6 +3,7 @@ import {FormsModule} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {Router} from "@angular/router";
 import { ApiDataService } from '../api-data.service';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 
 @Component({
@@ -11,7 +12,8 @@ import { ApiDataService } from '../api-data.service';
   imports: [
     FormsModule,
     NgForOf,
-    NgIf
+    NgIf,
+    NavbarComponent
   ],
   templateUrl: './teacher-admin-info.component.html',
   styleUrl: './teacher-admin-info.component.css'

@@ -4,13 +4,15 @@ import {TeacherService} from "../teacher.service";
 import {FormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {ApiDataService} from "../api-data.service";
+import { TeacherNavbarComponent } from '../teacher-navbar/teacher-navbar.component';
 
 @Component({
   selector: 'app-teacher-profile',
   standalone: true,
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
+    TeacherNavbarComponent
   ],
   templateUrl: './teacher-profile.component.html',
   styleUrl: './teacher-profile.component.css'

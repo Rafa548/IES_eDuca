@@ -4,13 +4,16 @@ import { GenTokenService } from '../gen-token.service';
 import { ApiDataService } from '../api-data.service';
 import {Class} from "../class";
 import {NgForOf, NgIf} from "@angular/common";
+import { NavbarComponent } from '../navbar/navbar.component';
+
 
 @Component({
   selector: 'app-class-students-admin-info',
   standalone: true,
   imports: [
     NgForOf,
-    NgIf
+    NgIf,
+    NavbarComponent
   ],
   templateUrl: './class-students-admin-info.component.html',
   styleUrl: './class-students-admin-info.component.css'

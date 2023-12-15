@@ -3,13 +3,15 @@ import {NgForOf} from "@angular/common";
 import {ReactiveFormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
 import { ApiDataService } from '../api-data.service';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-teachers-admin-info',
   standalone: true,
     imports: [
         NgForOf,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NavbarComponent
     ],
   templateUrl: './teachers-admin-info.component.html',
   styleUrl: './teachers-admin-info.component.css'

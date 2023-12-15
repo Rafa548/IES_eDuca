@@ -4,11 +4,12 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { StudentService } from '../student.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { StudentNavbarComponent } from '../student-navbar/student-navbar.component';
 
 @Component({
   selector: 'app-student-grades',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, StudentNavbarComponent],
   templateUrl: './student-grades.component.html',
   styleUrls: ['./student-grades.component.css'],
 })
