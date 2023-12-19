@@ -519,6 +519,8 @@ public class EducaServices {
             notificationService.sendNotificationToClass(notification, notification.getReceiver());
             return notificationRepository.save(notification);
         }
+        Notification savednotification = notificationRepository.save(notification);
+        System.out.println(savednotification);
         notificationService.sendNotification(notification);
         return notificationRepository.save(notification);
     }
@@ -591,6 +593,16 @@ public class EducaServices {
             return null;
         } else {
             return grades.get();
+        }
+    }
+
+    public List<Grade> getGradeByStudentAndSubject(Student student, Subject subject) {
+        List<Grade> grades = grade_repo.findByStudentAndSubject(student, subject);
+
+        if (grades.isEmpty()) {
+            return null;
+        } else {
+            return grades;
         }
     }
 

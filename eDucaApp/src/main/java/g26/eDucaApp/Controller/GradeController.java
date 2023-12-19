@@ -45,14 +45,27 @@ public class GradeController {
         int gradeValue = Integer.parseInt(gradeStr);
 
         Student student = studentService.getStudentByEmail(email_s);
+        if (student == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         Subject subject = subjectServices.getSubjectByName(subject_name);
+        if (subject == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         Teacher teacher = teacherServices.getTeacherByEmail(email_t);
+        if (teacher == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         Grade newGrade = new Grade();
         newGrade.setStudent(student);
         newGrade.setSubject(subject);
         newGrade.setTeacher(teacher);
         newGrade.setGrade(gradeValue);
+
+        if (gradeService.getGradeByStudentAndSubject(student, subject).size() > 19) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }   
 
         gradeServices.createGrade(newGrade);
         return new ResponseEntity<>(newGrade, HttpStatus.CREATED);

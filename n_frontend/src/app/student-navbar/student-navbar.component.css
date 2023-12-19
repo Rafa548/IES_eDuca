@@ -30,6 +30,7 @@
     overflow-y: auto;
     width: max-content;
     flex-direction: column-reverse;
+    z-index: 1111;
   }
   
   .custom-dropdown.show {

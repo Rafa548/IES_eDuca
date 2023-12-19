@@ -260,4 +260,13 @@ export class ApiDataService {
     });
     return await data.text() ?? undefined;
   }
+
+  async getNotifications(item: string | null, user: string | null): Promise<any> {
+    const url = this.baseURL + '/notification/' + user;
+    const data = await fetch(url, {
+      method: 'GET',
+      headers: {Authorization: `Bearer ${item}`}
+    });
+    return await data.json() ?? undefined;
+  }
 }

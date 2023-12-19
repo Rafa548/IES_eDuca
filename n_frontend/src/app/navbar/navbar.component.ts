@@ -1,8 +1,9 @@
 import { NgIf } from '@angular/common';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { WebSocketService } from '../websocket.service';
 import { CommonModule, NgFor} from '@angular/common';
+import { ApiDataService } from '../api-data.service';
 
 
 
@@ -16,6 +17,7 @@ import { CommonModule, NgFor} from '@angular/common';
 })
 export class NavbarComponent {
   webSocketService: WebSocketService;
+  apiDataService = inject(ApiDataService);
   isLoggedIn: boolean = localStorage.getItem('token') !== null;
   showDropdown: boolean = false;
   showNotifications = false;
@@ -37,6 +39,13 @@ export class NavbarComponent {
   ngOnInit(): void {
     console.log('Connecting to WebSocket...');
     this.webSocketService.connect(this.onMessage.bind(this));
+
+
+    this.apiDataService.getNotifications(localStorage.getItem('token'), localStorage.getItem('user')).then((notifications: any) => {
+      this.notifications = notifications;
+      console.log(notifications);
+    });
+
 
     // Subscribe to the class (replace 'ClassName' with the actual class name)
     //this.subscription = this.webSocketService.subscribeToClass('ClassName');

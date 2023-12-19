@@ -50,8 +50,24 @@ public class NotificationsController {
         }
     }
 
-    @GetMapping("/notification/{user}") //not used
-    public ResponseEntity<List<Notification>> getNotificationsByUser(@PathVariable("user") String user, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    @GetMapping("/notifications")
+    public ResponseEntity<List<Notification>> getAllNotifications(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1000") int size) {
+        try {
+            List<Notification> notifications = new ArrayList<Notification>();
+            notifications = notificationRepository.findAll(PageRequest.of(page, size)).getContent();
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("notifications", notifications);
+            
+            return new ResponseEntity<>(notifications, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    } 
+
+    @GetMapping("/notification/{user}")
+    public ResponseEntity<List<Notification>> getNotificationsByUser(@PathVariable("user") String user, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10000") int size) {
         try {
             List<Notification> notifications = new ArrayList<Notification>();
             notifications = notificationRepository.findByReceiver(user, PageRequest.of(page, size));
@@ -86,7 +102,7 @@ public class NotificationsController {
                     if (type != null) {
                         notification.setType(NotificationType.valueOf(type));
                     }
-                    //System.out.println(notification);
+                    System.out.println(notification);
                     Notification _notification = EducaServices.createNotification(notification);
                     //System.out.println(_notification);
                     return new ResponseEntity<>(_notification, HttpStatus.CREATED);

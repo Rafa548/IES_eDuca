@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Date;
 import java.util.List;
 
-@Repository
+
 public interface NotificationRepository extends MongoRepository<Notification, String>{
     
     List<Notification> findByType(NotificationType type, Pageable pageable);
