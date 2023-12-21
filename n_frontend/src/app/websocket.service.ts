@@ -22,7 +22,7 @@ export class WebSocketService {
     const token = localStorage.getItem('token');
     
     this.stompClient = new Client({
-      brokerURL: 'ws://localhost:8080/ws',
+      brokerURL: 'ws://deti-ies-12.ua.pt:8080/ws',
       connectHeaders: {
         Authorization: `Bearer ${token}`,
       },
