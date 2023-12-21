@@ -4,12 +4,13 @@ import {JwtHelperService} from "@auth0/angular-jwt";
 import { CommonModule, NgFor} from '@angular/common';
 import { WebSocketService } from '../websocket.service';
 import { Router } from '@angular/router';
+import { StudentNavbarComponent } from '../student-navbar/student-navbar.component';
 
 
 @Component({
   selector: 'app-student-home',
   standalone: true,
-  imports: [CommonModule, NgFor],
+  imports: [CommonModule, NgFor, StudentNavbarComponent],
   templateUrl: './student-home.component.html',
   styleUrl: './student-home.component.css'
 
@@ -72,7 +73,11 @@ export class StudentHomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  
+  redirectToGrades() {
+    this.router.navigate(['student_grades']);
+  }
+
+
 
   updateContentPeriodically() {
     setInterval(() => {

@@ -40,3 +40,15 @@
 .card-content {
   padding: 15px;
 }
+
+.button {
+  padding: 8px 15px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:nth-child(2) {
+  background-color: #4caf50;
+  color: white;
+}

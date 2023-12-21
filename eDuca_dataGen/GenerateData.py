@@ -12,9 +12,9 @@ def generate_random_string(length):
 
 def main():
     
-    consumer = KafkaConsumer(bootstrap_servers=['localhost:9092'], auto_offset_reset='earliest', enable_auto_commit=True, group_id='my-group', value_deserializer=lambda x: json.loads(x.decode('utf-8')))
+    consumer = KafkaConsumer(bootstrap_servers=['kafka:29092'], auto_offset_reset='earliest', enable_auto_commit=True, group_id='my-group', value_deserializer=lambda x: json.loads(x.decode('utf-8')))
 
-    producer = KafkaProducer(bootstrap_servers=['localhost:9092'], value_serializer=lambda x: json.dumps(x).encode('utf-8'))
+    producer = KafkaProducer(bootstrap_servers=['kafka:29092'], value_serializer=lambda x: json.dumps(x).encode('utf-8'))
 
     
     
@@ -193,14 +193,14 @@ def main():
         for message in consumer:
                 print(message.value)
 
-                admin_token_url = "http://localhost:8080/auth/signin"
+                admin_token_url = "http://spring:8080/auth/signin"
                 data = {
                     'email': "admin@gmail.com",
                     'password': "admin"
                 }
 
                 
-                response = requests.post(admin_token_url, json=data)
+                response = requests.post(admin_token_url, json=data) 
                 token = response.json().get('token')
 
                 headers = {
@@ -211,7 +211,7 @@ def main():
                 
 
                 if message.value['type'] == 'init':
-                    subjects_api_url = "http://localhost:8080/subjects"
+                    subjects_api_url = "http://spring:8080/subjects"
                     current_subjects = requests.get(subjects_api_url,headers=headers).json()
                     subjects_messages = []
                     
@@ -248,7 +248,7 @@ def main():
                     
 
 
-                    classes_api_url = "http://localhost:8080/classes"
+                    classes_api_url = "http://spring:8080/classes"
                     current_classes = requests.get(classes_api_url,headers=headers).json()
                     classes_messages = []
                     for class_ in class_objects:
@@ -286,7 +286,7 @@ def main():
                         producer.send(send_topic, class_json)
                             
 
-                    students_api_url = "http://localhost:8080/students"
+                    students_api_url = "http://spring:8080/students"
                     current_students = requests.get(students_api_url,headers=headers).json()
                     students_messages = []
 
@@ -327,7 +327,7 @@ def main():
                         producer.send(send_topic, student_json)
                     
                     
-                    teachers_api_url = "http://localhost:8080/teachers"
+                    teachers_api_url = "http://spring:8080/teachers"
                     current_teachers = requests.get(teachers_api_url,headers=headers).json()
                     teachers_messages = []
                     for teacher in teachers:
@@ -372,7 +372,7 @@ def main():
                     for teacher_json in teachers_messages:
                         producer.send(send_topic, teacher_json)
 
-                    assigments_api_url = "http://localhost:8080/teaching_assignments"
+                    assigments_api_url = "http://spring:8080/teaching_assignments"
                     current_assigments = requests.get(assigments_api_url,headers=headers).json()
                     assigments_messages = []
                     for assigment in teacher_assignment:
@@ -411,7 +411,7 @@ def main():
                 if message.value['type'] == 'periodic':
                     
 
-                    std_progress_api_url = "http://localhost:8080/progress/insertion/students"
+                    std_progress_api_url = "http://spring:8080/progress/insertion/students"
                     response = requests.get(std_progress_api_url,headers=headers)
                     while response.status_code != 200:
                         response = requests.get(std_progress_api_url,headers=headers)
@@ -421,9 +421,9 @@ def main():
                         response = requests.get(std_progress_api_url,headers=headers)
                         std_progress = response.json()
                         time.sleep(1)
-                    students_api_url = "http://localhost:8080/students"
+                    students_api_url = "http://spring:8080/students"
                     current_students = requests.get(students_api_url,headers=headers).json()
-                    class_progress_api_url = "http://localhost:8080/progress/insertion/classes"
+                    class_progress_api_url = "http://spring:8080/progress/insertion/classes"
                     response = requests.get(class_progress_api_url,headers=headers)
                     while response.status_code != 200:
                         response = requests.get(class_progress_api_url,headers=headers)
@@ -433,9 +433,9 @@ def main():
                         response = requests.get(class_progress_api_url,headers=headers)
                         class_progress = response.json()
                         time.sleep(1)
-                    class_api_url = "http://localhost:8080/classes"
+                    class_api_url = "http://spring:8080/classes"
                     current_classes = requests.get(class_api_url,headers=headers).json()
-                    teacher_progress_api_url = "http://localhost:8080/progress/insertion/teachers"
+                    teacher_progress_api_url = "http://spring:8080/progress/insertion/teachers"
                     response = requests.get(teacher_progress_api_url,headers=headers)
                     while response.status_code != 200:
                         response = requests.get(teacher_progress_api_url,headers=headers)
@@ -445,9 +445,9 @@ def main():
                         response = requests.get(teacher_progress_api_url,headers=headers)
                         teacher_progress = response.json()
                         time.sleep(1)
-                    teacher_api_url = "http://localhost:8080/teachers"
+                    teacher_api_url = "http://spring:8080/teachers"
                     current_teachers = requests.get(teacher_api_url,headers=headers).json()
-                    subject_progress_api_url = "http://localhost:8080/progress/insertion/subjects"
+                    subject_progress_api_url = "http://spring:8080/progress/insertion/subjects"
                     response = requests.get(subject_progress_api_url,headers=headers)
                     while response.status_code != 200:
                         response = requests.get(subject_progress_api_url,headers=headers)
@@ -457,9 +457,9 @@ def main():
                         response = requests.get(subject_progress_api_url,headers=headers)
                         subject_progress = response.json()
                         time.sleep(1)
-                    subjects_api_url = "http://localhost:8080/subjects"
+                    subjects_api_url = "http://spring:8080/subjects"
                     current_subjects = requests.get(subjects_api_url,headers=headers).json()
-                    assigment_progress_api_url = "http://localhost:8080/progress/insertion/assigments"
+                    assigment_progress_api_url = "http://spring:8080/progress/insertion/assigments"
                     response = requests.get(assigment_progress_api_url)
                     while response.status_code != 200:
                         response = requests.get(assigment_progress_api_url,headers=headers)
@@ -469,9 +469,9 @@ def main():
                         response = requests.get(assigment_progress_api_url,headers=headers)
                         assigment_progress = response.json()
                         time.sleep(1)
-                    assigments_api_url = "http://localhost:8080/teaching_assignments"
+                    assigments_api_url = "http://spring:8080/teaching_assignments"
                     current_assigments = requests.get(assigments_api_url,headers=headers).json()
-                    """ grade_progress_api_url = "http://localhost:8080/progress/insertion/grades"
+                    """ grade_progress_api_url = "http://spring:8080/progress/insertion/grades"
                     response = requests.get(grade_progress_api_url)
                     while response.status_code != 200:
                         response = requests.get(grade_progress_api_url)
@@ -484,7 +484,7 @@ def main():
                     max_grades_number = 20
                     grades = {}
                     new_grades = []
-                    grades_api_url = "http://localhost:8080/grades"
+                    grades_api_url = "http://spring:8080/grades"
                     current_grades = requests.get(grades_api_url,headers=headers).json()
 
                     for existing_grade in current_grades:

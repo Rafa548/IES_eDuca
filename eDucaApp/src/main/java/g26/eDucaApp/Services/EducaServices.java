@@ -139,6 +139,7 @@ public class EducaServices {
                                 sum += grade.getGrade();
                             }
                             double median = sum / grades.size();
+                            median = Math.round(median * 100.0) / 100.0;
                             if (median < 10) {
                                 String median1 = Double.toString(median);
                                 String message = String.format("Your median of %s is too low: %s", subject.getName(), median1);
@@ -182,6 +183,7 @@ public class EducaServices {
                             sum += grade.getGrade();
                         }
                         double median = sum / Subjectgrades.size();
+                        median = Math.round(median * 100.0) / 100.0;
                         if (median < 10) {
                             String median1 = Double.toString(median);
                             String message = String.format("The median of %s in %s is too low: %s", s_class.getClassname(), subject.getName(), median1);
@@ -267,6 +269,16 @@ public class EducaServices {
         }
         Teacher teacher = teacher_repo.findByNmec(n_mec).get();
         teacher_repo.delete(teacher);
+    }
+
+    public Teacher updateTeacher(Teacher teacher){
+        Teacher existingTeacher = teacher_repo.findById(teacher.getId()).get();
+        existingTeacher.setName(teacher.getName());
+        existingTeacher.setEmail(teacher.getEmail());
+        existingTeacher.setNmec(teacher.getNmec());
+        existingTeacher.setSchool(teacher.getSchool());
+        Teacher updatedTeacher = teacher_repo.save(existingTeacher);
+        return updatedTeacher;
     }
 
     //----------------------------------------------------------------//
@@ -507,6 +519,8 @@ public class EducaServices {
             notificationService.sendNotificationToClass(notification, notification.getReceiver());
             return notificationRepository.save(notification);
         }
+        Notification savednotification = notificationRepository.save(notification);
+        System.out.println(savednotification);
         notificationService.sendNotification(notification);
         return notificationRepository.save(notification);
     }
@@ -579,6 +593,16 @@ public class EducaServices {
             return null;
         } else {
             return grades.get();
+        }
+    }
+
+    public List<Grade> getGradeByStudentAndSubject(Student student, Subject subject) {
+        List<Grade> grades = grade_repo.findByStudentAndSubject(student, subject);
+
+        if (grades.isEmpty()) {
+            return null;
+        } else {
+            return grades;
         }
     }
 

@@ -3,13 +3,16 @@ import {JwtHelperService} from "@auth0/angular-jwt";
 import {TeacherService} from "../teacher.service";
 import {FormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
+import {ApiDataService} from "../api-data.service";
+import { TeacherNavbarComponent } from '../teacher-navbar/teacher-navbar.component';
 
 @Component({
   selector: 'app-teacher-profile',
   standalone: true,
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
+    TeacherNavbarComponent
   ],
   templateUrl: './teacher-profile.component.html',
   styleUrl: './teacher-profile.component.css'
@@ -18,7 +21,10 @@ export class TeacherProfileComponent implements OnInit, OnDestroy{
   private TeacherService = inject(TeacherService);
   teacherData: any = {};
   private alive: boolean = true;
+  private ApiDataService = inject(ApiDataService);
+
   constructor() {}
+  
 
   ngOnInit() {
     this.fetchData();
@@ -55,7 +61,18 @@ export class TeacherProfileComponent implements OnInit, OnDestroy{
 
   updateTeacher() {
     const password = document.getElementById('password') as HTMLInputElement;
-    console.log("aaaaaaaaaaaaaaaa",password.value);
+    const name = this.teacherData.name;
+    const email = document.getElementById('email') as HTMLInputElement;
+    const nmec = document.getElementById('nmec') as HTMLInputElement;
+   
+
+    const json = { name : name.value, email : email.value, password : password.value, nmec : nmec.value};
+
+
+    this.ApiDataService.updateTeacher(localStorage.getItem('token'), json).then((response : any) => {
+     
+    });
+    
   }
 
 }

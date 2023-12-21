@@ -1,8 +1,9 @@
+<app-navbar></app-navbar>
 <div class="container">
   <h2>Classes</h2>
 
   <!-- Add Class button -->
-  <button class="add-button">Add Class</button>
+  <button class="add-button" (click)="openModal()">Add Class</button>
 
   <!-- Display classes information as smaller cards in rows -->
   <div class="class-row">
@@ -12,8 +13,27 @@
 
       <!-- Delete button with Font Awesome trash icon -->
       <button class="delete-button" (click)="deleteClass($event, classItem.classname)">
-        <i class="fas fa-trash"></i>
+        <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
+  </div>
+</div>
+
+<div id="createModal" class="modal">
+  <div class="modal-content">
+    <div class="input-group">
+      <div class="select">
+        <p>Create Class</p>
+      </div>
+    </div>
+    <div class="input-group">
+      <label for="classname">Classname:</label>
+      <input type="text" id="classname" [(ngModel)]="classname" placeholder="Enter classname" />
+    </div>
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+    <button (click)="saveChanges()">Save Changes</button>
+    <button (click)="closeCreateModal()">Close</button>
   </div>
 </div>

@@ -4,12 +4,13 @@ import { JwtHelperService } from "@auth0/angular-jwt";
 import { FormsModule } from "@angular/forms";
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { StudentNavbarComponent } from '../student-navbar/student-navbar.component';
 
 @Component({
   selector: 'app-student-profile',
   standalone: true,
   imports: [
-    FormsModule, CommonModule
+    FormsModule, CommonModule, StudentNavbarComponent
   ],
   templateUrl: './student-profile.component.html',
   styleUrl: './student-profile.component.css'

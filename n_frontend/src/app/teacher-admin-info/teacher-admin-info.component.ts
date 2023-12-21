@@ -3,6 +3,7 @@ import {FormsModule} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {Router} from "@angular/router";
 import { ApiDataService } from '../api-data.service';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 
 @Component({
@@ -11,7 +12,8 @@ import { ApiDataService } from '../api-data.service';
   imports: [
     FormsModule,
     NgForOf,
-    NgIf
+    NgIf,
+    NavbarComponent
   ],
   templateUrl: './teacher-admin-info.component.html',
   styleUrl: './teacher-admin-info.component.css'
@@ -44,16 +46,22 @@ export class TeacherAdminInfoComponent {
               this.teacherSubjects.push(this.teacher.subjects[i].name);
         }
         for (let i = 0; i < this.teacher.classes.length; i++) {
-            if ( i == 0)
+            if ( i == 0) {}
               this.selectedClass = this.teacher.classes[i].classname;
             this.selectedClasses.push(this.teacher.classes[i].classname);
         }
+        //console.log(this.teacherSubjects);
+        //console.log(this.selectedClasses);
         this.ApiDataService.getTeachingAssigmments(localStorage.getItem('token')).then((teachingAssigmments : any[]) => {
           this.selectedSubjects = [];
           for (let i = 0; i < teachingAssigmments.length; i++) {
             if (teachingAssigmments[i].teacher.nmec == this.TeacherNmec) {
-              if (teachingAssigmments[i].sclass.classname == this.selectedClass)
+              if (teachingAssigmments[i].sclass.classname == this.selectedClass){
+                this.initialSelectedSubjects.push(teachingAssigmments[i].subject.name);
                 this.selectedSubjects.push(teachingAssigmments[i].subject.name);
+              }
+
+
             }
 
 
@@ -224,6 +232,8 @@ export class TeacherAdminInfoComponent {
   }
 
   UpdateTeachingAss() {
+    //console.log(this.selectedSubjects);
+    //console.log(this.initialSelectedSubjects);
     for (let i = 0; i < this.selectedSubjects.length; i++) {
       if (!this.initialSelectedSubjects.includes(this.selectedSubjects[i])) {
         //console.log("add");

@@ -3,6 +3,7 @@ import {FormsModule} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {Router} from "@angular/router";
 import { ApiDataService } from '../api-data.service';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 interface Option {
   value: string;
@@ -13,7 +14,8 @@ interface Option {
   standalone: true,
   imports: [FormsModule,
     NgForOf,
-    NgIf],
+    NgIf,
+    NavbarComponent],
   templateUrl: './student-admin-info.component.html',
   styleUrl: './student-admin-info.component.css'
 })

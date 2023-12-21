@@ -1,0 +1,142 @@
+.notification-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;  
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 4px;
+    display: none;
+  }
+  
+  .notification-dropdown.show {
+    display: block;
+  }
+  
+  
+  .navbar-actions {
+    display: flex;
+    align-items: center;
+  }
+  
+  .custom-dropdown {
+    display: none;
+    position: absolute;
+    
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-height: 400px;
+    overflow-y: auto;
+    width: max-content;
+    flex-direction: column-reverse;
+    z-index: 1111;
+  }
+  
+  .custom-dropdown.show {
+    display: flex;
+    
+    
+  }
+  
+  .notification-item {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    flex-grow: 1;
+  }
+  
+  
+  .dropdown {
+    margin-left: 20px; /* Adjust the margin as needed */
+    right: 0;
+  }
+  
+  /* Add your custom styles as needed */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-logo a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .button {
+    background-color: #282828;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #434242;
+  }
+  
+  .navbar-links {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar-links li {
+    margin-right: 20px;
+  }
+  
+  .navbar-links a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+  
+  .navbar-links a:hover {
+    color: #ffcc00;
+  }
+  
+  .navbar-actions button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .navbar-actions button:hover {
+    background-color: #0056b3;
+  }
+  
+  .notification-item {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .scroll-container {
+    flex: 1; /* Fill available space */
+    overflow-y: auto; /* Enable vertical scrolling for this container */
+  }
+  
+  .notification-content {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .message {
+    flex-grow: 1;
+  }
+  
+  .created-date {
+    margin-left: 10px;
+  }
+  
