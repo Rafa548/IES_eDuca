@@ -8,89 +8,43 @@
   flex-wrap: wrap;
   justify-content: space-around;
   margin-top: 20px;
+  
 }
 
-/* Style for each card */
 .card {
-  width: calc(25% - 20px);  /* 25% width with margin between cards */
+  width: calc(25% - 20px);
   margin: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 15px;  /* Rounded corners */
-  overflow: hidden;  /* Ensure rounded corners are applied */
-  transition: transform 0.3s ease-in-out;  /* Hover animation */
+  border-radius: 15px;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
 }
 
-/* Hover effect for the card */
 .card:hover {
-  transform: scale(1.05);  /* Scale the card on hover */
+  transform: scale(1.05);
 }
 
-/* Style for card body */
 .card-body {
   padding: 1.25rem;
 }
 
-/* Style for card title */
 .card-title {
   font-size: 1.25rem;
   font-weight: bold;
 }
 
-/* Style for the image in the card */
 .card-img-top {
-  max-height: 250px;  /* Adjust the max-height as needed */
+  max-height: 250px;
   object-fit: cover;
-  border-radius: 15px 15px 0 0;  /* Rounded corners for the top of the image */
+  border-radius: 15px 15px 0 0;
 }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #333;
-  padding: 10px 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.welcome-container {
+  margin: 20px;
 }
 
-.navbar-logo a {
-  text-decoration: none;
-  color: #fff;
-  font-size: 24px;
-  font-weight: bold;
+.left-aligned {
+  text-align: left;
 }
 
-.navbar-links {
-  list-style: none;
-  display: flex;
-  margin: 0;
-  padding: 0;
-}
 
-.navbar-links li {
-  margin-right: 20px;
-}
-
-.navbar-links a {
-  text-decoration: none;
-  color: #fff;
-  font-weight: bold;
-  font-size: 16px;
-  transition: color 0.3s ease;
-}
-
-.navbar-links a:hover {
-  color: #ffcc00;
-}
-
-.navbar-actions button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.navbar-actions button:hover {
-  background-color: #0056b3;
-}

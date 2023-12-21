@@ -17,6 +17,15 @@ export class ApiDataService {
     return await data.json() ?? undefined;
   }
 
+  async getSubjects(token: string|null): Promise<any[]> {
+    const url = this.baseURL + '/subjects';
+    //console.log(url);
+    const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${token}` } });
+    //console.log(data.json());
+    return await data.json() ?? undefined;
+  }
+
+
   async sendMsg(token: string|null, msg: string, receiver: string): Promise<any> {
     const url = this.baseURL + '/notification';
     //console.log(url);
@@ -44,6 +53,7 @@ export class ApiDataService {
     const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${token}` } });
     return await data.text() ?? undefined;
   }
+
 
   async getStudentByEmail(token: string|null, email: string): Promise<any> {
     const url = this.baseURL + '/students?email=' + email;
@@ -149,12 +159,21 @@ export class ApiDataService {
   }
 
   async updateTeacher(token: string|null , teacher: any): Promise<any> {
-    console.log(teacher);
+    //console.log(teacher);
     const teacherNmec = teacher.nmec;
+    let classes : string[] = [];
     const url = this.baseURL + '/teachers/' + teacherNmec;
-    console.log(url);
+    //console.log(teacher.classes);
+
+    classes = teacher.classes;
+    teacher = {updates:{name: teacher.name, email: teacher.email, password: teacher.password, nmec: teacher.nmec},
+               classes: classes
+              };
+
+    //console.log(url);
     //console.log(JSON.stringify(teacher));
-    const data = await fetch(url, {method: 'PUT', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(teacher) });
+    //console.log(JSON.stringify(classes));
+    const data = await fetch(url, {method: 'PUT', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: (JSON.stringify(teacher)) });
     //console.log(data);
     return await data.text() ?? undefined;
   }
@@ -217,6 +236,37 @@ export class ApiDataService {
   async getClassTeachers(item: string | null, className: string):Promise<any>{
     const url = this.baseURL + '/teaching_assignments?class_name=' + className;
     const data = await fetch(url, {method: 'GET', headers: { Authorization: `Bearer ${item}` } });
+    return await data.json() ?? undefined;
+  }
+
+  async addTeacher(item: string | null, teacher: any):Promise<any>{
+    const url = this.baseURL + '/teachers';
+    const data = await fetch(url, {method: 'POST', headers: { Authorization: `Bearer ${item}`, 'Content-Type': 'application/json' }, body: JSON.stringify(teacher) });
+    return await data.text() ?? undefined;
+  }
+  
+  async getAvgGrade(item: string | null, className: string, subject: string, nmec: number): Promise<any> {
+    const url = this.baseURL + '/classes/' + className + '/' + nmec + '/' + subject + '/grade';
+    const data = await fetch(url, {method: 'GET', headers: {Authorization: `Bearer ${item}`}});
+    return await data.text() ?? undefined;
+  }
+
+  async createClass(item: string | null, json: { classname: string; }): Promise<any> {
+    const url = this.baseURL + '/classes';
+    const data = await fetch(url, {
+      method: 'POST',
+      headers: {Authorization: `Bearer ${item}`, 'Content-Type': 'application/json'},
+      body: JSON.stringify(json)
+    });
+    return await data.text() ?? undefined;
+  }
+
+  async getNotifications(item: string | null, user: string | null): Promise<any> {
+    const url = this.baseURL + '/notification/' + user;
+    const data = await fetch(url, {
+      method: 'GET',
+      headers: {Authorization: `Bearer ${item}`}
+    });
     return await data.json() ?? undefined;
   }
 }

@@ -52,6 +52,7 @@ public class Notification implements Serializable{
                 ", message='" + message + '\'' +
                 ", type=" + type +
                 ", createdDate=" + createdDate +
+                ", receiver='" + receiver + '\'' +
                 '}';
     }
     

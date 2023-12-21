@@ -8,11 +8,12 @@ import {FormsModule} from "@angular/forms";
 import {GradesService} from "../grades.service";
 import { json } from 'stream/consumers';
 import { ApiDataService } from '../api-data.service';
+import { TeacherNavbarComponent } from '../teacher-navbar/teacher-navbar.component';
 
 @Component({
   selector: 'app-teacher-class-students',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TeacherNavbarComponent],
   templateUrl: './teacher-class-students.component.html',
   styleUrls: ['./teacher-class-students.component.css'],
 })
@@ -123,7 +124,9 @@ export class TeacherClassStudentsComponent implements OnInit, OnDestroy {
         this.teacherData = teacher;
         this.TeacherService.getTeacherSubjects(email,classname).then(subjects => {
           this.teachersubjects = subjects;
-          this.selectedSubject = subjects[0].subject.name;
+          if (this.selectedSubject == undefined) 
+             this.selectedSubject = subjects[0].subject.name;
+          
           //console.log("selected subject: ", this.selectedSubject);
           //console.log("subjects: ", this.teachersubjects);
         });

@@ -70,16 +70,25 @@ button:nth-child(2) {
   flex: 1; /* Take remaining space */
 }
 
-.select {
-  margin-left: 20px; /* Adjust spacing between input and select */
-}
 
 /* Style for the select element */
+.select  {
+  width: 100%; /* Full width within its container */
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 80px;
+
+}
+
 .select select {
   width: 100%; /* Full width within its container */
   padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+}
+
+.select p {
+  width: 100%; /* Full width within its container */
+  padding: 8px;
+  margin-top: 32px;
 }
 
 
@@ -133,6 +142,10 @@ button:nth-child(2) {
   transform: scale(1.2); /* Scale the icon slightly on hover */
 }
 
+.action-icon.edit:hover {
+  color: blue; /* Change color on hover */
+  transform: scale(1.2); /* Scale the icon slightly on hover */
+}
 
 .table-container {
   display: flex;

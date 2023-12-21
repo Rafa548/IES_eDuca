@@ -153,3 +153,49 @@ button[type="submit"]:hover {
 .form-group {
   flex: 1;
 }
+
+.container #rad {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-left: -10px;
+}
+
+.container #rad input{
+  width: auto;
+  margin-left: -10px;
+}
+
+/* Updated button styles */
+/* Updated button styles */
+#save1 {
+  padding: 6px 12px;
+  font-size: 12px;
+  margin-top: 68px;
+  background-color: #007bff; /* Adjusted to blue */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#save1:hover {
+  background-color: #0056b3; /* Adjusted hover color */
+}
+
+#select1 {
+  padding: 6px 12px;
+  margin-top: 52px;
+  font-size: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+
+
+
+

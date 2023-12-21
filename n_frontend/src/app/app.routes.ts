@@ -12,6 +12,7 @@ import {StudentGradesComponent} from "./student-grades/student-grades.component"
 import {StudentProfileComponent} from "./student-profile/student-profile.component";
 import {TeacherHomeComponent} from "./teacher-home/teacher-home.component";
 import {TeacherClassStudentsComponent} from "./teacher-class-students/teacher-class-students.component";
+import { TeacherProfileComponent } from './teacher-profile/teacher-profile.component';
 
 
 export const routes: Routes = [
@@ -31,7 +32,7 @@ export const routes: Routes = [
   {path: 'student_grades', component: StudentGradesComponent},
   {path: 'student_profile', component: StudentProfileComponent},
   {path: 'teacher_home', component: TeacherHomeComponent},
-  {path: 'teacher/class/:classname/students', component: TeacherClassStudentsComponent}
-
+  {path: 'teacher/class/:classname/students', component: TeacherClassStudentsComponent},
+  {path: 'teacher/profile', component: TeacherProfileComponent}
 ];
 

@@ -1,21 +1,18 @@
 import { NgIf } from '@angular/common';
-import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { WebSocketService } from '../websocket.service';
 import { CommonModule, NgFor} from '@angular/common';
 import { ApiDataService } from '../api-data.service';
 
-
-
-
 @Component({
-  selector: 'app-navbar',
+  selector: 'app-student-navbar',
   standalone: true,
   imports: [NgIf, NgFor, CommonModule],
-  templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+  templateUrl: './student-navbar.component.html',
+  styleUrl: './student-navbar.component.css'
 })
-export class NavbarComponent {
+export class StudentNavbarComponent {
   webSocketService: WebSocketService;
   apiDataService = inject(ApiDataService);
   isLoggedIn: boolean = localStorage.getItem('token') !== null;
@@ -26,13 +23,14 @@ export class NavbarComponent {
   @Input() childData: string = '';
   notification: boolean = false;
 
+  constructor(private router: Router) {
+    this.webSocketService = new WebSocketService();
+    
+  }
+
   toggleNotifications(event: Event) {
     event.stopPropagation(); // Prevent default event behavior to avoid toggling dropdown and closing it immediately
     this.showNotifications = !this.showNotifications;
-    
-  }
-  constructor(private router: Router) {
-    this.webSocketService = new WebSocketService();
     
   }
 
@@ -40,12 +38,10 @@ export class NavbarComponent {
     console.log('Connecting to WebSocket...');
     this.webSocketService.connect(this.onMessage.bind(this));
 
-
     this.apiDataService.getNotifications(localStorage.getItem('token'), localStorage.getItem('user')).then((notifications: any) => {
       this.notifications = notifications;
       console.log(notifications);
     });
-
 
     // Subscribe to the class (replace 'ClassName' with the actual class name)
     //this.subscription = this.webSocketService.subscribeToClass('ClassName');
@@ -91,17 +87,14 @@ export class NavbarComponent {
 
   redirectTo(path: string): void {
     switch (path) {
-      case 'classes':
-        this.router.navigate(['/admin/class_students']); // Change the route path as needed
+      case 'grades':
+        this.router.navigate(['student_grades']); // Change the route path as needed
         break;
-      case 'students':
-        this.router.navigate(['/admin/students']); // Change the route path as needed
-        break;
-      case 'teachers':
-        this.router.navigate(['/admin/teachers']); // Change the route path as needed
+      case 'profile':
+        this.router.navigate(['student_profile']); // Change the route path as needed
         break;
       case 'home':
-        this.router.navigate(['/admin_dashboard']); // Change the route path as needed
+        this.router.navigate(['student_home']); // Change the route path as needed
         break;
       default:
         break;

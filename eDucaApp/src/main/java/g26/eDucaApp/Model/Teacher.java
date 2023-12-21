@@ -48,7 +48,7 @@ public class Teacher implements UserDetails {
             joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "class_id")
     )
-    @JsonIgnoreProperties({"teachers","students", "subjects", "teaching_assignments"})
+    @JsonIgnoreProperties({"teachers","students", "subjects", "teaching_assignments","grades"})
     private List<S_class> classes;
 
     @ManyToMany

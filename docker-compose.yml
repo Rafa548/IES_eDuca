@@ -5,7 +5,6 @@ services:
   mysql_db:
     image: mysql/mysql-server:5.7
     restart: unless-stopped
-    container_name: eDuca_db	
     environment:
       MYSQL_ROOT_PASSWORD: 'rootpass'
       MYSQL_DATABASE: 'eDuca'
@@ -13,6 +12,8 @@ services:
       MYSQL_PASSWORD: 'springpass'
     ports:
       - "3306:3306"
+    networks:
+      - default
     
   zookeeper:
     image: confluentinc/cp-zookeeper:6.0.1
@@ -21,15 +22,14 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - default
 
   kafka:
     image: confluentinc/cp-kafka:6.0.1
     depends_on:
       - zookeeper
-    ports:
-      - 9092:9092
     restart: unless-stopped
-    container_name: kafka
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -42,10 +42,11 @@ services:
       interval: 30s
       timeout: 10s
       retries: 4
+    networks:
+      - default
 
   mongodb:
     image: mongo:latest
-    container_name: mongodb
     restart: always
     environment:
         MONGO_INITDB_ROOT_USERNAME: root
@@ -55,6 +56,50 @@ services:
         - 27017:27017
     volumes:
         - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - default
+
+  spring:
+    build: ./eDucaApp
+    container_name: spring
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    image: educaapp
+    expose:
+      - 8080
+    depends_on:
+      kafka:
+          condition: service_healthy
+    networks:
+      - default
+
+  generator:
+    build: ./eDuca_dataGen
+    restart: unless-stopped
+    image: python-generator 
+    depends_on:
+      kafka:
+        condition: service_healthy
+    networks:
+      - default
+
+  angular:
+    build: ./n_frontend
+    container_name: angular
+    stdin_open: true
+    ports:
+      - 4200:4200
+    expose:
+      - 4200
+    restart: unless-stopped
+    image: frontend
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge
 
 
   
