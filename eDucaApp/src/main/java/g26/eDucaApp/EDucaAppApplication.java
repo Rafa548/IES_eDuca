@@ -49,7 +49,7 @@ public class EDucaAppApplication implements CommandLineRunner {
 			@Override
 			public void addCorsMappings(org.springframework.web.servlet.config.annotation.CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("http://localhost:4200")
+						.allowedOrigins("http://localhost:4200", "http://deti-ies-12.ua.pt:4200")
 						.allowedMethods("GET", "POST", "PUT", "DELETE")
 						.allowCredentials(true);
 
