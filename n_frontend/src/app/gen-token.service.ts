@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class GenTokenService {
 
-  private  baseURL = 'http://localhost:8080/auth/signin';
+  private  baseURL = 'http://deti-ies-12.ua.pt:8080/auth/signin';
 
   constructor() { }
 

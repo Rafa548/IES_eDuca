@@ -5,7 +5,7 @@ import {Class} from "./class";
   providedIn: 'root'
 })
 export class ApiDataService {
-  private baseURL = 'http://localhost:8080';
+  private baseURL = 'http://deti-ies-12.ua.pt:8080';
 
   constructor() { }
 

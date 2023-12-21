@@ -24,6 +24,10 @@ http://localhost:4200/
 
 ```
 
+## Link para acesso ao site:
+
+http://deti-ies-12.ua.pt:4200/
+
 ##Credentials
 School Admin
 
