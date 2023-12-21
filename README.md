@@ -8,43 +8,41 @@ Ensure Docker is installed and operational on your system before proceeding.
 
 ### 1. Start Services
 
-#### a. `eDuca_dataGen` Directory:
-
+Run inside eDucaApp dir
 ```bash
-cd eDuca_dataGen
-docker-compose up -d
+./mvnw package
+``
 
-```
-
-#### b. `eDuca_db` Directory:
-In the eDuca_db directory:
 ```bash
 docker-compose up -d
+
 ```
-### 2. Setup Data Generation
 
-Navigate to the eDuca_dataGen directory to execute the Python Script:
-
+### 2. Open the webApp
 ```bash
-cd eDuca_dataGen
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python GenerateData.py
+http://localhost:4200/
+
 ```
 
-### 3. Run Application (eDucaApp->SpringBoot)
+##Credentials
+School Admin
 
-In the eDucaApp directory:
+email
+admin@gmail.com
 
-```bash
-./mvnw spring-boot:run
-```
+password
+admin
 
-### 4. Run FrontEnd (React)
- 
-In the frontend directory:
+Student
 
-```bash
-npm start
-```
+email (choose from admin)
+
+password
+hello
+
+Teacher
+email (choose from admin)
+
+password
+password123
+
