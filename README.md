@@ -5,48 +5,48 @@
 Ensure Docker is installed and operational on your system before proceeding.
 
 ---
+# Acesso ao Site
+
+## Link para acesso ao site:
+
+
+[http://deti-ies-12.ua.pt:4200/](http://deti-ies-12.ua.pt:4200/)
+
+
+## Correr localmente
 
 ### 1. Start Services
 
 Run inside eDucaApp dir
 ```bash
 ./mvnw package
-``
+```
 
 ```bash
 docker-compose up -d
-
 ```
 
 ### 2. Open the webApp
 ```bash
 http://localhost:4200/
-
 ```
 
-## Link para acesso ao site:
 
-http://deti-ies-12.ua.pt:4200/
+## Credenciais
 
-##Credentials
-School Admin
+### Administrador da Escola
 
-email
-admin@gmail.com
+- **E-mail:** admin@gmail.com
+- **Senha:** admin
 
-password
-admin
+### Estudante
 
-Student
+- **E-mail:** (escolha a partir do admin)
+- **Senha:** hello
 
-email (choose from admin)
+### Professor
 
-password
-hello
+- **E-mail:** (escolha a partir do admin)
+- **Senha:** password123
 
-Teacher
-email (choose from admin)
-
-password
-password123
 
